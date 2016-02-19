@@ -1,0 +1,63 @@
+user allend sec124ond
+
+binary
+
+lcd \WaterskiScoring\WebLiveScores\Commands\Mobile
+
+cd WfwWeb
+put WfwImport.php
+
+bye
+
+REM ftp -i -n -s:"C:\WaterskiScoring\WebLiveScores\Commands\Mobile\webLoadMobile.ftp" ftpuser.madriverinternet.com
+REM put wfwShowScoreRecap.php
+
+REM put wfwMobile.js
+REM put wfwShowTourScores.php
+REM put wfwShowScoreRecap.php
+REM put wfwShowRecentScores.php
+REM put wfwShowTourRunOrder.php
+REM put wfwShowTourList.php
+REM put wfwMobile.css
+REM put wfwShowRunOrder.php
+REM put getScores_json.php
+REM put getRunOrder_json.php
+REM put getGroupsPerEvent_json.php
+REM put getDivisionsPerEvent_json.php
+REM put wfwShowTourList.php
+REM put getEvtsAndRds_json.php
+REM put getDivisionsPerEvent_json.php
+REM put wfwFunctions.php
+REM put wfw.js
+REM put wfw.css
+REM put wfwShowTourDiv.php
+REM put wfwShowRecentScores.php
+REM put wfwShowScoreboard.php
+REM put WfwShowScores.php
+REM put WfwShowSlalomScores.php
+REM put WfwShowTrickScores.php
+REM put WfwShowJumpScores.php
+REM put WfwShowSlalomSkierRecap.php
+REM put WfwShowTrickSkierRecap.php
+REM put WfwShowJumpSkierRecap.php
+REM put WfwTourDivSelectList.php
+REM put unofficial.jpg
+REM put unofficial_slalom.jpg
+REM put unofficial_trick.jpg
+REM put unofficial_jump.jpg
+REM put AdamsPondFarm.jpg
+
+REM mkdir "WfwWeb"
+REM put WfwInit.php
+REM put Wfwterm.php
+REM put WfwImport.php
+REM put WfwShowTableData.php
+REM put index.php
+REM put filelist.php
+
+REM del init.php
+REM del wfwShowTourDiv.php
+
+REM lcd \WaterskiScoring\WebLiveScores\Commands
+REM put myPhpInfo.php
+
