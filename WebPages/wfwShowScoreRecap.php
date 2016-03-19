@@ -4,7 +4,7 @@ ini_set("display_errors", 1);
 session_start();
 
 if(!isset($_SESSION['sanctionID']) || empty($_SESSION['sanctionID'])) {
-   header('Location: index.php');
+   header('Location: ../index.php');
 }
 include_once( "WfwInit.php" );
 

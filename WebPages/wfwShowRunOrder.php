@@ -31,7 +31,7 @@ include_once( "WfwInit.php" );
 <div data-role="page" id="getRunOrder">
 
 	<div data-role="header">
-    	<a href='wfwShowTourScores.php' class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false'></a>
+    	<a href='wfwShowTourScores.php' class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false'>Scores</a>
 		<h1><?php echo "Sanction: " . $_SESSION['sanctionID'] . " Event: " . $_SESSION['skiEvent'];?></h1>
         <a id="ui-header-refresh" href='#' onclick='reloadPage()' class='ui-btn-right RefreshLink' data-role='button' data-icon='refresh' data-mini='true' data-ajax='true'>Refresh</a>
 

@@ -139,12 +139,17 @@ function buildNavHTML() {
 		
 	eventString += "<input type='radio' name='skiEvent' id='recent' value='Recent' />"
 		+ "<label for='recent'>Recent</label>";
+
+	eventString += "<input type='radio' name='skiEvent' id='team' value='Team' />"
+		+ "<label for='team'>Team</label>";
+
 	eventString += "</fieldset></div>";
 	submitString += "<div style='display:none' id='submitBtn'>" 
 		+ "<button data-mini='true' data-inline='true' data-theme='b' name='submit' value='submit-value'>" 
 		+ "Submit</button></div>";
 	//submitString += "<div style='display:none' id='submitBtn'><button type='submit' data-mini='true' data-inline='true' data-theme='b' name='submit' value='submit-value'>Submit</button></div></form>";
 	//var formEndString = "</form>";
+
 
 	//$("#panel").append(formStartString).trigger('create');
 	$("#panel").append(eventString).trigger('create');
@@ -162,6 +167,14 @@ function buildNavHTML() {
 			
 	$(document).ready(function(){
 	  $("#recent").click(function(){
+		$("#slalomRoundDiv,#jumpRoundDiv,#trickRoundDiv,#overallRoundDiv").hide(350);
+		$("#sDivisions,#jDivisions,#tDivisions,#oDivisions").hide(350);
+		$("#submitBtn").show(200);
+	  });
+	});
+
+	$(document).ready(function(){
+	  $("#team").click(function(){
 		$("#slalomRoundDiv,#jumpRoundDiv,#trickRoundDiv,#overallRoundDiv").hide(350);
 		$("#sDivisions,#jDivisions,#tDivisions,#oDivisions").hide(350);
 		$("#submitBtn").show(200);

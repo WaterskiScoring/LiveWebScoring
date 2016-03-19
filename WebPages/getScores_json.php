@@ -7,6 +7,8 @@ include_once( "WfwInit.php" );
 function checkReqVars() {
 	if ( $_POST['skiEvent'] == 'Recent') {
 		return true;
+	} else if ( $_POST['skiEvent'] == 'Team') {
+		return isset($_POST['sanctionID']);
 	} else {
 		return isset($_POST['sanctionID'],$_POST['divisionID'], $_POST['skiEvent'], $_POST['changeRoundSelector']);
 	}
@@ -64,6 +66,15 @@ if (checkReqVars()) {
 			. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = 'Jump' "
 			. "WHERE ssi.SanctionID='" .  $thisSanc . "' "
 			. "ORDER BY SortLastUpdateDate DESC, AgeGroup, Event";
+
+	} else if ( $_SESSION['skiEvent'] == 'Team') {
+		$QueryCmd = "Select S.SanctionId, S.TeamCode, S.AgeGroup, Name, ReportFormat"
+			. ", S.OverallPlcmt AS OverallPlcmtTeam, S.SlalomPlcmt AS SlalomPlcmtTeam, S.TrickPlcmt AS TrickPlcmtTeam, S.JumpPlcmt AS JumpPlcmtTeam"
+			. ", S.OverallScore AS OverallScoreTeam, S.SlalomScore AS SlalomScoreTeam, S.TrickScore AS TrickScoreTeam, S.JumpScore AS JumpScoreTeam "
+			. "From TeamScore S "
+			. "Where S.SanctionId = '" . $thisSanc . "' "
+			. "Order by S.AgeGroup, S.OverallPlcmt ";
+
 	} else if ( $_SESSION['skiEvent'] == 'Overall') {
 		$_SESSION['skiRound'] = $_POST['changeRoundSelector'];
 		$_SESSION['skiDivision'] = $_POST['divisionID'];
@@ -94,7 +105,6 @@ if (checkReqVars()) {
 			//. "AND ((Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) > 2 "
 			//. "	OR (Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) >= 2 "
 			//. "		AND TR.AgeGroup in ('B1', 'G1', 'W8', 'W9', 'WA', 'WB', 'M8', 'M9', 'MA', 'MB')) "
-
 
 	} else {
 		$_SESSION['skiRound'] = $_POST['changeRoundSelector'];
@@ -218,6 +228,33 @@ if (checkReqVars()) {
 
 				$prevGroup = $ScoresRow['AgeGroup'];
 			}
+
+		} else if ( $_SESSION['skiEvent'] == 'Team') {
+			$RowCount = 0;
+			while ($ScoresRow = mysql_fetch_assoc($QueryResult)) {
+				if ( $ScoresRow['AgeGroup'] != $prevGroup || $RowCount == 0) {
+					if ( $prevGroup != '' ) {
+						echo "\r\n</ul>";
+					}
+
+					echo "\r\n<div data-role='header' class='GroupHeader'>Division: " . $ScoresRow['AgeGroup'] . "</div>";
+					echo "\r\n<ul data-role='listview' id='scoresID'>";
+				}
+
+				echo "<li>\r\n";
+				echo "<a href='wfwShowScoreRecapTeam.php?TeamCode=" . $ScoresRow['TeamCode'] . "&AgeGroup=" . $ScoresRow['AgeGroup'] . "&ReportFormat=" . $ScoresRow['ReportFormat'] . "' "
+				. "data-rel='dialog' data-transition='pop'>" . $ScoresRow['TeamCode'] . "-" . $ScoresRow['Name'] 
+				. "<span class='lastUpdateTime'> (" . $ScoresRow['AgeGroup'] . " - " . $ScoresRow['TeamCode'] . ") </span>\r\n";
+				echo "<span class='score'>" . $ScoresRow['OverallScoreTeam']  ." Points ("
+					. $ScoresRow['SlalomScoreTeam'] . ", " . $ScoresRow['TrickScoreTeam'] . ", " . $ScoresRow['JumpScoreTeam']
+					. ") </span></a></li>\r\n";
+
+				$prevGroup = $ScoresRow['AgeGroup'];
+				$RowCount++;
+			}
+			echo "\r\n</ul>";
+
+			
 		} else {
 			while ($ScoresRow = mysql_fetch_assoc($QueryResult)) {
 				if ($thisDivision == "Recent" || $_SESSION['skiEvent'] == 'Recent' ) {
