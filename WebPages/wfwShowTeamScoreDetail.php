@@ -67,18 +67,19 @@ $thisSanctionId = $_SESSION['sanctionID'];
 				. "Where S.SanctionId = '" . $thisSanctionId . "'"
 				. "Order by S.AgeGroup, S.OverallPlcmt, SD.SkierCategory, SD.LineNum ";
 
-			$QueryResult = mysql_query($QueryCmd) or die (mysql_error());
-			$curDataRow = mysql_num_rows($QueryResult);
-			if ( $curDataRow != 0 ) {
+			$QueryResult = $dbConnect->query($QueryCmd) or die ($dbConnect->error);
+			$curRowCount = $QueryResult->num_rows;
+
+			if ( $curRowCount > 0 ) {
 				$curTeam = '';
 				$prevTeam = '';
-				
-				while ($curDataRow = mysql_fetch_assoc($QueryResult)) {
+
+				while ($curDataRow = $QueryResult->fetch_assoc()) {
 					$curTeam = $curDataRow['TeamCode'];
-					
+
 					if ( $curTeam == $prevTeam ) {
 						echo "\r\n<tr><td>-----------------</td></tr>";
-						
+
 						echo "\r\n<tr>";
 						echo "\r\n<td>.</td>";
 						echo "\r\n<td>.</td>";
@@ -95,12 +96,12 @@ $thisSanctionId = $_SESSION['sanctionID'];
 						echo "\r\n<td>" . $curDataRow['SkierCategory'] . "</td>";
 						echo "\r\n<td>" . $curDataRow['AgeGroup'] . "</td>";
 					}
-					
+
 					echo "\r\n<td>" . $curDataRow['SlalomSkierName'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['TrickSkierName'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['JumpSkierName'] . "</td>";
 					echo "\r\n</tr>\r\n";
-					
+
 					$prevTeam = $curDataRow['TeamCode'];
 				}
 			} else {

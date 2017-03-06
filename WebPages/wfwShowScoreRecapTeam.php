@@ -3,11 +3,9 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 session_start();
 
-if(!isset($_SESSION['sanctionID']) || empty($_SESSION['sanctionID'])) {
-   header('Location: index.php');
-}
 include_once( "WfwInit.php" );
 
+$SanctionId = $_GET['SanctionId'];
 $TeamCode = $_GET['TeamCode'];
 $TeamDiv = $_GET['AgeGroup'];
 $ReportFormat = $_GET['ReportFormat'];
@@ -50,171 +48,174 @@ $ReportFormat = $_GET['ReportFormat'];
 			. ", JumpSkierName, SD.JumpPlcmt, SD.JumpScore, JumpNops, JumpPoints "
 			. "From TeamScore S "
 			. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode AND S.AgeGroup = SD.AgeGroup "
-			. "Where S.SanctionId = '" . $_SESSION['sanctionID'] . "'"
+			. "Where S.SanctionId = '" . $SanctionId . "'"
 			. "AND S.TeamCode = '" . $TeamCode . "'"
 			. "AND S.AgeGroup = '" . $TeamDiv . "'"
 			. "Order by S.AgeGroup, S.OverallPlcmt, SD.SkierCategory, SD.LineNum ";
 
-		$RecapResult = mysql_query($RecapQry) or die (mysql_error());
-		$RecapRow = mysql_num_rows($RecapResult);
-
-		if ( $RecapRow != 0 ) {
-
-			if ($ReportFormat == "ncwsa" || $ReportFormat == "awsa") { 
-				$RecapRow = mysql_fetch_array($RecapResult);
-				echo "<h1>" . $TeamCode . "-" . $RecapRow['Name'] . " (" . $TeamDiv . ") Score: " . $RecapRow['OverallScoreTeam'] . "</h1>";
-				
-				?>
-				<div style="border:0; margin:0 0 0 0; padding:0; text-align: left; background-image:url('unofficial.jpg');background-size:cover; opacity:1; z-index:-1">
-				<?php
-
-
-				$RowCount = 0;
-				$curCategory = '';
-				$prevCategory = '';
-
-				mysql_data_seek( $RecapResult, 0 );
-				while ($RecapRow = mysql_fetch_array($RecapResult)) {
-					$curCategory = $RecapRow['SkierCategory'];
-					if ( $RowCount == 0 ) {
-						echo "<p style='border:0; margin:0; padding:0;'>"
-							. "<span class='PageSubTitle'>"
-							. "Slalom: (" . $ReportFormat . ")<br/>" 
-							. "Team Plcmt: " . $RecapRow['SlalomPlcmtTeam'] 
-							. ", Score: " . $RecapRow['SlalomScoreTeam'] 
-							. "</span></p>\r\n";
-						echo "<div style='padding-left:16px;'>";
-					}
-					if ($ReportFormat == "awsa") { 
-						if ( $curCategory != $prevCategory ) {
-							echo "<p style='border:0; margin:0; padding:0;'>" 
-								. "<span class='PageSubTitle'>" . "Category: " 
-								. $RecapRow['SkierCategory'] . "</span></p>\r\n";
-						}
-					}
-					if ( $RecapRow['SlalomSkierName'] != '' ) {
-						if ($ReportFormat == "ncwsa") {
-							echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>" 
-								. "<strong>" . $RecapRow['SlalomSkierName'] . "</strong>"
-								. " <strong>, Pl:</strong>" . $RecapRow['SlalomPlcmt'] 
-								. " <strong>, Pts:</strong>" . $RecapRow['SlalomNops'] 
-								. "</span></p>\r\n";
-						}
-						if ($ReportFormat == "awsa") {
-							echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>" 
-								. "<strong>" . $RecapRow['SlalomSkierName'] . "</strong>"
-								. " <span>, Pl:</span>" . $RecapRow['SlalomPlcmt'] 
-								. " <strong>, NOPS:</strong>" . $RecapRow['SlalomNops'] 
-								. " <strong>, Pts:</strong>" . $RecapRow['SlalomPoints'] 
-								. "</span></p>\r\n";
-						}
-					}
-					
-					$RowCount++;
-					$prevCategory = $RecapRow['SkierCategory'];
-				}
-				echo "</div>";
-				
-				$RowCount = 0;
-				$curCategory = '';
-				$prevCategory = '';
-
-				mysql_data_seek( $RecapResult, 0 );
-				while ($RecapRow = mysql_fetch_array($RecapResult)) {
-					$curCategory = $RecapRow['SkierCategory'];
-					if ( $RowCount == 0 ) {
-						echo "<p style='border:0; margin:1em 0 0 0; padding:0;'>"
-							. "<span class='PageSubTitle'>"
-							. "Trick: (" . $ReportFormat . ")<br/>" 
-							. "Team Plcmt: " . $RecapRow['TrickPlcmtTeam'] 
-							. ", Score: " . $RecapRow['TrickScoreTeam'] 
-							. "</span></p>\r\n";
-						echo "<div style='padding-left:16px;'>";
-					}
-					if ($ReportFormat == "awsa") { 
-						if ( $curCategory != $prevCategory ) {
-							echo "<p style='border:0; margin:0; padding:0;'>" 
-								. "<span class='PageSubTitle'>" . "Category: " 
-								. $RecapRow['SkierCategory'] . "</span></p>\r\n";
-						}
-					}
-					if ( $RecapRow['TrickSkierName'] != '' ) {
-						if ($ReportFormat == "ncwsa") {
-							echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>" 
-								. "<strong>" . $RecapRow['TrickSkierName'] . "</strong>"
-								. " <strong>, Pl:</strong>" . $RecapRow['TrickPlcmt'] 
-								. " <strong>, Pts:</strong>" . $RecapRow['TrickNops'] 
-								. "</span></p>\r\n";
-						}
-						if ($ReportFormat == "awsa") {
-							echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>" 
-								. "<strong>" . $RecapRow['TrickSkierName'] . "</strong>"
-								. " <span>, Pl:</span>" . $RecapRow['TrickPlcmt'] 
-								. " <strong>, NOPS:</strong>" . $RecapRow['TrickNops'] 
-								. " <strong>, Pts:</strong>" . $RecapRow['TrickPoints'] 
-								. "</span></p>\r\n";
-						}
-					}
-					
-					$RowCount++;
-					$prevCategory = $RecapRow['SkierCategory'];
-				}
-				echo "</div>";
-				
-				$RowCount = 0;
-				$curCategory = '';
-				$prevCategory = '';
-
-				mysql_data_seek( $RecapResult, 0 );
-				while ($RecapRow = mysql_fetch_array($RecapResult)) {
-					$curCategory = $RecapRow['SkierCategory'];
-					if ( $RowCount == 0 ) {
-						echo "<p style='border:0; margin:1em 0 0 0; padding:0;'>"
-							. "<span class='PageSubTitle'>"
-							. "Jump: (" . $ReportFormat . ")<br/>" 
-							. "Team Plcmt: " . $RecapRow['JumpPlcmtTeam'] 
-							. ", Score: " . $RecapRow['JumpScoreTeam'] 
-							. "</span></p>\r\n";
-						echo "<div style='padding-left:16px;'>";
-					}
-					if ($ReportFormat == "awsa") { 
-						if ( $curCategory != $prevCategory ) {
-							echo "<p style='border:0; margin:0; padding:0;'>" 
-								. "<span class='PageSubTitle'>" . "Category: " 
-								. $RecapRow['SkierCategory'] . "</span></p>\r\n";
-						}
-					}
-					if ( $RecapRow['JumpSkierName'] != '' ) {
-						if ($ReportFormat == "ncwsa") {
-							echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>" 
-								. "<strong>" . $RecapRow['JumpSkierName'] . "</strong>"
-								. " <strong>, Pl:</strong>" . $RecapRow['JumpPlcmt'] 
-								. " <strong>, Pts:</strong>" . $RecapRow['JumpNops'] 
-								. "</span></p>\r\n";
-						}
-						if ($ReportFormat == "awsa") {
-							echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>" 
-								. "<strong>" . $RecapRow['JumpSkierName'] . "</strong>"
-								. " <span>, Pl:</span>" . $RecapRow['JumpPlcmt'] 
-								. " <strong>, NOPS:</strong>" . $RecapRow['JumpNops'] 
-								. " <strong>, Pts:</strong>" . $RecapRow['JumpPoints'] 
-								. "</span></p>\r\n";
-						}
-					}
-					
-					$RowCount++;
-					$prevCategory = $RecapRow['SkierCategory'];
-				}
-				echo "</div>";
-				
-				
-				echo "</div>";
-			}
-
+		$RecapResult = $dbConnect->query($RecapQry);
+		if ($dbConnect->error) {
+			echo "An error was encountered running a query: " . $dbConnect->error;
+			exit(500);
 		} else {
-			echo "<span class='noScores'>No scores available yet for this Team.</span>";
-		}
+			$curRowCount = $RecapResult->num_rows;
+			echo "<span class='noScores'>Query Row Count: " . $curRowCount . "</span>";
+			if ( $curRowCount > 0 ) {
+				if ($ReportFormat == "ncwsa" || $ReportFormat == "awsa") {
+					$RecapRow = $RecapResult->fetch_assoc();
+					echo "<h1>" . $TeamCode . "-" . $RecapRow['Name'] . " (" . $TeamDiv . ") Score: " . $RecapRow['OverallScoreTeam'] . "</h1>";
 
+					?>
+					<div style="border:0; margin:0 0 0 0; padding:0; text-align: left; background-image:url('unofficial.jpg');background-size:cover; opacity:1; z-index:-1">
+					<?php
+
+
+					$RowCount = 0;
+					$curCategory = '';
+					$prevCategory = '';
+
+					$RecapResult->data_seek(0);
+					while ( $RecapRow = $RecapResult->fetch_assoc() ) {
+						$curCategory = $RecapRow['SkierCategory'];
+						if ( $RowCount == 0 ) {
+							echo "<p style='border:0; margin:0; padding:0;'>"
+								. "<span class='PageSubTitle'>"
+								. "Slalom: (" . $ReportFormat . ")<br/>"
+								. "Team Plcmt: " . $RecapRow['SlalomPlcmtTeam']
+								. ", Score: " . $RecapRow['SlalomScoreTeam']
+								. "</span></p>\r\n";
+							echo "<div style='padding-left:16px;'>";
+						}
+						if ($ReportFormat == "awsa") {
+							if ( $curCategory != $prevCategory ) {
+								echo "<p style='border:0; margin:0; padding:0;'>"
+									. "<span class='PageSubTitle'>" . "Category: "
+									. $RecapRow['SkierCategory'] . "</span></p>\r\n";
+							}
+						}
+						if ( $RecapRow['SlalomSkierName'] != '' ) {
+							if ($ReportFormat == "ncwsa") {
+								echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>"
+									. "<strong>" . $RecapRow['SlalomSkierName'] . "</strong>"
+									. " <strong>, Pl:</strong>" . $RecapRow['SlalomPlcmt']
+									. " <strong>, Pts:</strong>" . $RecapRow['SlalomNops']
+									. "</span></p>\r\n";
+							}
+							if ($ReportFormat == "awsa") {
+								echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>"
+									. "<strong>" . $RecapRow['SlalomSkierName'] . "</strong>"
+									. " <span>, Pl:</span>" . $RecapRow['SlalomPlcmt']
+									. " <strong>, NOPS:</strong>" . $RecapRow['SlalomNops']
+									. " <strong>, Pts:</strong>" . $RecapRow['SlalomPoints']
+									. "</span></p>\r\n";
+							}
+						}
+
+						$RowCount++;
+						$prevCategory = $RecapRow['SkierCategory'];
+					}
+					echo "</div>";
+
+					$RowCount = 0;
+					$curCategory = '';
+					$prevCategory = '';
+
+					$RecapResult->data_seek(0);
+					while ( $RecapRow = $RecapResult->fetch_assoc() ) {
+						$curCategory = $RecapRow['SkierCategory'];
+						if ( $RowCount == 0 ) {
+							echo "<p style='border:0; margin:1em 0 0 0; padding:0;'>"
+								. "<span class='PageSubTitle'>"
+								. "Trick: (" . $ReportFormat . ")<br/>"
+								. "Team Plcmt: " . $RecapRow['TrickPlcmtTeam']
+								. ", Score: " . $RecapRow['TrickScoreTeam']
+								. "</span></p>\r\n";
+							echo "<div style='padding-left:16px;'>";
+						}
+						if ($ReportFormat == "awsa") {
+							if ( $curCategory != $prevCategory ) {
+								echo "<p style='border:0; margin:0; padding:0;'>"
+									. "<span class='PageSubTitle'>" . "Category: "
+									. $RecapRow['SkierCategory'] . "</span></p>\r\n";
+							}
+						}
+						if ( $RecapRow['TrickSkierName'] != '' ) {
+							if ($ReportFormat == "ncwsa") {
+								echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>"
+									. "<strong>" . $RecapRow['TrickSkierName'] . "</strong>"
+									. " <strong>, Pl:</strong>" . $RecapRow['TrickPlcmt']
+									. " <strong>, Pts:</strong>" . $RecapRow['TrickNops']
+									. "</span></p>\r\n";
+							}
+							if ($ReportFormat == "awsa") {
+								echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>"
+									. "<strong>" . $RecapRow['TrickSkierName'] . "</strong>"
+									. " <span>, Pl:</span>" . $RecapRow['TrickPlcmt']
+									. " <strong>, NOPS:</strong>" . $RecapRow['TrickNops']
+									. " <strong>, Pts:</strong>" . $RecapRow['TrickPoints']
+									. "</span></p>\r\n";
+							}
+						}
+
+						$RowCount++;
+						$prevCategory = $RecapRow['SkierCategory'];
+					}
+					echo "</div>";
+
+					$RowCount = 0;
+					$curCategory = '';
+					$prevCategory = '';
+
+					$RecapResult->data_seek(0);
+					while ( $RecapRow = $RecapResult->fetch_assoc() ) {
+						$curCategory = $RecapRow['SkierCategory'];
+						if ( $RowCount == 0 ) {
+							echo "<p style='border:0; margin:1em 0 0 0; padding:0;'>"
+								. "<span class='PageSubTitle'>"
+								. "Jump: (" . $ReportFormat . ")<br/>"
+								. "Team Plcmt: " . $RecapRow['JumpPlcmtTeam']
+								. ", Score: " . $RecapRow['JumpScoreTeam']
+								. "</span></p>\r\n";
+							echo "<div style='padding-left:16px;'>";
+						}
+						if ($ReportFormat == "awsa") {
+							if ( $curCategory != $prevCategory ) {
+								echo "<p style='border:0; margin:0; padding:0;'>"
+									. "<span class='PageSubTitle'>" . "Category: "
+									. $RecapRow['SkierCategory'] . "</span></p>\r\n";
+							}
+						}
+						if ( $RecapRow['JumpSkierName'] != '' ) {
+							if ($ReportFormat == "ncwsa") {
+								echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>"
+									. "<strong>" . $RecapRow['JumpSkierName'] . "</strong>"
+									. " <strong>, Pl:</strong>" . $RecapRow['JumpPlcmt']
+									. " <strong>, Pts:</strong>" . $RecapRow['JumpNops']
+									. "</span></p>\r\n";
+							}
+							if ($ReportFormat == "awsa") {
+								echo "<p style='border:0; margin:.25em 0 .25em 0; padding:0;'><span>"
+									. "<strong>" . $RecapRow['JumpSkierName'] . "</strong>"
+									. " <span>, Pl:</span>" . $RecapRow['JumpPlcmt']
+									. " <strong>, NOPS:</strong>" . $RecapRow['JumpNops']
+									. " <strong>, Pts:</strong>" . $RecapRow['JumpPoints']
+									. "</span></p>\r\n";
+							}
+						}
+
+						$RowCount++;
+						$prevCategory = $RecapRow['SkierCategory'];
+					}
+					echo "</div>";
+
+
+					echo "</div>";
+				}
+
+			} else {
+				echo "<span class='noScores'>No scores available yet for this Team.</span>";
+			}
+		}
 		?>
 
 		<a href='#' data-rel="back" data-role='button' data-mini='false' data-ajax='true' data-theme='b'>Back to Results</a>

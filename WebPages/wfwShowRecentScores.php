@@ -88,15 +88,16 @@ if (cookieVal != null && cookieVal !="" && cookieVal !="Now") {
 		$noJumpScores='';
 
 		echo "<div data-role='collapsible-set' data-theme='b' data-content-theme='d' data-inset='false'>";
-		$RecentSlalomResult = mysql_query($RecentSlalomQry) or die (mysql_error());
-		$RecentSlalomRow = mysql_num_rows($RecentSlalomResult);
 
-		if ( $RecentSlalomRow != 0 ) {
+		$RecentSlalomResult = $dbConnect->query($RecentSlalomQry) or die ($dbConnect->error);
+		$curRowCount = $RecentSlalomResult->num_rows;
+
+		if ( $curRowCount > 0 ) {
 			echo "<div data-role='collapsible' data-collapsed='false'>\r\n";
 			echo "<h2>Slalom</h2>\r\n";
 			echo "<ul data-role='listview' data-role='collapsible'>\r\n";
 
-			while ($RecentSlalomRow = mysql_fetch_assoc($RecentSlalomResult)) {
+			while ($RecentSlalomRow = $RecentSlalomResult->fetch_assoc()) {
 				echo "<li><a href='javascript:void(0)' onclick='javascript:getScoresFromRecent(\""
 				. $RecentSlalomRow['AgeGroup'] . "\",\"" . $RecentSlalomRow['Round'] . "\",\"Slalom\");'>"
 				. $RecentSlalomRow['AgeGroup'] . " " . $RecentSlalomRow['SkierName'] . " on " . $RecentSlalomRow['LastUpdateDate']
@@ -110,15 +111,15 @@ if (cookieVal != null && cookieVal !="" && cookieVal !="Now") {
 			$noSlalomScores=true;
 		}
 
-		$RecentTrickResult = mysql_query($RecentTrickQry) or die (mysql_error());
-		$RecentTrickRow = mysql_num_rows($RecentTrickResult);
+		$RecentTrickResult = $dbConnect->query($RecentTrickQry) or die ($dbConnect->error);
+		$curRowCount = $RecentTrickResult->num_rows;
 
-		if ( $RecentTrickRow != 0 ) {
+		if ( $curRowCount > 0 ) {
 			echo "<div data-role='collapsible'>";
 			echo "<h2>Trick</h2>";
 			echo "<ul data-role='listview' data-role='collapsible'>";
 
-			while ($RecentTrickRow = mysql_fetch_assoc($RecentTrickResult)) {
+			while ($RecentTrickRow = $RecentTrickResult->fetch_assoc()) {
 				echo "<li><a href='javascript:void(0)' onclick='javascript:getScoresFromRecent(\"" . $RecentTrickRow['AgeGroup'] . "\",\"" . $RecentTrickRow['Round'] . "\",\"Trick\");'>"
 				. $RecentTrickRow['AgeGroup'] . " " . $RecentTrickRow['SkierName'] . " on " . $RecentSlalomRow['LastUpdateDate']
 				. "<span class='score'>" . $RecentTrickRow['Score']
@@ -131,15 +132,15 @@ if (cookieVal != null && cookieVal !="" && cookieVal !="Now") {
 			$noTrickScores=true;
 		}
 
-		$RecentJumpResult = mysql_query($RecentJumpQry) or die (mysql_error());
-		$RecentJumpRow = mysql_num_rows($RecentJumpResult);
+		$RecentJumpResult = $dbConnect->query($RecentJumpQry) or die ($dbConnect->error);
+		$curRowCount = $RecentJumpResult->num_rows;
 
-		if ( $RecentJumpRow != 0 ) {
+		if ( $curRowCount > 0 ) {
 			 echo "<div data-role='collapsible'>";
 			echo "<h2>Jump</h2>";
 			echo "<ul data-role='listview' data-role='collapsible'>";
 
-			while ($RecentJumpRow = mysql_fetch_assoc($RecentJumpResult)) {
+			while ($RecentJumpRow = $RecentJumpResult->fetch_assoc()) {
 				echo "<li><a href='javascript:void(0)' onclick='javascript:getScoresFromRecent(\"" . $RecentJumpRow['AgeGroup'] . "\",\"" . $RecentJumpRow['Round'] . "\",\"Jump\");'>"
 				. $RecentJumpRow['AgeGroup'] . " " . $RecentJumpRow['SkierName'] . " on " . $RecentSlalomRow['LastUpdateDate']
 				. "<span class='score'>" . $RecentJumpRow['ScoreFeet'] . " (" . $RecentJumpRow['ScoreMeters'] . ")"

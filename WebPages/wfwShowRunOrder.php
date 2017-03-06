@@ -58,11 +58,12 @@ include_once( "WfwInit.php" );
 			. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 			. "Where TR.SanctionId = '" .  $_SESSION['sanctionID'] . "' AND ER.Event = '" .  $_SESSION['skiEvent'] . "' "
 			. "Order by TR.SanctionId, ER.Event, ER.EventGroup, TR.MemberId, ER.RunOrder, ER.RankingScore ";
-			$QueryResult = mysql_query($SqlCmd) or die (mysql_error());
 
-			$curDataRow = mysql_num_rows($QueryResult);
-			if ( $curDataRow != 0 ) {
-				while ($curDataRow = mysql_fetch_assoc($QueryResult)) {
+			$QueryResult = $dbConnect->query($SqlCmd) or die ($dbConnect->error);
+			$curRowCount = $QueryResult->num_rows;
+
+			if ( $curRowCount > 0 ) {
+				while ($curDataRow = $QueryResult->fetch_assoc()) {
 					echo "\r\n<tr>";
 					echo "\r\n<td>" . $curDataRow['SkierName'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['EventGroup'] . "</td>";

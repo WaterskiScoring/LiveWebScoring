@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <link rel="stylesheet" href="WfwWeb/wfw.css" type="text/css" />
-<script language="JavaScript" type="text/javascript" src="WfwWeb/wfw.js" ></script>
+<script language="JavaScript" type="text/javascript" src="WfwWeb/wfwMobile.js" ></script>
 
 <body>
 <div>

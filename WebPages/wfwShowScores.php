@@ -120,10 +120,12 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 				WHERE ssi.SanctionID='" .  $_SESSION['sanctionID'] . "'  AND ssi.AgeGroup='" .  $_SESSION['divisionID'] . "' AND Round = '" . $_SESSION['skiRound'] . "'
 				ORDER BY ssi.Score DESC, RunOffScore DESC";
 			}
-			$ScoresResult = mysql_query($ScoresQry) or die (mysql_error());
-			$ScoresRow = mysql_num_rows($ScoresResult);
-			if ( $ScoresRow != 0 ) {
-				while ($ScoresRow = mysql_fetch_assoc($ScoresResult)) {
+
+			$ScoresResult = $dbConnect->query($ScoresQry) or die ($dbConnect->error);
+			$curRowCount = $ScoresResult->num_rows;
+
+			if ( $curRowCount > 0 ) {
+				while ($ScoresRow = $ScoresResult->fetch_assoc()) {
 					echo "<li>\r\n";
 					echo "<a href='wfwShowScoreRecap.php?MemberId=" . $ScoresRow['MemberId'] . "&SkierName=" . $ScoresRow['SkierName'] . "' data-rel='dialog' data-transition='pop'>" . $ScoresRow['SkierName'] . "\r\n";
 					if ($_SESSION['skiEvent'] == "Jump") {

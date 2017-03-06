@@ -72,25 +72,26 @@ $thisSanctionId = $_SESSION['sanctionID'];
 				. "Where S.SanctionId = '" . $thisSanctionId . "' "
 				. "Order by S.AgeGroup, S.OverallPlcmt ";
 
-			$QueryResult = mysql_query($QueryCmd) or die (mysql_error());
-			$curDataRow = mysql_num_rows($QueryResult);
-			if ( $curDataRow != 0 ) {
+			$QueryResult = $dbConnect->query($QueryCmd) or die ($dbConnect->error);
+			$curRowCount = $QueryResult->num_rows;
+
+			if ( $curRowCount > 0 ) {
 				$curAgeGroup = '';
 				$prevAgeGroup = '';
-				
-				while ($curDataRow = mysql_fetch_assoc($QueryResult)) {
+
+				while ($curDataRow = $QueryResult->fetch_assoc()) {
 					$curAgeGroup = $curDataRow['AgeGroup'];
-					
+
 					if ( $curAgeGroup != $prevAgeGroup ) {
 						echo "\r\n<tr Class='TeamChange'><td colspan='12'>&nbsp;</td></tr>";
 					}
-					
+
 					echo "\r\n<tr>";
 					echo "\r\n<td>" . $curDataRow['ReportFormat'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['AgeGroup'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['TeamCode'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['Name'] . "</td>";
-					
+
 					echo "\r\n<td>" . $curDataRow['OverallPlcmtTeam'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['OverallScoreTeam'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['SlalomPlcmtTeam'] . "</td>";
@@ -100,7 +101,7 @@ $thisSanctionId = $_SESSION['sanctionID'];
 					echo "\r\n<td>" . $curDataRow['JumpPlcmtTeam'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['JumpScoreTeam'] . "</td>";
 					echo "\r\n</tr>\r\n";
-					
+
 					$prevAgeGroup = $curDataRow['AgeGroup'];
 				}
 			} else {
@@ -114,7 +115,7 @@ $thisSanctionId = $_SESSION['sanctionID'];
 
 </div><!-- /page -->
 
-<div id="bgDiv" style="position:absolute; top:0; left:0; width:100%; height:100%; margin:0; padding:0; background-image:url('unofficial.jpg');background-size:cover; opacity:1; z-index:-1"></div>
+<div id="bgDiv" style="position:absolute; top:0; left:0; width:100%; height:100%; margin:0; padding:0; background-image:url('Images/unofficial.jpg');background-size:cover; opacity:1; z-index:-1"></div>
 
 <script type="text/javascript">
 $('body').hide();

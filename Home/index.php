@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <link rel="stylesheet" href="WfwWeb/wfw.css" type="text/css" />
-<script language="JavaScript" type="text/javascript" src="WfwWeb/wfw.js" ></script>
+<script language="JavaScript" type="text/javascript" src="WfwWeb/wfwMobile.js" ></script>
 
 <body>
 <div id="IndexContainer">
@@ -18,6 +18,7 @@
 	<div style="margin-left: 16px;">
 	<br><li><a href="WfwWeb/wfwShowScoreboard.php">WSTIMS For Windows Web Scoreboard</a></li>
 	<br><li><a href="publish.htm">WSTIMS For Windows Download and Deployment</a></li>
+	<br><li><a href="https://waterskiresults.vids.io/" target="blank">Trick Video Site</a></li>
 	<br><li><a href="Newsletters/HOW TO ARTICLES PUBLISHED IN NEWSLETTERS.pdf">WSTIMS For Windows Newsletter -  - How to Index</a>.</li>
 	<br><li><a href="Newsletters">WSTIMS For Windows Newsletter Archive</a>.</li>
 	<br><li><a href="RegistrationTemplateManuals">Registration Template Instructions</a>.</li>

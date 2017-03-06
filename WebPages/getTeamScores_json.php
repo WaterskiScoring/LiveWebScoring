@@ -24,9 +24,9 @@ if (checkReqVars()) {
 		. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode AND S.AgeGroup = SD.AgeGroup "
 	$QueryCmd = $QueryCmd . "Order by " . $SortOrder;
 
-	$QueryResult = mysql_query($QueryCmd) or die (mysql_error());
+	$QueryResult = $dbConnect->query($QueryCmd) or die ($dbConnect->error);
 
-	$curDataRow = mysql_num_rows($QueryResult);
+	$curRowCount = $QueryResult->num_rows;
 ?>
 <style>
 .TeamScore {
@@ -44,12 +44,12 @@ if (checkReqVars()) {
 
 </style>
 <?php
-	if ( $curDataRow != 0 ) {
+	if ( $curRowCount > 0 ) {
 		$prevEventGroup = '';
 
 		echo "\r\n<h2><p class='centeredItalic'>These are unofficial, repeat <span class='alertNotice'>UNOFFICIAL</span></p></h2>";
 		echo "\r\n<ul data-role='listview' id='TeamScoreID'>";
-		while ($curDataRow = mysql_fetch_assoc($QueryResult)) {
+		while ($curDataRow = $QueryResult->fetch_assoc()) {
 			$curEventGroup = $curDataRow['TeamCode'] . "-" . $curDataRow['AgeGroup'];
 			if ( $curEventGroup == $prevEventGroup ) {
 			} else {
@@ -57,7 +57,7 @@ if (checkReqVars()) {
 			}
 
 			echo "\r\n<li>";
-			echo $curDataRow['SlalomSkierName'] 
+			echo $curDataRow['SlalomSkierName']
 				. $curDataRow['TrickSkierName']
 				. $curDataRow['JumpSkierName'];
 				. "</li>";
@@ -66,7 +66,7 @@ if (checkReqVars()) {
 		}
 
 		echo "\r\n</ul><!-- /listview -->";
-		mysql_free_result($QueryResult);
+		$QueryResult->free();
 	} else {
 		echo "<span class='noScores'>No team scores available yet</span>";
 	}
