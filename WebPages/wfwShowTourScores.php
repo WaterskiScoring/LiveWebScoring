@@ -10,7 +10,6 @@ if (isset($_POST['sanctionID'])) {
 } else if (!isset ($_SESSION['sanctionID'])) {
 	  header('Location: http://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
 }
-
 ?>
 
 <!DOCTYPE html>

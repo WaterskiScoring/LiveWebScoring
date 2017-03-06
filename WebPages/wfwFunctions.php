@@ -1,7 +1,5 @@
 <?php
 
-
-
 function printallSanctionIDs() {
   foreach( $_SESSION['allSanctionIDs'] as $key => $value){
       echo "SANCID: $key<br />";

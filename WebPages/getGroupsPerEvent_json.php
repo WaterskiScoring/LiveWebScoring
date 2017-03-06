@@ -15,10 +15,10 @@ if (isset($_POST['sanctionID']) && isset($_POST['skiEvent'])) {
 	if ( $curRegion == "U") {
 		$QueryCmd = "SELECT DISTINCT AgeGroup as EventGroup FROM EventReg WHERE SanctionID='" . $curSanctionID . "' AND Event='" . $curSkiEvent . "' ORDER BY AgeGroup ASC";
 	}
-	$QueryResult = mysql_query($QueryCmd) or die (mysql_error());
-	$curRowCount = mysql_num_rows($QueryResult);
+	$QueryResult = $dbConnect->query($QueryCmd) or die ($dbConnect->error);
+	$curRowCount = $QueryResult->num_rows;
 	if ( $curRowCount != 0 ) {
-		while ($curRow = mysql_fetch_assoc($QueryResult)) {
+		while ($curRow = $QueryResult->fetch_assoc()) {
 			$eventGroups[] = $curRow['EventGroup'];
 		}
 		$eventGroups[] = 'All';
@@ -26,7 +26,7 @@ if (isset($_POST['sanctionID']) && isset($_POST['skiEvent'])) {
 		echo "<span class='noScores'>No groups have been defined yet.</span>" . $_POST['sanctionID'] . " - " . $_POST['skiEvent'];
 	}
     /* close statement */
-	mysql_free_result($QueryResult);
+	$QueryResult->free();
 
 	echo json_encode($eventGroups);
 } else {

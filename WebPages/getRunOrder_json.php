@@ -52,9 +52,9 @@ if (checkReqVars()) {
 		$QueryCmd = $QueryCmd . "Order by " . $thisSortOrder;
 	}
 
-	$QueryResult = mysql_query($QueryCmd) or die (mysql_error());
+	$QueryResult = $dbConnect->query($QueryCmd) or die ($dbConnect->error);
 
-	$curDataRow = mysql_num_rows($QueryResult);
+	$curRowCount = $QueryResult->num_rows;
 ?>
 <style>
 .RunOrderGroup {
@@ -72,12 +72,12 @@ if (checkReqVars()) {
 
 </style>
 <?php
-	if ( $curDataRow != 0 ) {
+	if ( $curRowCount > 0 ) {
 		$prevEventGroup = '';
 
 		echo "\r\n<h2><p class='centeredItalic'>These are unofficial, repeat <span class='alertNotice'>UNOFFICIAL</span></p></h2>";
 		echo "\r\n<ul data-role='listview' id='RunOrderID'>";
-		while ($curDataRow = mysql_fetch_assoc($QueryResult)) {
+		while ($curDataRow = $QueryResult->fetch_assoc()) {
 			if ( $curDataRow['EventGroup'] != $prevEventGroup ) {
 				echo "\r\n<div data-role='header' class='RunOrderGroup'>Event Group: " . $curDataRow['EventGroup'] . "</div>";
 			}
@@ -99,7 +99,7 @@ if (checkReqVars()) {
 		}
 
 		echo "\r\n</ul><!-- /listview -->";
-		mysql_free_result($QueryResult);
+		$QueryResult->free();
 	} else {
 		echo "<span class='noScores'>No running orders available yet for " . $_SESSION['skiGroup'] . ".</span>";
 	}

@@ -1,0 +1,11 @@
+WindowsInstaller-KB893803-v2-x86.exe
+####Not sure if these next 2 are needed but worth putting in the same folder as exe
+Redist.txt
+windows installer 3.1 EULA.doc
+
+.Net Framework 3.5 Sp1 dotnetfx35_Sp1FullPackage.exe
+
+.Net Framework 3.5 Sp1/2 Fix Packs
+NDP20SP2-KB958481-x86.exe
+NDP35SP1-KB958484-x86.exe
+NDP30SP2-KB958483-x86.exe

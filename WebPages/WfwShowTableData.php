@@ -12,57 +12,51 @@ error_reporting(E_ALL | E_STRICT);
 //phpinfo();
 
 /* ****************************************
-printf("Connect failed: %s\n", mysql_connect_error());
+printf("Connect failed: %s\n", $dbConnect->error);
 printf("\nConnection successful");
 **************************************** */
-$dbConnect = mysql_connect( 'localhost', 'waterski', 'scor2007ing', 'AWSAEast' );
-if (mysql_error()) {
+$dbConnect = new mysqli( 'localhost', 'awsaeast_liveweb', 'Waterski#13', 'awsaeast_scoring' );
+if ($dbConnect->error) {
 	echo "\nConnection failed";
 	exit();
 } else {
 	printf("\nConnection successful");
 	echo "\nConnection successful";
-	mysql_select_db('AWSAEast') or die(mysql_error());
-	if (mysql_error()) {
-	} else {
-		echo "\nAWSAEast selected";
-	}
 }
 
 $curTableName = $_GET['TableName'];;
-$mySqlStmt = "Select * from $curTableName";
+$QueryCmd = "Select * from $curTableName";
 
-$result = mysql_query($mySqlStmt);
-if (mysql_error()) {
-	printf("\nErrors detected for query %s ", mysql_error());
+$QueryResult = $dbConnect->query($Query) or die ($dbConnect->error);
+if ($dbConnect->error) {
+	printf("\nErrors detected for query %s ", $dbConnect->error);
 } else {
-	if ( $result ) {
-		$num_rows = mysql_num_rows($result);
-		if ( $num_rows > 0 ) {
-			printf("<br/>Select returned %d rows<br/><br/>", $num_rows);
+	if ( $QueryResult ) {
+		$curRowCount = $QueryResult->num_rows;
+		if ( $curRowCount > 0 ) {
+			printf("<br/>Select returned %d rows<br/><br/>", $curRowCount);
 
-			$fields_num = mysql_num_fields($result);
+			$fieldCount = $QueryResult->field_count;
 			echo "<h1>Table: {$curTableName}</h1>";
 			echo "<table border='1'><tr>";
 			// printing table headers
-			for($i=0; $i<$fields_num; $i++)
-			{
-				$field = mysql_fetch_field($result);
+			for($i=0; $i<$fieldCount; $i++) {
+				$field = $QueryResult->fetch_field()
 				echo "<td>{$field->name}</td>";
 			}
 			echo "</tr>\n";
 			// printing table rows
-			while($row = mysql_fetch_row($result)) {
+			while($curRow = $QueryResult->fetch_assoc()) {
 				echo "<tr>";
 
 				// $row is array... foreach( .. ) puts every element
-				// of $row to $cell variable
-				foreach($row as $cell)
+				// of $curRow to $cell variable
+				foreach($curRow as $cell)
 					echo "<td>$cell</td>";
 
 				echo "</tr>\n";
 			}
-			mysql_free_result($result);
+			$QueryResult->free();
 		} else {
 			printf("\n No rows found");
 		}

@@ -47,12 +47,12 @@ function isRowFound($inTableName, $inTableNode, $inRowNode) {
 	}
 
 	//echo "\nSQL=$mySqlStmt";
-	$result = mysql_query($mySqlStmt);
-	if (mysql_error()) {
-		printf("\nErrors detected for query %s ", mysql_error());
+	$result = $dbConnect->query($mySqlStmt);
+	if ($dbConnect->error) {
+		printf("\nErrors detected for query %s ", $dbConnect->error);
 	} else {
 		if ( $result ) {
-			$num_rows = mysql_num_rows($result);
+			$num_rows = $result->num_rows;
 			if ( $num_rows > 0 ) {
 				printf("\nSelect returned %d rows.", $num_rows);
 				return true;
@@ -89,13 +89,13 @@ function updateRow($inTableName, $inTableNode, $inRowNode) {
 		$mySep = " AND ";
 	}
 
-	$result = mysql_query($mySqlStmt);
-	if (mysql_error()) {
-		printf("\n Errors detected on update %s ", mysql_error());
+	$result = $dbConnect->query($mySqlStmt);
+	if ($dbConnect->error) {
+		printf("\n Errors detected on update %s ", $dbConnect->error);
 		return false;
 	} else {
 		printf("\n Update successful %d ", $result);
-		mysql_info();
+		mysqli_get_client_info()
 		return true;
 	}
 }
@@ -123,13 +123,13 @@ function insertRow($inTableName, $inTableNode, $inRowNode) {
 	$mySqlStmt .= " );";
 
 	//echo "\nSQL=$mySqlStmt";
-	$result = mysql_query($mySqlStmt);
-	if (mysql_error()) {
-		printf("\n Errors detected on insert %s ", mysql_error());
+	$result = $dbConnect->query($mySqlStmt);
+	if ($dbConnect->error) {
+		printf("\n Errors detected on insert %s ", $dbConnect->error);
 		return false;
 	} else {
 		printf("\n Record inserted %d", mysql_insert_id());
-		mysql_info();
+		mysqli_get_client_info();
 		return true;
 	}
 }
@@ -149,13 +149,13 @@ function deleteRow($inTableName, $inTableNode, $inRowNode) {
 		$mySep = " AND ";
 	}
 
-	$result = mysql_query($mySqlStmt);
-	if (mysql_error()) {
-		printf("\n Errors detected on update %s ", mysql_error());
+	$result = $dbConnect->query($mySqlStmt);
+	if ($dbConnect->error) {
+		printf("\n Errors detected on delete %s ", $dbConnect->error);
 		return false;
 	} else {
 		printf("\n Delete successful %d ", $result);
-		mysql_info();
+		mysqli_get_client_info();
 		return true;
 	}
 }

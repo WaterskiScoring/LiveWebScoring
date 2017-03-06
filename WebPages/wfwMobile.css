@@ -80,6 +80,11 @@
 	display:inline-block;	
 }
 
+.videoNote {
+	font-weight:bold;
+	color: red;
+}
+
 .eventDivisions {
 	list-style:none;
 	padding-top:-10px;

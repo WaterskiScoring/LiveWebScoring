@@ -31,7 +31,7 @@ include_once( "WfwInit.php" );
 <div data-role="page" id="getRunOrder">
 
 	<div data-role="header">
-    	<a href='wfwShowTourScores.php' class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false'></a>
+    	<a href='wfwShowTourScores.php' class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false'>Scores</a>
 		<h1><?php echo "Sanction: " . $_SESSION['sanctionID'] . " Event: " . $_SESSION['skiEvent'];?></h1>
         <a id="ui-header-refresh" href='#' onclick='reloadPage()' class='ui-btn-right RefreshLink' data-role='button' data-icon='refresh' data-mini='true' data-ajax='true'>Refresh</a>
 
@@ -58,11 +58,12 @@ include_once( "WfwInit.php" );
 			. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 			. "Where TR.SanctionId = '" .  $_SESSION['sanctionID'] . "' AND ER.Event = '" .  $_SESSION['skiEvent'] . "' "
 			. "Order by TR.SanctionId, ER.Event, ER.EventGroup, TR.MemberId, ER.RunOrder, ER.RankingScore ";
-			$QueryResult = mysql_query($SqlCmd) or die (mysql_error());
 
-			$curDataRow = mysql_num_rows($QueryResult);
-			if ( $curDataRow != 0 ) {
-				while ($curDataRow = mysql_fetch_assoc($QueryResult)) {
+			$QueryResult = $dbConnect->query($SqlCmd) or die ($dbConnect->error);
+			$curRowCount = $QueryResult->num_rows;
+
+			if ( $curRowCount > 0 ) {
+				while ($curDataRow = $QueryResult->fetch_assoc()) {
 					echo "\r\n<tr>";
 					echo "\r\n<td>" . $curDataRow['SkierName'] . "</td>";
 					echo "\r\n<td>" . $curDataRow['EventGroup'] . "</td>";

@@ -37,21 +37,34 @@ include_once( "WfwInit.php" );
         <a href="wfwShowRecentScores.php" data-role="button" data-theme="b" data-mini="true" data-ajax="true">AWSA Recent Skier Scores</a>
 		<hr />
         <p class="centeredItalic">Tournaments sorted by activity date
+        <br/><sup class='videoNote'>V</sup>Indicates trick videos are available
 		<br/>These scores are unofficial, repeat <span class="alertNotice">UNOFFICIAL</span></p>
 
 		<?php
-		$TourneyQry = "Select SanctionId, Name, Class, EventLocation, SlalomRounds, TrickRounds, JumpRounds, STR_TO_DATE(EventDates, '%m/%d/%Y') as EventDate from Tournament Order By STR_TO_DATE(EventDates, '%m/%d/%Y') DESC;"; // Divisions currently scored
-		$TourneyResult = mysql_query($TourneyQry) or die (mysql_error());
-		$TourneyRow = mysql_num_rows($TourneyResult);
-		if ( $TourneyRow != 0 ) {
-
+		$TourneyQry = "Select SanctionId, Name, Class, EventLocation"
+			. ", SlalomRounds, TrickRounds, JumpRounds"
+			. ", STR_TO_DATE(EventDates, '%m/%d/%Y') as EventDate "
+			. ", (Select count(*) from TrickVideo V Where V.SanctionId = T.SanctionId "
+			. "And (V.Pass1VideoUrl is not null or V.Pass2VideoUrl is not null)) as TrickVideoCount "
+			. "from Tournament T "
+			. "Order By STR_TO_DATE(EventDates, '%m/%d/%Y') DESC";
+		$TourneyResult = $dbConnect->query($TourneyQry);
+		if ( $TourneyResult->num_rows > 0 ) {
 			echo "<ul data-role='listview' data-theme='b'>\n\r";
-			while ($TourneyRow = mysql_fetch_assoc($TourneyResult)) { // THIS RETRIEVES ALL THE TOURNEYS
+			while ($TourneyRow = $TourneyResult->fetch_assoc()) {
 				$thisSanctionID = $TourneyRow['SanctionId'];
-				echo "\r\n<li>\r\n<a href='javascript:void(0)' onclick='javascript:getTourneyBySanctionID(\"" . $thisSanctionID . "\", \"" . $TourneyRow['Name'] . "\")';>" . $TourneyRow['Name'] . "<span class='eventDate'>"  . $TourneyRow['SanctionId'] . " " . $TourneyRow['EventLocation'] . " " . $TourneyRow['EventDate'] . "</a>\r\n</li>";
+				echo "\r\n<li>\r\n<a href='javascript:void(0)' onclick='javascript:getTourneyBySanctionID(\"" . $thisSanctionID . "\", \""
+				. $TourneyRow['Name'] . "\")';>";
+				if ( $TourneyRow['TrickVideoCount'] > 0 ) {
+					echo "<sup class='videoNote'>V</sup>" ;
+				}
+				echo $TourneyRow['Name']
+				. "<span class='eventDate'>"
+				. $TourneyRow['SanctionId'] . " " . $TourneyRow['EventLocation'] . " " . $TourneyRow['EventDate']
+				. "</a>\r\n</li>";
 
 			}
-			mysql_free_result($TourneyResult);
+			$TourneyResult->free_result();
 			echo "\r\n</ul>";
 
 		} else {
