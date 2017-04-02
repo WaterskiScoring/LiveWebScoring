@@ -4,6 +4,9 @@ ini_set("display_errors", 1);
 session_start();
 include_once( "WfwInit.php" );
 
+$tempSanctionID = $_SESSION['sanctionID'];
+$tempEventName = $_SESSION['EventName'];
+
 if (isset($_POST['sanctionID'])) {
 	$_SESSION['sanctionID'] = $_POST['sanctionID'];
 	$_SESSION['EventName'] = $_POST['EventName'];

@@ -140,6 +140,8 @@ CREATE TABLE IF NOT EXISTS `SlalomScore` (
   `LastUpdateDate` datetime DEFAULT NULL,
   `Note` varchar(1024) DEFAULT NULL,
   `EventClass` char(1) DEFAULT NULL,
+  `CompletedSpeedMph` tinyint(4) DEFAULT NULL,
+  `CompletedSpeedKph` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`PK`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8  ;
 

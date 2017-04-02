@@ -1,8 +1,14 @@
 <?php
+error_reporting(E_ALL);
+//phpinfo();
+ini_set("display_errors", 1);
+//session_start();
+
 include_once( "WfwInit.php" );
+
 /* ****************************************
 **************************************** */
-function updateTable($inTableNode) {
+function updateTable($dbConnect, $inTableNode) {
 	$myAttrList = $inTableNode->attributes();
 	$myTableName = $myAttrList["name"];
 	$myCmd = $myAttrList["command"];
@@ -14,12 +20,12 @@ function updateTable($inTableNode) {
 	if($myRowCount > 0) {
 		foreach($myRows as $myRow) {
 			if ( $myCmd == "Delete" ) {
-				deleteRow($myTableName, $inTableNode, $myRow);
+				deleteRow($dbConnect, $myTableName, $inTableNode, $myRow);
 			} else {
-				if ( isRowFound($myTableName, $inTableNode, $myRow)) {
-					updateRow($myTableName, $inTableNode, $myRow);
+				if ( isRowFound($dbConnect, $myTableName, $inTableNode, $myRow)) {
+					updateRow($dbConnect, $myTableName, $inTableNode, $myRow);
 				} else {
-					insertRow($myTableName, $inTableNode, $myRow);
+					insertRow($dbConnect, $myTableName, $inTableNode, $myRow);
 				}
 			}
 		}
@@ -29,8 +35,7 @@ function updateTable($inTableNode) {
 
 /* ****************************************
 **************************************** */
-function isRowFound($inTableName, $inTableNode, $inRowNode) {
-	//global $dbConnect;
+function isRowFound($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	$mySep = "";
 	$mySqlStmt = "Select ";
 	$myKeys = $inTableNode->xpath('Keys/Key');
@@ -69,7 +74,7 @@ function isRowFound($inTableName, $inTableNode, $inRowNode) {
 
 /* ****************************************
 **************************************** */
-function updateRow($inTableName, $inTableNode, $inRowNode) {
+function updateRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	$mySep = "";
 	$myKeys = $inTableNode->xpath('Keys/Key');
 	$myColumns = $inTableNode->xpath('Columns/Column');
@@ -95,14 +100,14 @@ function updateRow($inTableName, $inTableNode, $inRowNode) {
 		return false;
 	} else {
 		printf("\n Update successful %d ", $result);
-		mysqli_get_client_info()
+		/* mysqli_get_client_info() */
 		return true;
 	}
 }
 
 /* ****************************************
 **************************************** */
-function insertRow($inTableName, $inTableNode, $inRowNode) {
+function insertRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	$mySep = "";
 	$mySqlStmt = "Insert INTO " . $inTableName . " ( ";
 
@@ -128,15 +133,15 @@ function insertRow($inTableName, $inTableNode, $inRowNode) {
 		printf("\n Errors detected on insert %s ", $dbConnect->error);
 		return false;
 	} else {
-		printf("\n Record inserted %d", mysql_insert_id());
-		mysqli_get_client_info();
+		printf("\n Record inserted %d", $dbConnect->insert_id);
+		/* mysqli_get_client_info() */
 		return true;
 	}
 }
 
 /* ****************************************
 **************************************** */
-function deleteRow($inTableName, $inTableNode, $inRowNode) {
+function deleteRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	$mySep = "";
 	$myKeys = $inTableNode->xpath('Keys/Key');
 	$myColumns = $inTableNode->xpath('Columns/Column');
@@ -155,7 +160,7 @@ function deleteRow($inTableName, $inTableNode, $inRowNode) {
 		return false;
 	} else {
 		printf("\n Delete successful %d ", $result);
-		mysqli_get_client_info();
+		/* mysqli_get_client_info() */
 		return true;
 	}
 }
@@ -172,7 +177,7 @@ Process input requests
 echo "\n------------------------------";
 $myTables = $xmlDoc->xpath('//Table');
 foreach($myTables as $myTable) {
-	updateTable($myTable);
+	updateTable($dbConnect, $myTable);
 }
 include_once( "WfwTerm.php" );
 ?>

@@ -6,6 +6,4 @@
 	}
 	ini_set( 'display_errors', true );
 
-	include_once( 'admin_awsaeast/classes/image.php' );
-	include_once( 'admin_awsaeast/classes/image_public_display.php' );
 ?>

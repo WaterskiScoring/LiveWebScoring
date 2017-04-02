@@ -2,5 +2,5 @@
 /* ****************************************
 Close database connection
 **************************************** */
-$close = mysql_close($dbConnect);
+$dbConnect->close();
 ?>
