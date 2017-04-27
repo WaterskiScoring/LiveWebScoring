@@ -9,9 +9,6 @@ function checkReqVars() {
 }
 
 if (checkReqVars()) {
-	$_SESSION['skiEvent'] = $_POST['skiEvent'];
-	$_SESSION['skiGroup'] = $_POST['groupID'];
-
 	$thisSanc = $_POST['sanctionID'];
 	$thisSkiEvent = $_POST['skiEvent'];
 	$thisGroup = $_POST['groupID'];
@@ -29,9 +26,9 @@ if (checkReqVars()) {
 		. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 		. "Left Outer Join "
 		. "(Select SanctionId, MemberId, AgeGroup, Max(LastUpdateDate) as LastSkied From "
-		. $_SESSION['skiEvent'] . "Score Group by SanctionId, MemberId, AgeGroup) SS "
+		. $thisSkiEvent . "Score Group by SanctionId, MemberId, AgeGroup) SS "
 		. "on SS.SanctionId = TR.SanctionId AND SS.MemberId = TR.MemberId AND SS.AgeGroup = TR.AgeGroup "
-		. "Where TR.SanctionId = '" .  $_SESSION['sanctionID'] . "' AND ER.Event = '" .  $_SESSION['skiEvent'] . "' "
+		. "Where TR.SanctionId = '" .  $thisSanc . "' AND ER.Event = '" .  $thisSkiEvent . "' "
 		. "Order by " . $thisSortOrder;
 	} else {
 		// Retrieve scores for single group and round
@@ -41,9 +38,9 @@ if (checkReqVars()) {
 		. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 		. "Left Outer Join "
 		. "(Select SanctionId, MemberId, AgeGroup, Max(LastUpdateDate) as LastSkied From "
-		. $_SESSION['skiEvent'] . "Score Group by SanctionId, MemberId, AgeGroup) SS "
+		. $thisSkiEvent . "Score Group by SanctionId, MemberId, AgeGroup) SS "
 		. "on SS.SanctionId = TR.SanctionId AND SS.MemberId = TR.MemberId AND SS.AgeGroup = TR.AgeGroup "
-		. "Where TR.SanctionId = '" .  $_SESSION['sanctionID'] . "' AND ER.Event = '" .  $_SESSION['skiEvent'] . "' ";
+		. "Where TR.SanctionId = '" .  $thisSanc . "' AND ER.Event = '" .  $thisSkiEvent . "' ";
 		if ( $curRegion == "U") {
 			$QueryCmd = $QueryCmd . "AND ER.AgeGroup = '"  .  $thisGroup . "' ";
 		} else {
@@ -101,7 +98,7 @@ if (checkReqVars()) {
 		echo "\r\n</ul><!-- /listview -->";
 		$QueryResult->free();
 	} else {
-		echo "<span class='noScores'>No running orders available yet for " . $_SESSION['skiGroup'] . ".</span>";
+		echo "<span class='noScores'>No running orders available yet for " . $thisGroup. ".</span>";
 	}
 
 } else {

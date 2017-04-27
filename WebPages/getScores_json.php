@@ -30,12 +30,11 @@ function checkReqVars() {
 </style>
 <?php
 if (checkReqVars()) {
-	$_SESSION['skiEvent'] = $_POST['skiEvent'];
 	$thisSanc = $_POST['sanctionID'];
 	$thisSkiEvent = $_POST['skiEvent'];
 	$thisDivision = '';
 
-	if ( $_SESSION['skiEvent'] == 'Recent') {
+	if ( $thisSkiEvent == 'Recent') {
 		$scoreField = "EventScore";
 		$thisDivision = 'Recent';
 
@@ -66,7 +65,7 @@ if (checkReqVars()) {
 			. "WHERE ssi.SanctionID='" .  $thisSanc . "' AND ssi.LastUpdateDate >= CURDATE() "
 			. "ORDER BY SortLastUpdateDate DESC, AgeGroup, Event";
 
-	} else if ( $_SESSION['skiEvent'] == 'Team') {
+	} else if ( $thisSkiEvent == 'Team') {
 		$QueryCmd = "Select S.SanctionId, S.TeamCode, S.AgeGroup, Name, ReportFormat"
 			. ", S.OverallPlcmt AS OverallPlcmtTeam, S.SlalomPlcmt AS SlalomPlcmtTeam, S.TrickPlcmt AS TrickPlcmtTeam, S.JumpPlcmt AS JumpPlcmtTeam"
 			. ", S.OverallScore AS OverallScoreTeam, S.SlalomScore AS SlalomScoreTeam, S.TrickScore AS TrickScoreTeam, S.JumpScore AS JumpScoreTeam "
@@ -74,7 +73,7 @@ if (checkReqVars()) {
 			. "Where S.SanctionId = '" . $thisSanc . "' "
 			. "Order by S.AgeGroup, S.OverallPlcmt ";
 
-	} else if ( $_SESSION['skiEvent'] == 'Overall') {
+	} else if ( $thisSkiEvent == 'Overall') {
 		$_SESSION['skiRound'] = $_POST['changeRoundSelector'];
 		$_SESSION['skiDivision'] = $_POST['divisionID'];
 
@@ -157,7 +156,7 @@ if (checkReqVars()) {
 				. ", DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 				. ", ssi.Score as EventScore, er.TeamCode "
 				. ", CONCAT(CAST(ssi.Score as CHAR), ' POINTS (P1:', CAST(ssi.ScorePass1 as CHAR), ' P2:', CAST(ssi.ScorePass2 as CHAR), ')' ) as EventScoreDesc "
-				. ", V.Pass1VideoUrl, V.Pass2VideoUrl "
+				. ", IFNULL(V.Pass1VideoUrl, '') as Pass1VideoUrl, IFNULL(V.Pass2VideoUrl, '') as Pass2VideoUrl "
 				. ", (SELECT IFNULL(ssi2.Score,0) "
 				. "FROM TourReg tri2 "
 				. "JOIN TrickScore ssi2 on ssi2.MemberId=tri2.MemberId AND ssi2.SanctionId=tri2.SanctionId AND ssi2.AgeGroup = tri2.AgeGroup "
@@ -208,7 +207,7 @@ if (checkReqVars()) {
 
 			echo "<h2><p class='centeredItalic'><br/>These scores are unofficial, repeat <span class='alertNotice'>UNOFFICIAL</span></p></h2>";
 
-			if ( $_SESSION['skiEvent'] == 'Overall') {
+			if ( $thisSkiEvent == 'Overall') {
 				while ($ScoresRow = $QueryResult->fetch_assoc()) {
 					if ( $ScoresRow['AgeGroup'] != $prevGroup ) {
 						if ( $prevGroup != '' ) {
@@ -231,7 +230,7 @@ if (checkReqVars()) {
 					$prevGroup = $ScoresRow['AgeGroup'];
 				}
 
-			} else if ( $_SESSION['skiEvent'] == 'Team') {
+			} else if ( $thisSkiEvent == 'Team') {
 				$RowCount = 0;
 				while ($ScoresRow = $QueryResult->fetch_assoc()) {
 					if ( $ScoresRow['AgeGroup'] != $prevGroup || $RowCount == 0) {
@@ -259,7 +258,7 @@ if (checkReqVars()) {
 
 			} else {
 				while ($ScoresRow = $QueryResult->fetch_assoc()) {
-					if ($thisDivision == "Recent" || $_SESSION['skiEvent'] == 'Recent' ) {
+					if ($thisDivision == "Recent" || $thisSkiEvent == 'Recent' ) {
 						if ( $prevGroup == '' ) {
 							echo "\r\n<ul data-role='listview' id='scoresID'>";
 						}
@@ -303,7 +302,7 @@ if (checkReqVars()) {
 
 					if ($ScoresRow['Event'] == "Jump") {
 						echo "<span class='score'>" . $ScoresRow['EventScoreDesc']  ."</span></a></li>\r\n";
-					} else if ($ScoresRow['Event'] == "Trick") {
+					} else if ( ($ScoresRow['Event'] == "Trick") && ($thisSkiEvent == "Trick") ) {
 						if ($ScoresRow['Pass1VideoUrl'] != "" || $ScoresRow['Pass2VideoUrl'] != "") {
 							echo "<sup class='videoNote'>V</sup>" ;
 						}

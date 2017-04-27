@@ -4,13 +4,10 @@ ini_set("display_errors", 1);
 session_start();
 include_once( "WfwInit.php" );
 
-$tempSanctionID = $_SESSION['sanctionID'];
-$tempEventName = $_SESSION['EventName'];
-
 if (isset($_POST['sanctionID'])) {
-	$_SESSION['sanctionID'] = $_POST['sanctionID'];
-	$_SESSION['EventName'] = $_POST['EventName'];
-} else if (!isset ($_SESSION['sanctionID'])) {
+	$SanctionID = $_POST['sanctionID'];
+	$EventName = $_POST['EventName'];
+} else {
 	  header('Location: http://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
 }
 ?>
@@ -18,7 +15,7 @@ if (isset($_POST['sanctionID'])) {
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo $_SESSION['EventName'] ?> (<?php echo $_SESSION['sanctionID'] ?>) - Tournament Scores </title>
+	<title><?php echo $EventName ?> (<?php echo $SanctionID ?>) - Tournament Scores </title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,7 +31,7 @@ if (isset($_POST['sanctionID'])) {
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 	<script>
-		var TournamentInfo = new Tournament("<?php echo $_SESSION['sanctionID'] ?>", "<?php echo $_SESSION['EventName'] ?>");
+		var TournamentInfo = new Tournament("<?php echo $SanctionID ?>", "<?php echo $EventName ?>");
 
 		function getURLParameter(name) {
 			return decodeURI(
@@ -60,7 +57,7 @@ if (isset($_POST['sanctionID'])) {
 		$( document ).ajaxStop(function() {
 			$("#toggle").click();
 			$("#toggle").html("Select...");
-			document.title = "<?php echo $_SESSION['EventName']?> (<?php echo $_SESSION['sanctionID'] ?>) - Tournament Scores ";
+			document.title = "<?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Scores ";
 			buildNavHTML();
 		});
 
@@ -77,7 +74,7 @@ if (isset($_POST['sanctionID'])) {
 <div data-role="page" id="Scores">
 
 	<div data-role="header">
-		<h2><?php echo $_SESSION['EventName']?> (<?php echo $_SESSION['sanctionID'] ?>) - Tournament Scores</h2>
+		<h2><?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Scores</h2>
 	    <a href='wfwShowTourRunOrder.php' id='RunOrderBtn' class='ui-btn-right' data-role='button' data-icon='grid' data-mini='true' data-ajax='false' data-iconpos="left">Running Orders</a>
 	</div><!-- /header -->
 
