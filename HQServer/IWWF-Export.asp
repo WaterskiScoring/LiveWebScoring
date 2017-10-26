@@ -174,16 +174,33 @@ Please wait a moment ...<br><br>
   Set objTextOut = objFSO.opentextfile(ExportFile,2,true)
 
   'Open Raw Scores Table and Pull applicable Score Records, along with necessary Membership table derivatives
-  sSQL = "Select RS.FName, RS.LName, RS.MemberID, MT.Email, MT.Password, MT.FederationCode as MemberFed, Convert(char(8),RS.EndDate,112)"
-  sSQL = sSQL & " as EndDate, RS.TourID, RS.Event, RS.Div, RS.Class, RS.Round, RS.Place, RS.Perf_Qual1, RS.Perf_Qual2, RS.AltScore,"
-  sSQL = sSQL & " Case when RS.Event = 'S' then RS.Score-DT.ZBSConversion else RS.Score end as Score, MT.Sex, MT.BirthDate,"
-  sSQL = sSQL & " MT.ForFedID, MT.FedIDLen, case when MT.ForFedID = RS.MemberID then 'USAWS-#' when MT.FedIDLen = 0 then 'Missing'"
-  sSQL = sSQL & " when FFP.ForFedPatt is null then 'Invalid' else 'Present' end as ForFedStat"
-  sSQL = sSQL & " from " & RawScoresTableName & " as RS left join " & MemberWFedIDTableName & " as MT on cast(right(RS.MemberID,8)"
-  sSQL = sSQL & " as integer) = MT.PersonID left join " & FedIDPatternTableName & " as FFP on FFP.ForFedPatt = MT.ForFedPatt"
-  sSQL = sSQL & " left join " & SkiYearTableName & " as SY on RS.EndDate between SY.BeginDate and SY.EndDate and SY.SkiYearID <> 1"
-  sSQL = sSQL & " left join " & DivisionsTableName & " as DT on RS.Div = DT.Div and SY.skiyearid = DT.skiyearid"
-  sSQL = sSQL & " where RS.Class in ('R','L') and RS.TourID = '" & sTourID & "' order by RS.MemberID, RS.Round, RS.Event"
+  sSQL = "SELECT RS.FName, RS.LName, RS.MemberID, MT.Email, MT.Password, MT.FederationCode as MemberFed"
+  sSQL = sSQL & ", Convert(char(8),RS.EndDate,112) as EndDate, RS.TourID"
+  sSQL = sSQL & ", RS.Event, RS.Div, RS.Class, RS.Round, RS.Place"
+  sSQL = sSQL & ", Case when RS.Event = 'S' AND RS.AltScore < 0 AND RS.Perf_Qual1 < 1825 then 1825 else RS.Perf_Qual1 end as Perf_Qual"
+  sSQL = sSQL & ", RS.Perf_Qual2, ABS(RS.AltScore) as AltScore"
+  sSQL = sSQL & ", Case when RS.Event = 'S' then RS.Score else RS.Score end as Score"
+  sSQL = sSQL & ", MT.Sex, MT.BirthDate, MT.ForFedID, MT.FedIDLen"
+  sSQL = sSQL & ", case when MT.ForFedID = RS.MemberID then 'USAWS-#' when MT.FedIDLen = 0 then 'Missing' when FFP.ForFedPatt is null then 'Invalid' else 'Present' end as ForFedStat "
+  sSQL = sSQL & "FROM " & RawScoresTableName & " as RS "
+  sSQL = sSQL & "  LEFT JOIN " & MemberWFedIDTableName & " as MT ON cast(right(RS.MemberID,8) as integer) = MT.PersonID "
+  sSQL = sSQL & "  LEFT JOIN " & FedIDPatternTableName & " as FFP ON FFP.ForFedPatt = MT.ForFedPatt "
+  sSQL = sSQL & "  LEFT JOIN " & SkiYearTableName & " as SY ON RS.EndDate between SY.BeginDate and SY.EndDate and SY.SkiYearID <> 1 "
+  sSQL = sSQL & "  LEFT JOIN " & DivisionsTableName & " as DT ON RS.Div = DT.Div and SY.skiyearid = DT.skiyearid "
+  sSQL = sSQL & "WHERE RS.Class in ('R','L') AND RS.TourID = '" & sTourID & "' "
+  sSQL = sSQL & "ORDER BY RS.MemberID, RS.Round, RS.Event"
+
+
+'  sSQL = "Select RS.FName, RS.LName, RS.MemberID, MT.Email, MT.Password, MT.FederationCode as MemberFed, Convert(char(8),RS.EndDate,112)"
+'  sSQL = sSQL & " as EndDate, RS.TourID, RS.Event, RS.Div, RS.Class, RS.Round, RS.Place, RS.Perf_Qual1, RS.Perf_Qual2, RS.AltScore,"
+'  sSQL = sSQL & " Case when RS.Event = 'S' then RS.Score-DT.ZBSConversion else RS.Score end as Score, MT.Sex, MT.BirthDate,"
+'  sSQL = sSQL & " MT.ForFedID, MT.FedIDLen, case when MT.ForFedID = RS.MemberID then 'USAWS-#' when MT.FedIDLen = 0 then 'Missing'"
+'  sSQL = sSQL & " when FFP.ForFedPatt is null then 'Invalid' else 'Present' end as ForFedStat"
+'  sSQL = sSQL & " from " & RawScoresTableName & " as RS left join " & MemberWFedIDTableName & " as MT on cast(right(RS.MemberID,8)"
+'  sSQL = sSQL & " as integer) = MT.PersonID left join " & FedIDPatternTableName & " as FFP on FFP.ForFedPatt = MT.ForFedPatt"
+'  sSQL = sSQL & " left join " & SkiYearTableName & " as SY on RS.EndDate between SY.BeginDate and SY.EndDate and SY.SkiYearID <> 1"
+'  sSQL = sSQL & " left join " & DivisionsTableName & " as DT on RS.Div = DT.Div and SY.skiyearid = DT.skiyearid"
+'  sSQL = sSQL & " where RS.Class in ('R','L') and RS.TourID = '" & sTourID & "' order by RS.MemberID, RS.Round, RS.Event"
 
   WriteDebugSQL (sSQL)
 
@@ -239,7 +256,7 @@ Please wait a moment ...<br><br>
       tempSL = FormatNumber(tempScore,2)
       tempTR = ""
       tempJU = ""
-      IF tempScore < 6 THEN tempSlmMiss = "Y": ELSE tempSlmMiss = "N"
+      IF tempScore < 6 THEN tempSlmMiss = "*": ELSE tempSlmMiss = ""
 
 '     Move following line to outside Case -- now applies to all 3 events. 
 '     IF tempScore > 0 THEN tempExport = "Y": ELSE tempExport = "N"
@@ -451,7 +468,8 @@ Please wait a moment ...<br><br>
    hideObject(splash);
    </SCRIPT>  
 
-   <%WriteIndexPageHeader
+   <%
+       WriteIndexPageHeader
 
    ' WriteDebugSQL (RecsSaved & " Records Saved")
 
