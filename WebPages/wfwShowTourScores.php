@@ -75,7 +75,10 @@ if (isset($_POST['sanctionID'])) {
 
 	<div data-role="header">
 		<h2><?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Scores</h2>
-	    <a href='wfwShowTourRunOrder.php' id='RunOrderBtn' class='ui-btn-right' data-role='button' data-icon='grid' data-mini='true' data-ajax='false' data-iconpos="left">Running Orders</a>
+	    <a id='RunOrderBtn' class='ui-btn-right' data-role='button' data-icon='grid' data-mini='true' data-ajax='false' data-iconpos="left"
+			<?php echo "href='wfwShowTourRunOrder.php?sanctionID=" . $SanctionID
+			. "&EventName=" . str_replace("'","&#039;", $EventName) . "'>Running Orders</a>";
+			?>
 	</div><!-- /header -->
 
 	<div data-role="header">
