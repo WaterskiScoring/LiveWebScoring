@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `EventReg` (
   `AgeGroup` varchar(12) NOT NULL,
   `Event` varchar(12) NOT NULL,
   `EventGroup` varchar(12) DEFAULT NULL,
+  `ReadyForPlcmt` char(1) DEFAULT NULL,
   `RunOrder` smallint(6) DEFAULT NULL,
   `TeamCode` varchar(12) DEFAULT NULL,
   `EventClass` char(1) DEFAULT NULL,
@@ -363,3 +364,50 @@ CREATE TABLE IF NOT EXISTS `TeamScoreDetail` (
 
   PRIMARY KEY (`PK`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+-- DROP INDEX SlalomScorePKIndex ON SlalomScore;
+
+CREATE UNIQUE INDEX Table
+    ON SlalomScore (SanctionId, MemberId, AgeGroup)
+    [index_option]
+    [algorithm_option | lock_option] 
+    
+CREATE UNIQUE INDEX TournamentPKIndex
+    ON Tournament (SanctionId);
+
+CREATE UNIQUE INDEX TourRegPKIndex
+    ON TourReg (SanctionId, MemberId, AgeGroup);
+    
+CREATE UNIQUE INDEX EventRegPKIndex
+    ON EventReg (SanctionId, MemberId, AgeGroup, Event);
+    
+CREATE UNIQUE INDEX EventRunOrderPKIndex
+    ON EventRunOrder (SanctionId, MemberId, AgeGroup, Event, Round);
+    
+CREATE UNIQUE INDEX SlalomScorePKIndex
+    ON SlalomScore (SanctionId, MemberId, AgeGroup, Round);
+    
+CREATE UNIQUE INDEX SlalomRecapPKIndex
+    ON SlalomRecap (SanctionId, MemberId, AgeGroup, Round, SkierRunNum);
+    
+CREATE UNIQUE INDEX JumpScorePKIndex
+    ON JumpScore (SanctionId, MemberId, AgeGroup, Round);
+    
+CREATE UNIQUE INDEX JumpRecapPKIndex
+    ON JumpRecap (SanctionId, MemberId, AgeGroup, Round, PassNum);
+    
+CREATE UNIQUE INDEX TrickScorePKIndex
+    ON TrickScore (SanctionId, MemberId, AgeGroup, Round);
+    
+CREATE UNIQUE INDEX TrickVideoPKIndex
+    ON TrickVideo (SanctionId, MemberId, AgeGroup, Round);
+
+CREATE UNIQUE INDEX TrickPassPKIndex
+    ON TrickPass (SanctionId, MemberId, AgeGroup, Round, PassNum, Seq);
+    
+CREATE UNIQUE INDEX TeamScorePKIndex
+    ON TeamScore (SanctionId, TeamCode, AgeGroup);
+    
+CREATE UNIQUE INDEX TeamScoreDetailPKIndex
+    ON TeamScoreDetail (SanctionId, TeamCode, AgeGroup, LineNum);
+

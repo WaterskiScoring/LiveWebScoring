@@ -53,8 +53,9 @@ include_once( "WfwInit.php" );
 			echo "<ul data-role='listview' data-theme='b'>\n\r";
 			while ($TourneyRow = $TourneyResult->fetch_assoc()) {
 				$thisSanctionID = $TourneyRow['SanctionId'];
-				echo "\r\n<li>\r\n<a href='javascript:void(0)' onclick='javascript:getTourneyBySanctionID(\"" . $thisSanctionID . "\", \""
-				. $TourneyRow['Name'] . "\")';>";
+				echo "\r\n<li>\r\n<a href='javascript:void(0)' onclick='javascript:getTourneyBySanctionID(\""
+				. $thisSanctionID . "\", \""
+				. str_replace("'","&#039;", $TourneyRow['Name']) . "\")';>";
 				if ( $TourneyRow['TrickVideoCount'] > 0 ) {
 					echo "<sup class='videoNote'>V</sup>" ;
 				}

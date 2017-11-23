@@ -1,21 +1,17 @@
 <?php
 error_reporting(E_ALL);
-ini_set("display_errors", 0);
+ini_set("display_errors", 1);
 session_start();
 include_once( "WfwInit.php" );
 
-if (isset($_POST['sanctionID'])) {
-	$_SESSION['sanctionID'] = $_POST['sanctionID'];
-	$_SESSION['EventName'] = $_POST['EventName'];
-} else if (!isset ($_SESSION['sanctionID'])) {
-	  header('Location: http://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
-}
+$SanctionID = $_GET['sanctionID'];
+$EventName = $_GET['EventName'];
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo $_SESSION['EventName'] ?> (<?php echo $_SESSION['sanctionID'] ?>) - Tournament Running Order</title>
+	<title><?php echo $EventName ?> (<?php echo $SanctionID ?>) - Tournament Running Order</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,7 +27,7 @@ if (isset($_POST['sanctionID'])) {
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 	<script>
-		var TournamentInfo = new Tournament("<?php echo $_SESSION['sanctionID'] ?>", "<?php echo $_SESSION['EventName'] ?>");
+		var TournamentInfo = new Tournament("<?php echo $SanctionID ?>", "<?php echo $EventName ?>");
 
 		function getURLParameter(name) {
 			return decodeURI(
@@ -54,7 +50,7 @@ if (isset($_POST['sanctionID'])) {
 		$( document ).ajaxStop(function() {
 			$("#toggle").click();
 			$("#toggle").html("Select...");
-			document.title = "<?php echo $_SESSION['EventName']?> (<?php echo $_SESSION['sanctionID'] ?>) - Tournament Running Order";
+			document.title = "<?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Running Order";
 			buildRunOrderNavHTML();
 		});
 
@@ -62,16 +58,11 @@ if (isset($_POST['sanctionID'])) {
 </head>
 
 <body>
-<!--
-<div id="nav">
-	<div id="loading">Loading ro...</div>
-</div>
--->
 
 <div data-role="page" id="RunOrder">
 
 	<div data-role="header">
-		<h2><?php echo $_SESSION['EventName']?> (<?php echo $_SESSION['sanctionID'] ?>) - Tournament Running Orders</h2>
+		<h2><?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Running Orders</h2>
 	</div><!-- /header -->
 
 	<div data-role="header">
