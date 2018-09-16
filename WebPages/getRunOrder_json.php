@@ -15,6 +15,9 @@ if (checkReqVars()) {
 	$curRegion = strtoupper(substr($thisSanc, 2, 1));
 
 	$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.RunOrder, ER.RankingScore ";
+	if ( $thisSkiEvent == "Jump" AND $curRegion != "U") {
+		$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.RunOrder, TR.JumpHeight, ER.RankingScore ";
+	}
 	if ( $curRegion == "U") {
 		$thisSortOrder = "TR.SanctionId, ER.Event, ER.AgeGroup, ER.RunOrder, ER.RankingScore ";
 	}
