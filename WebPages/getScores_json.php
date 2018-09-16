@@ -97,7 +97,7 @@ if (checkReqVars()) {
 			. "LEFT OUTER JOIN JumpScore JS on JS.MemberId=TR.MemberId AND JS.SanctionId=TR.SanctionId AND JS.AgeGroup = TR.AgeGroup AND JS.Round = '" . $thisRound . "' "
 			. "WHERE TR.SanctionID='" .  $thisSanc . "' " . $thisDivisionFilter
 			. "AND COALESCE(SS.Round,COALESCE(TS.Round,COALESCE(JS.Round,0))) > 0 "
-			. "Order By TR.AgeGroup, OverallScore DESC, TR.SkierName ";
+			. "Order By TR.AgeGroup, TR.ReadyForPlcmt DESC, OverallScore DESC, TR.SkierName ";
 
 			// Removed until I have a better way to determine overall eligibility
 			//. "AND ((Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) > 2 "
@@ -119,13 +119,13 @@ if (checkReqVars()) {
 
 		if ($thisDivision == "All" ) {
 			$WhereDivCmd = "";
-			$OrderCmd = "ORDER BY ssi.AgeGroup, ssi." . $scoreField . " DESC, RunOffScore DESC ";
+			$OrderCmd = "ORDER BY ssi.AgeGroup, er.ReadyForPlcmt DESC, ssi." . $scoreField . " DESC, RunOffScore DESC ";
 		} else if ($thisDivision == "Recent" ) {
 			$WhereDivCmd = "AND ssi.LastUpdateDate >= CURDATE() ";
 			$OrderCmd = "ORDER BY ssi.LastUpdateDate DESC, ssi." . $scoreField . " DESC ";
 		} else {
 			$WhereDivCmd = "AND ssi.AgeGroup = '" .  $thisDivision . "' ";
-			$OrderCmd = "ORDER BY ssi.AgeGroup, ssi." . $scoreField . " DESC, RunOffScore DESC ";
+			$OrderCmd = "ORDER BY ssi.AgeGroup, er.ReadyForPlcmt DESC, ssi." . $scoreField . " DESC, RunOffScore DESC ";
 		}
 
 		// Retrieve scores includes runoff score if available, assumes runoff applies to current round
@@ -220,7 +220,7 @@ if (checkReqVars()) {
 					}
 
 					echo "<li>\r\n";
-					echo "<a href='wfwShowScoreRecap.php?SanctionId=" . $ScoresRow['SanctionId'] . "&MemberId=" . $ScoresRow['MemberId'] . "&SkierName=" . str_replace("'","&#039;", $ScoresRow['SkierName']) . "&SkierRound=" . $ScoresRow['Round'] . "&SkierEvent=" . $ScoresRow['Event'] . "' "
+					echo "<a href='wfwShowScoreRecap.php?SanctionId=" . $ScoresRow['SanctionId'] . "&MemberId=" . $ScoresRow['MemberId'] . "&AgeGroup=" . $ScoresRow['AgeGroup'] . "&SkierName=" . str_replace("'","&#039;", $ScoresRow['SkierName']) . "&SkierRound=" . $ScoresRow['Round'] . "&SkierEvent=" . $ScoresRow['Event'] . "' "
 					. "data-rel='dialog' data-transition='pop'>" . str_replace("'","&#039;", $ScoresRow['SkierName'])
 					. "<span class='lastUpdateTime'> (" . $ScoresRow['AgeGroup'] . " - " . $ScoresRow['Event'] . ") </span>\r\n";
 					echo "<span class='score'>" . $ScoresRow['OverallScore']  ." Points ("
@@ -291,7 +291,7 @@ if (checkReqVars()) {
 					}
 
 					echo "<li>\r\n";
-					echo "<a href='wfwShowScoreRecap.php?SanctionId=" . $ScoresRow['SanctionId'] . "&MemberId=" . $ScoresRow['MemberId']
+					echo "<a href='wfwShowScoreRecap.php?SanctionId=" . $ScoresRow['SanctionId'] . "&MemberId=" . $ScoresRow['MemberId'] . "&AgeGroup=" . $ScoresRow['AgeGroup']
 						. "&SkierName=" . str_replace("'","&#039;", $ScoresRow['SkierName'])
 						. "&SkierRound=" . $ScoresRow['Round']
 						. "&SkierEvent=" . $ScoresRow['Event']

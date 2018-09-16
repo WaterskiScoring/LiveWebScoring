@@ -7,6 +7,7 @@ include_once( "WfwInit.php" );
 
 $SanctionId = $_GET['SanctionId'];
 $MemberId = $_GET['MemberId'];
+$AgeGroup = $_GET['AgeGroup'];
 $SkierName = $_GET['SkierName'];
 $SkierRound = $_GET['SkierRound'];
 $SkierEvent = $_GET['SkierEvent'];
@@ -45,7 +46,7 @@ $SkierEvent = $_GET['SkierEvent'];
 		if ($SkierEvent == "Slalom") {
 			$RecapQry = "Select Score, PassLineLength, Note, Reride, ScoreProt, RerideReason "
 				. "FROM `SlalomRecap` "
-				. "WHERE SanctionId='" . $SanctionId . "' AND MemberId='". $MemberId . "' AND Round='" . $SkierRound
+				. "WHERE SanctionId='" . $SanctionId . "' AND MemberId='". $MemberId . "' And AgeGroup='" . $AgeGroup . "' AND Round='" . $SkierRound
 				. "' Order By SkierRunNum ASC";
 		}
 
@@ -55,14 +56,14 @@ $SkierEvent = $_GET['SkierEvent'];
 				. "FROM `TrickPass` P "
 				. "Join TrickScore S on S.SanctionId = P.SanctionId AND S.MemberId = P.MemberId AND S.AgeGroup = P.AgeGroup AND S.Round = P.Round "
 				. "Left Outer Join TrickVideo V ON V.SanctionId = P.SanctionId AND V.MemberId = P.MemberId AND V.AgeGroup = P.AgeGroup AND V.Round = P.Round "
-				. "WHERE P.SanctionId='" . $SanctionId . "' AND P.MemberId='". $MemberId . "' AND P.Round='" . $SkierRound
+				. "WHERE P.SanctionId='" . $SanctionId . "' AND P.MemberId='". $MemberId . "' And P.AgeGroup='" . $AgeGroup . "' AND P.Round='" . $SkierRound
 				. "' Order By P.PassNum ASC, P.Seq ASC";
 		}
 
 		if ($SkierEvent == "Jump") {
 			$RecapQry = "Select ScoreFeet, ScoreMeters, PassNum, Results, BoatSpeed, RampHeight, ScoreProt, Reride, RerideReason "
 				. "FROM `JumpRecap` "
-				. "WHERE SanctionId='" . $SanctionId . "' AND MemberId='". $MemberId . "' AND Round='" . $SkierRound
+				. "WHERE SanctionId='" . $SanctionId . "' AND MemberId='". $MemberId . "' And AgeGroup='" . $AgeGroup . "' AND Round='" . $SkierRound
 				. "' Order By PassNum ASC";
 		}
 
@@ -78,13 +79,12 @@ $SkierEvent = $_GET['SkierEvent'];
 				. "LEFT OUTER JOIN SlalomScore SS on SS.MemberId=TR.MemberId AND SS.SanctionId=TR.SanctionId AND SS.AgeGroup = TR.AgeGroup AND SS.Round = '" . $SkierRound . "' "
 				. "LEFT OUTER JOIN TrickScore TS on TS.MemberId=TR.MemberId AND TS.SanctionId=TR.SanctionId AND TS.AgeGroup = TR.AgeGroup AND TS.Round = '" . $SkierRound . "' "
 				. "LEFT OUTER JOIN JumpScore JS on JS.MemberId=TR.MemberId AND JS.SanctionId=TR.SanctionId AND JS.AgeGroup = TR.AgeGroup AND JS.Round = '" . $SkierRound . "' "
-				. "WHERE TR.SanctionID='" .  $SanctionId . "' AND TR.MemberId='". $MemberId . "' "
+				. "WHERE TR.SanctionID='" .  $SanctionId . "' AND TR.MemberId='". $MemberId  . "' And AgeGroup='" . $AgeGroup. "' "
 				. "AND COALESCE(SS.Round,COALESCE(TS.Round,COALESCE(JS.Round,0))) > 0 "
 				. "AND ((Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) > 2 "
 				. "	OR (Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) >= 2 "
 				. "		AND TR.AgeGroup in ('B1', 'G1', 'W8', 'W9', 'WA', 'WB', 'M8', 'M9', 'MA', 'MB')) "
 				. "Order By TR.AgeGroup, OverallScore DESC, TR.SkierName ";
-
 		}
 		?>
 
