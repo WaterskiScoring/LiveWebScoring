@@ -8,6 +8,7 @@ function checkReqVars() {
   return isset($_POST['sanctionID']);
 }
 
+$QueryCmd = "";
 if (checkReqVars()) {
 	$thisSanc = $_POST['sanctionID'];
 	$curRegion = strtoupper(substr($thisSanc, 2, 1));

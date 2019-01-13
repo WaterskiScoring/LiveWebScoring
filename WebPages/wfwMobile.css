@@ -189,7 +189,7 @@
 	text-align:center;
 	font-style:italic;
 	font-size:1em; 
-	margin-bottom:1.5em;
+	margin-bottom:1em;
 }
 
 #recentPasses .ui-btn-inline {
@@ -282,7 +282,6 @@ td {
 }
 .DataCenter {
 	Text-Align:Center; 
-}
 }
 
 /* CSS Document */
@@ -475,9 +474,6 @@ h1 .dropNav a.ui-link, h1 .dropNav a.ui-link:hover {
 	margin: 0px -15px;
 }
 
-
-	
-
 #scoresID.ui-content, #scoresID.ui-body-c, #recentPassesID .ui-collapsible-content { /* Specific fix for .ui-content selector change that impacted recent passes page */
 	padding: 0px 15px;
 }
@@ -542,7 +538,10 @@ h1 .dropNav a.ui-link, h1 .dropNav a.ui-link:hover {
 	font-weight:lighter;
 }
 
-#slalomRoundDiv, #trickRoundDiv, #jumpRoundDiv, #overallRoundDiv, #divisions {
+#slalomRoundDiv, #trickRoundDiv, #jumpRoundDiv, #overallRoundDiv, #sDivisions, #tDivisions, #jDivisions, #oDivisions {
+	display:none;
+}
+.ContainerHide {
 	display:none;
 }
 
@@ -571,4 +570,3 @@ h1 .dropNav a.ui-link, h1 .dropNav a.ui-link:hover {
 	text-align:center;
 	white-space:normal;	
 }
-

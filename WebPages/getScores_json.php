@@ -20,6 +20,7 @@ function checkReqVars() {
 	Background: #396B9E;
 	Color: White;
 	font-size:1.1em;
+	padding: 10px;
 	margin: auto;
 	text-align:center;
 }

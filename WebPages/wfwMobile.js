@@ -42,14 +42,16 @@ function buildNavHTML() {
 			+ "<label id='slabel' for='slalom'>Slalom</label>";
 
 		// BUILD ROUNDS
-		sRoundsString += "<div id='slalomRoundDiv'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		//sRoundsString += "<div id='slalomRoundDiv' style='display:none;'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		sRoundsString += "<div id='slalomRoundDiv' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		for (s=1;s<=slalom;s++) {
 			sRoundsString += "<input type='radio' name='changeRoundSelector' id='slalomRound" + s + "' value='" + s + "'><label for='slalomRound" + s + "'>Round " + s + "</label>";
 		}
 		sRoundsString += "</fieldset></div>";
 
 		// BUILD SLALOM DIVISIONS
-		sDivisionsString += "<div style='display:none' id='sDivisions'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		//sDivisionsString += "<div style='display:none' id='sDivisions' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		sDivisionsString += "<div id='sDivisions' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		try {
 			for (sd=0;sd<slalomDivisions.length;sd++) {
 				sDivisionsString += "<input type='radio' name='divisionID' id='slalomdivisionID" + slalomDivisions[sd]
@@ -69,14 +71,16 @@ function buildNavHTML() {
 			+ "<label for='trick'>Trick</label>";
 
 		// BUILD ROUNDS
-		tRoundsString += "<div id='trickRoundDiv'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		//tRoundsString += "<div id='trickRoundDiv' style='display:none;'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		tRoundsString += "<div id='trickRoundDiv'  Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		for (t=1;t<=trick;t++) {
 			tRoundsString += "<input type='radio' name='changeRoundSelector' id='trickRound" + t + "' value='" + t + "'><label for='trickRound" + t + "'>Round " + t + "</label>";
 		}
 		tRoundsString += "</fieldset></div>";
 
 		// BUILD TRICK DIVISIONS
-		tDivisionsString += "<div style='display:none' id='tDivisions'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		//tDivisionsString += "<div style='display:none' id='tDivisions'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		tDivisionsString += "<div id='tDivisions' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		try {
 			for (td=0;td<trickDivisions.length;td++) {
 				tDivisionsString += "<input type='radio' name='divisionID' id='trickdivisionID" + trickDivisions[td] +"' value='" + trickDivisions[td] + "'><label for='trickdivisionID" + trickDivisions[td] + "'> " + trickDivisions[td] + " </label>";
@@ -95,14 +99,16 @@ function buildNavHTML() {
 			+ "<label for='jump'>Jump</label>";
 
 		// BUILD ROUNDS
-		jRoundsString += "<div id='jumpRoundDiv'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		//jRoundsString += "<div id='jumpRoundDiv' style='display:none;'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		jRoundsString += "<div id='jumpRoundDiv' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		for (j=1;j<=jump;j++) {
 			jRoundsString += "<input type='radio' name='changeRoundSelector' id='jumpRound" + j + "' value='" + j + "'><label for='jumpRound" + j + "'>Round " + j + "</label>";
 		}
 		jRoundsString += "</fieldset></div>";
 
 		// BUILD JUMP DIVISIONS
-		jDivisionsString += "<div style='display:none' id='jDivisions'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		// jDivisionsString += "<div style='display:none' id='jDivisions'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		jDivisionsString += "<div id='jDivisions' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		try {
 			for (jd=0;jd<jumpDivisions.length;jd++) {
 				jDivisionsString += "<input type='radio' name='divisionID' id='jumpdivisionID" + jumpDivisions[jd] +"' value='" + jumpDivisions[jd] + "'><label for='jumpdivisionID" + jumpDivisions[jd] + "'> " + jumpDivisions[jd] + " </label>";
@@ -119,14 +125,17 @@ function buildNavHTML() {
 			+ "<label for='overall'>Overall</label>";
 
 		// BUILD ROUNDS
-		oRoundsString += "<div id='overallRoundDiv'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		//oRoundsString += "<div id='overallRoundDiv' style='display:none'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		oRoundsString += "<div id='overallRoundDiv' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		for (o=1;o<=jump;o++) {
 			oRoundsString += "<input type='radio' name='changeRoundSelector' id='overallRound" + o + "' value='" + o + "'><label for='overallRound" + o + "'>Round " + o + "</label>";
 		}
 		oRoundsString += "</fieldset></div>";
 
 		// BUILD OVERALL DIVISIONS
-		oDivisionsString += "<div style='display:none' id='oDivisions'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+
+		//oDivisionsString += "<div id='oDivisions' style='display:none'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
+		oDivisionsString += "<div id='oDivisions' Class='ContainerHide'><fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>";
 		try {
 			for (od=0;od<overallDivisions.length;od++) {
 				oDivisionsString += "<input type='radio' name='divisionID' id='overalldivisionID" + overallDivisions[od] +"' value='" + overallDivisions[od] + "'><label for='overalldivisionID" + overallDivisions[od] + "'> " + overallDivisions[od] + " </label>";
@@ -635,9 +644,10 @@ function getScoresFromRecent (division,eventRound,eventType) {
 
 /* ******************************************************************** */
 // USED FOR SENDING SANCTION INFO FROM TOURNY LIST PAGE TO GETSCORES
-function getTourneyBySanctionID(sancID, EventName) {
+function getTourneyBySanctionID(sancID, EventName, EventClass) {
 	document.forms['tourneyList'].sanctionID.value=sancID;
 	document.forms['tourneyList'].EventName.value=EventName;
+	document.forms['tourneyList'].EventClass.value=EventClass;
 	document.forms['tourneyList'].submit();
 }
 

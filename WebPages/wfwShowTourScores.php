@@ -4,23 +4,28 @@ ini_set("display_errors", 1);
 session_start();
 include_once( "WfwInit.php" );
 
+$SanctionID = "";
+$EventName = "";
+$EventTourClass = "";
+$TourneyName = "";
 if (isset($_POST['sanctionID'])) {
 	$SanctionID = $_POST['sanctionID'];
 	$EventName = $_POST['EventName'];
+	$EventTourClass = $_POST['EventClass'];
 } else {
 	  header('Location: http://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo $EventName ?> (<?php echo $SanctionID ?>) - Tournament Scores </title>
+	<title><?php echo $EventName . " (" . $SanctionID . ") - Tournament Scores"; ?> </title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
-	<link rel="stylesheet" href="wfwMobile.css">
+	<link rel="stylesheet" type="text/css" href="wfwMobile.css">
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
@@ -30,8 +35,13 @@ if (isset($_POST['sanctionID'])) {
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
+	<style>
+	#slalomRoundDiv, #trickRoundDiv, #jumpRoundDiv, #overallRoundDiv, #sDivisions, #tDivisions, #jDivisions, #oDivisions {
+		display:none;
+	}
+	</style>
 	<script>
-		var TournamentInfo = new Tournament("<?php echo $SanctionID ?>", "<?php echo $EventName ?>");
+		var TournamentInfo = new Tournament(<?php echo "'" . $SanctionID . "', '" . $EventName . "'"; ?>);
 
 		function getURLParameter(name) {
 			return decodeURI(
@@ -57,7 +67,7 @@ if (isset($_POST['sanctionID'])) {
 		$( document ).ajaxStop(function() {
 			$("#toggle").click();
 			$("#toggle").html("Select...");
-			document.title = "<?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Scores ";
+			document.title = "<?php echo $EventName . "(" . $SanctionID . ") - Tournament Scores "; ?>";
 			buildNavHTML();
 		});
 
@@ -65,16 +75,26 @@ if (isset($_POST['sanctionID'])) {
 </head>
 
 <body>
-<!--
-<div id="nav">
-	<div id="loading">Loading...</div>
-</div>
--->
 
 <div data-role="page" id="Scores">
 
 	<div data-role="header">
-		<h2><?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Scores</h2>
+		<h2>
+		<?php
+		if ( $EventTourClass == "L" OR $EventTourClass == "R" OR $EventTourClass == "A" OR $EventTourClass == "B" ) {
+			echo $EventName
+				. " (" . $SanctionID . ")"
+				. " <sup class='videoNote'><img src='Images/AWSALogo.png' alt='AWSA Sacntioned Event'></sup>"
+				. " <sup class='videoNote'><img src='Images/IwwfLogo.png' alt='IWWF Class L/R Event'></sup>"
+ 				. " - Tournament Scores";
+		} else {
+			echo $EventName
+				. " (" . $SanctionID . ")"
+				. " <sup class='videoNote'><img src='Images/AWSALogo.png' alt='AWSA Sacntioned Event'></sup>"
+ 				. " - Tournament Scores";
+		}
+		?>
+		</h2>
 	    <a id='RunOrderBtn' class='ui-btn-right' data-role='button' data-icon='grid' data-mini='true' data-ajax='false' data-iconpos="left"
 			<?php echo "href='wfwShowTourRunOrder.php?sanctionID=" . $SanctionID
 			. "&EventName=" . str_replace("'","&#039;", $EventName) . "'>Running Orders</a>";
