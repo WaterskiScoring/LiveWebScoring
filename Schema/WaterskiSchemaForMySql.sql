@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `EventRunOrder` (
   `MemberId` char(9) NOT NULL,
   `AgeGroup` varchar(12) NOT NULL,
   `EventGroup` varchar(12) NOT NULL,
+  `RunOrderGroup` nvarchar(12) NOT NULL,
   `Event` varchar(12) NOT NULL,
   `Round` tinyint(4) NOT NULL,
   `RunOrder` smallint(6) DEFAULT NULL,
