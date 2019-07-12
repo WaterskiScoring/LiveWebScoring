@@ -21,33 +21,61 @@ function checkSessionSet() {
 }
 
 // SET SESSION DATA WITH POST DATA
+$SanctionID = '';
+$divisionID = '';
+$skiRound = '';
+$skiEvent = '';
+$eventRoundID = '';
+$eventTypeID = '';
+$eventTable = '';
+$formID = '';
+$scoreField = '';
+
 if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
-	if ($_POST['formID']=='getDivisionsForm') {
-		if (isset($_POST['divisionID'])) $_SESSION['divisionID'] = $_POST['divisionID'];
+	if ( isset($_POST['formID']) ) {
+		if ( isset($_SESSION['SanctionID']) ) $SanctionID = $_SESSION['SanctionID'];
+		if ( isset($_SESSION['divisionID']) ) $divisionID = $_SESSION['divisionID'];
+		if ( isset($_SESSION['skiRound']) ) $skiRound = $_SESSION['skiRound'];
+		if ( isset($_SESSION['skiEvent']) ) $skiEvent = $_SESSION['skiEvent'];
+		if ( isset($_SESSION['eventTable']) ) $eventTable = $_SESSION['eventTable'];
+
+		$formID = $_POST['formID'];
+		if ($formID == 'getDivisionsForm') {
+			if (isset($_POST['divisionID'])) {
+				$divisionID = $_POST['divisionID'];
+				$_SESSION['divisionID'] = $divisionID;
+			}
+
+		} else if ($formID == 'recentPassesForm') {
+			if (isset($_POST['divisionID'])) {
+				$divisionID = $_POST['divisionID'];
+				$_SESSION['divisionID'] = $divisionID;
+			}
+			if (isset($_POST['eventRoundID'])) {
+				$skiRound = $_POST['eventRoundID'];
+				$_SESSION['skiRound'] = $skiRound;
+			}
+			if (isset($_POST['eventTypeID'])) {
+				$eventTypeID = $_POST['eventTypeID'];
+				$_SESSION['skiEvent'] = $myEventTypeID;
+				$eventTable = $eventTypeID . "Score";
+				$_SESSION['eventTable'] = $eventTable;
+			}
+		}
+
+		if ( $skiEvent == "Jump") {
+			$scoreField="ScoreFeet";
+		} else {
+			$scoreField="Score";
+		}
+
+	} else {
+		$errorMsg = "<span class='noScores'>Input form not available.  Return to previous.</span>";
 	}
-	if ($_POST['formID']=='recentPassesForm') {
-		if (isset($_POST['divisionID'])) $_SESSION['divisionID'] = $_POST['divisionID'];
-		if (isset($_POST['eventRoundID'])) $_SESSION['skiRound'] = $_POST['eventRoundID'];
-		if (isset($_POST['eventTypeID'])) $_SESSION['skiEvent'] = $_POST['eventTypeID']; $_SESSION['eventTable']=$_SESSION['skiEvent'] . "Score";
-	}
-	if ($_SESSION['skiEvent'] == "Jump") $scoreField="ScoreFeet"; else $scoreField="Score";
+
 } else {
 	$errorMsg = "<span class='noScores'>Data not set to display scores.  Return to previous.</span>";
 }
-
-
-//THIS IS HACK FOR RECENT PASSES
-	//if (isset($_POST['ageGroupID'])) $_SESSION['divisionID'] = $_POST['ageGroupID'];
-	//if (isset($_POST['eventRoundID'])) $_SESSION['skiRound'] = $_POST['eventRoundID'];
-	//if (isset($_POST['eventTypeID'])) $_SESSION['skiEvent'] = $_POST['eventTypeID']; $_SESSION['eventTable']=$_SESSION['skiEvent'] . "Score";
-
-// THIS IS TYPICAL PATH DIRECTLY FROM getDivisions page
-	//if (isset($_POST['divisionID'])) $_SESSION['divisionID'] = $_POST['divisionID'];
-	//if ($_SESSION['skiEvent'] == "Jump") $scoreField="ScoreFeet"; else $scoreField="Score";
-
-// PAUL NOTE: Clean up code above if possible.
-// PAUL NOTE: Change to be able to view meters or feet off
-// PAUL NOTE: Make sure all session or post data is set before running query below so no php errors are returned if session times out.
 
 ?>
 
@@ -73,7 +101,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 
 	<div data-role="header">
     	<a href='wfwShowTourDiv.php' class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='true'>Divisions</a>
-		<h1><?php echo $_SESSION['divisionID'] . " " . $_SESSION['skiEvent'];?></h1>
+		<h1><?php echo $divisionID . " " . $skiEvent;?></h1>
         <a id="ui-header-refresh" href='#' onclick='reloadPage()' class='ui-btn-right RefreshLink' data-role='button' data-icon='refresh' data-mini='true' data-ajax='true'>Refresh</a>
 
 		<hr />
@@ -84,7 +112,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 
 		<ul data-role="listview">
 		<?php
-			if ($_SESSION['skiEvent'] == "Jump") {
+			if ($skiEvent == "Jump") {
 				$ScoresQry = "SELECT ssi.SanctionID, tri.SkierName, tri.MemberId, ssi.MemberId, ssi.AgeGroup, ssi.Round
 					, ssi.ScoreFeet, ssi.ScoreMeters
 				, (SELECT IFNULL((ssi2.ScoreFeet),0) from TourReg tri2
@@ -93,10 +121,10 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					) AS RunOffScore
 				from TourReg tri
 				JOIN JumpScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup
-				WHERE ssi.SanctionID='" .  $_SESSION['sanctionID'] . "'  AND ssi.AgeGroup='" .  $_SESSION['divisionID'] . "' AND Round = '" . $_SESSION['skiRound'] . "'
+				WHERE ssi.SanctionID='" .  $SanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
 				ORDER BY ssi.ScoreFeet DESC, ssi.ScoreMeters, RunOffScore DESC";
 			}
-			if ($_SESSION['skiEvent'] == "Trick") {
+			if ($skiEvent == "Trick") {
 				$ScoresQry = "SELECT ssi.SanctionID, tri.SkierName, tri.MemberId, ssi.MemberId, ssi.AgeGroup, ssi.Round
 					, ssi.Score, ssi.ScorePass1, ssi.ScorePass2
 				, (SELECT IFNULL(ssi2.Score,0) from TourReg tri2
@@ -105,10 +133,10 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					) AS RunOffScore
 				from TourReg tri
 				JOIN TrickScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup
-				WHERE ssi.SanctionID='" .  $_SESSION['sanctionID'] . "'  AND ssi.AgeGroup='" .  $_SESSION['divisionID'] . "' AND Round = '" . $_SESSION['skiRound'] . "'
+				WHERE ssi.SanctionID='" .  $SanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
 				ORDER BY ssi.Score DESC, RunOffScore DESC";
 			}
-			if ($_SESSION['skiEvent'] == "Slalom") {
+			if ($skiEvent == "Slalom") {
 				$ScoresQry = "SELECT ssi.SanctionID, tri.SkierName, tri.MemberId, ssi.MemberId, ssi.AgeGroup, ssi.Round
 					, ssi.Score, ssi.FinalSpeedMph, ssi.FinalSpeedKph, ssi.FinalLen, ssi.FinalLenOff, ssi.FinalPassScore
 				, (SELECT IFNULL(ssi2.Score,0) from TourReg tri2
@@ -117,7 +145,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					) AS RunOffScore
 				from TourReg tri
 				JOIN SlalomScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup
-				WHERE ssi.SanctionID='" .  $_SESSION['sanctionID'] . "'  AND ssi.AgeGroup='" .  $_SESSION['divisionID'] . "' AND Round = '" . $_SESSION['skiRound'] . "'
+				WHERE ssi.SanctionID='" .  $SanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
 				ORDER BY ssi.Score DESC, RunOffScore DESC";
 			}
 
@@ -128,13 +156,13 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 				while ($ScoresRow = $ScoresResult->fetch_assoc()) {
 					echo "<li>\r\n";
 					echo "<a href='wfwShowScoreRecap.php?MemberId=" . $ScoresRow['MemberId'] . "&SkierName=" . $ScoresRow['SkierName'] . "' data-rel='dialog' data-transition='pop'>" . $ScoresRow['SkierName'] . "\r\n";
-					if ($_SESSION['skiEvent'] == "Jump") {
+					if ($skiEvent == "Jump") {
 						echo "<span class='scoreLine'>" . $ScoresRow['ScoreFeet']  . " feet (" . $ScoresRow['ScoreMeters'] . "M)</span>";
 					}
-					if ($_SESSION['skiEvent'] == "Trick") {
+					if ($skiEvent == "Trick") {
 						echo "<span class='scoreLine'>" . $ScoresRow['Score']  . " points (" . $ScoresRow['ScorePass1'] . ", " . $ScoresRow['ScorePass2'] . ")</span>";
 					}
-					if ($_SESSION['skiEvent'] == "Slalom") {
+					if ($skiEvent == "Slalom") {
 						echo "<span class='scoreLine'>" . $ScoresRow['Score']  . " buoys " . $ScoresRow['FinalPassScore'];
 						if ($ScoresRow['FinalLenOff'] == "Long") {
 							echo "@" . $ScoresRow['FinalSpeedMph'] . "mph (" . $ScoresRow['FinalSpeedKph'] . "kph)";
@@ -146,7 +174,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					echo "</a></li>\r\n";
 				}
 			} else {
-				echo "<span class='noScores'>No scores available yet for " . $_SESSION['divisionID'] . ".</span>";
+				echo "<span class='noScores'>No scores available yet for " . $divisionID . ".</span>";
 			}
 		?>
 		</ul><!-- /listview -->

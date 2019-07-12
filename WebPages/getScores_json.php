@@ -5,12 +5,18 @@ session_start(); // base page pulling this file in already starts session
 include_once( "WfwInit.php" );
 
 function checkReqVars() {
-	if ( $_POST['skiEvent'] == 'Recent') {
-		return true;
-	} else if ( $_POST['skiEvent'] == 'Team') {
-		return isset($_POST['sanctionID']);
-	} else {
-		return isset($_POST['sanctionID'],$_POST['divisionID'], $_POST['skiEvent'], $_POST['changeRoundSelector']);
+	$skiEvent = false;
+	$sanctionID = false;
+
+	if ( isset($_POST['skiEvent']) ) {
+		$skiEvent = $_POST['skiEvent'];
+		if ( $skiEvent == 'Recent') {
+			return true;
+		} else if ( $skiEvent == 'Team') {
+			return isset($_POST['sanctionID']);
+		} else {
+			return isset($_POST['sanctionID'],$_POST['divisionID'], $_POST['skiEvent'], $_POST['changeRoundSelector']);
+		}
 	}
 }
 ?>
@@ -39,7 +45,7 @@ if (checkReqVars()) {
 		$scoreField = "EventScore";
 		$thisDivision = 'Recent';
 
-		$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.MemberId, ssi.AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
+		$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, tri.MemberId, tri.AgeGroup as AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
 			. ", 'Slalom' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 			. ", CONCAT( CAST(ssi.Score as CHAR), ' buoys '"
 			. ", CAST(FinalPassScore as CHAR), ' @ ', CAST(FinalSpeedMph as CHAR), 'mph ', FinalLenOff"
@@ -49,7 +55,7 @@ if (checkReqVars()) {
 			. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = 'Slalom' "
 			. "WHERE ssi.SanctionID='" .  $thisSanc . "' AND ssi.LastUpdateDate >= CURDATE() "
 			. "UNION "
-			. "SELECT tri.SanctionId, tri.SkierName, ssi.MemberId, ssi.AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
+			. "SELECT tri.SanctionId, tri.SkierName, tri.MemberId, tri.AgeGroup as AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
 			. ", 'Trick' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 			. ", CONCAT(CAST(ssi.Score as CHAR), ' POINTS (P1:', CAST(ssi.ScorePass1 as CHAR), ' P2:', CAST(ssi.ScorePass2 as CHAR), ')' ) as EventScoreDesc "
 			. "FROM TourReg tri "
@@ -57,7 +63,7 @@ if (checkReqVars()) {
 			. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = 'Trick' "
 			. "WHERE ssi.SanctionID='" .  $thisSanc . "' AND ssi.LastUpdateDate >= CURDATE() "
 			. "UNION "
-			. "SELECT tri.SanctionId, tri.SkierName, ssi.MemberId, ssi.AgeGroup, ssi.ScoreFeet as EventScore, er.TeamCode, Round"
+			. "SELECT tri.SanctionId, tri.SkierName, tri.MemberId, tri.AgeGroup as AgeGroup, ssi.ScoreFeet as EventScore, er.TeamCode, Round"
 			. ", 'Jump' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 			. ", CONCAT(CAST(ROUND(ssi.ScoreFeet, 0) as CHAR), 'FT (', CAST(ROUND(ssi.ScoreMeters, 1) as CHAR), 'M)' ) as EventScoreDesc "
 			. "FROM TourReg tri "

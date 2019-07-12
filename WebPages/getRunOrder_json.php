@@ -69,6 +69,9 @@ if (checkReqVars()) {
 	float:right;
 	display:inline-block;
 }
+.DataHidden {
+	display: none;
+}
 
 </style>
 <?php
@@ -84,6 +87,7 @@ if (checkReqVars()) {
 
 			echo "\r\n<li>";
 			echo $curDataRow['SkierName'] . " (" . $curDataRow['AgeGroup'] . ")"
+				. "<span class='DataHidden'>MemberId: " . $curDataRow['MemberId'] . "</span>"
 				. " Class: <Strong>" . $curDataRow['EventClass'] . "</Strong>"
 				. " Order: <Strong>" . $curDataRow['RunOrder'] . "</Strong>"
 				. " Rank: <Strong>" . number_format($curDataRow['RankingScore'],1) . "</Strong>"

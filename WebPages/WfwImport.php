@@ -82,7 +82,17 @@ function updateRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	$mySqlStmt = "Update " . $inTableName . " Set ";
 	foreach($myColumns as $myColumn) {
 		$myDataValue = $inRowNode->xpath($myColumn);
-		$mySqlStmt .= $mySep . $myColumn . "='" . $myDataValue[0] . "'";
+		if ( strlen($myDataValue[0]) > 0 ) {
+			if ( $myDataValue[0] == 'True' ) {
+				$mySqlStmt .= $mySep . $myColumn . "=1";
+			} else if ( $myDataValue[0] == 'False' ) {
+				$mySqlStmt .= $mySep . $myColumn . "=0";
+			} else {
+				$mySqlStmt .= $mySep . $myColumn . "='" . $myDataValue[0] . "'";
+			}
+		} else {
+			$mySqlStmt .= $mySep . $myColumn . "=null";
+		}
 		$mySep = ", ";
 	}
 
@@ -96,7 +106,7 @@ function updateRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 
 	$result = $dbConnect->query($mySqlStmt);
 	if ($dbConnect->error) {
-		printf("\n Errors detected on update %s ", $dbConnect->error);
+		printf("\n Errors detected on update %s %s", $dbConnect->error, $mySqlStmt);
 		return false;
 	} else {
 		printf("\n Update successful %d ", $result);
@@ -121,7 +131,17 @@ function insertRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	$mySqlStmt .= " ) VALUES (";
 	foreach($myColumns as $myColumn) {
 		$myDataValue = $inRowNode->xpath($myColumn);
-		$mySqlStmt .= $mySep . " '" . $myDataValue[0] . "'";
+		if ( strlen($myDataValue[0]) > 0 ) {
+			if ( $myDataValue[0] == 'True' ) {
+				$mySqlStmt .= $mySep . " 1";
+			} else if ( $myDataValue[0] == 'False' ) {
+				$mySqlStmt .= $mySep . " 0";
+			} else {
+				$mySqlStmt .= $mySep . " '" . $myDataValue[0] . "'";
+			}
+		} else {
+			$mySqlStmt .= $mySep . " null";
+		}
 		$mySep = ", ";
 	}
 
@@ -130,7 +150,7 @@ function insertRow($dbConnect, $inTableName, $inTableNode, $inRowNode) {
 	//echo "\nSQL=$mySqlStmt";
 	$result = $dbConnect->query($mySqlStmt);
 	if ($dbConnect->error) {
-		printf("\n Errors detected on insert %s ", $dbConnect->error);
+		printf("\n Errors detected on insert %s %s", $dbConnect->error, $mySqlStmt);
 		return false;
 	} else {
 		printf("\n Record inserted %d", $dbConnect->insert_id);

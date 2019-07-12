@@ -90,7 +90,6 @@ CREATE TABLE IF NOT EXISTS `SlalomRecap` (
   `MemberId` char(9) NOT NULL,
   `AgeGroup` varchar(12) NOT NULL,
   `Round` tinyint(4) NOT NULL,
-  `PassNum` tinyint(4) NOT NULL,
   `SkierRunNum` smallint(6) NOT NULL,
   `Judge1Score` decimal(5,2) DEFAULT NULL,
   `Judge2Score` decimal(5,2) DEFAULT NULL,
@@ -112,8 +111,18 @@ CREATE TABLE IF NOT EXISTS `SlalomRecap` (
   `LastUpdateDate` datetime DEFAULT NULL,
   `Note` varchar(1024) DEFAULT NULL,
   `PassLineLength` decimal(5,2) DEFAULT NULL,
+  `PassSpeedKph` tinyint(4) NOT NULL,
   PRIMARY KEY (`PK`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+Update SlalomRecap Set PassSpeedKph = SUBSTRING ( Note, LOCATE("kph", Note) - 2, 2 ) WHERE SanctionId like '19%';
+
+SELECT SanctionId, PassSpeedKph, Note, LOCATE("kph", Note), SUBSTR ( Note, 8 2 ) as KPH From SlalomRecap Where SanctionId like '19%';
+
+Update SlalomRecap Set PassSpeedKph = SUBSTRING( Note, CHARINDEX('kph', Note) - 2, 2 ) WHERE SanctionId like '19%';
+Update SlalomRecap Set PassSpeedKph = SUBSTRING( Note, LOCATE("kph", Note) - 2, 2 ) WHERE SanctionId like '19%';
+SELECT SanctionId, PassSpeedKph, Note, LOCATE("kph", Note), SUBSTRING( Note, 8, 2 ) as KPH From SlalomRecap Where SanctionId like '19%';
+
 
 --
 -- Table structure for table `SlalomScore`
@@ -132,7 +141,6 @@ CREATE TABLE IF NOT EXISTS `SlalomScore` (
   `NopsScore` decimal(7,2) DEFAULT NULL,
   `Rating` varchar(16) DEFAULT NULL,
   `Status` varchar(16) DEFAULT NULL,
-  `FinalPassNum` tinyint(4) DEFAULT NULL,
   `FinalSpeedMph` tinyint(4) DEFAULT NULL,
   `FinalSpeedKph` tinyint(4) DEFAULT NULL,
   `FinalLen` varchar(16) DEFAULT NULL,

@@ -79,12 +79,14 @@ $SkierEvent = $_GET['SkierEvent'];
 				. "LEFT OUTER JOIN SlalomScore SS on SS.MemberId=TR.MemberId AND SS.SanctionId=TR.SanctionId AND SS.AgeGroup = TR.AgeGroup AND SS.Round = '" . $SkierRound . "' "
 				. "LEFT OUTER JOIN TrickScore TS on TS.MemberId=TR.MemberId AND TS.SanctionId=TR.SanctionId AND TS.AgeGroup = TR.AgeGroup AND TS.Round = '" . $SkierRound . "' "
 				. "LEFT OUTER JOIN JumpScore JS on JS.MemberId=TR.MemberId AND JS.SanctionId=TR.SanctionId AND JS.AgeGroup = TR.AgeGroup AND JS.Round = '" . $SkierRound . "' "
-				. "WHERE TR.SanctionID='" .  $SanctionId . "' AND TR.MemberId='". $MemberId  . "' And AgeGroup='" . $AgeGroup. "' "
+				. "WHERE TR.SanctionID='" .  $SanctionId . "' AND TR.MemberId='". $MemberId  . "' And TR.AgeGroup='" . $AgeGroup. "' "
 				. "AND COALESCE(SS.Round,COALESCE(TS.Round,COALESCE(JS.Round,0))) > 0 "
-				. "AND ((Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) > 2 "
-				. "	OR (Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) >= 2 "
-				. "		AND TR.AgeGroup in ('B1', 'G1', 'W8', 'W9', 'WA', 'WB', 'M8', 'M9', 'MA', 'MB')) "
 				. "Order By TR.AgeGroup, OverallScore DESC, TR.SkierName ";
+
+				// Removed until I have a better way to determine overall eligibility
+				//. "AND ((Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) > 2 "
+				//. "	OR (Select count(*) from EventReg ER Where ER.MemberId=TR.MemberId AND ER.SanctionId=TR.SanctionId AND ER.AgeGroup = TR.AgeGroup ) >= 2 "
+				//. "		AND TR.AgeGroup in ('B1', 'G1', 'W8', 'W9', 'WA', 'WB', 'M8', 'M9', 'MA', 'MB')) "
 		}
 		?>
 
