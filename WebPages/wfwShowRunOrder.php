@@ -57,7 +57,7 @@ include_once( "WfwInit.php" );
 			. "From TourReg TR "
 			. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 			. "Where TR.SanctionId = '" .  $_SESSION['sanctionID'] . "' AND ER.Event = '" .  $_SESSION['skiEvent'] . "' "
-			. "Order by TR.SanctionId, ER.Event, ER.EventGroup, TR.MemberId, ER.RunOrder, ER.RankingScore ";
+			. "Order by TR.SanctionId, ER.Event, ER.EventGroup, ER.ReadyForPlcmt, TR.MemberId, ER.RunOrder, ER.RankingScore ";
 
 			$QueryResult = $dbConnect->query($SqlCmd) or die ($dbConnect->error);
 			$curRowCount = $QueryResult->num_rows;

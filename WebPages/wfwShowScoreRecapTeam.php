@@ -40,18 +40,32 @@ $ReportFormat = $_GET['ReportFormat'];
 	<div data-role="content" data-theme="d">
 
 		<?php
-		$RecapQry = "Select S.SanctionId, S.TeamCode, S.AgeGroup, Name, ReportFormat, SD.SkierCategory, LineNum"
-			. ", S.OverallPlcmt AS OverallPlcmtTeam, S.SlalomPlcmt AS SlalomPlcmtTeam, S.TrickPlcmt AS TrickPlcmtTeam, S.JumpPlcmt AS JumpPlcmtTeam"
-			. ", S.OverallScore AS OverallScoreTeam, S.SlalomScore AS SlalomScoreTeam, S.TrickScore AS TrickScoreTeam, S.JumpScore AS JumpScoreTeam"
-			. ", SlalomSkierName, SD.SlalomPlcmt, SD.SlalomScore, SlalomNops, SlalomPoints"
-			. ", TrickSkierName, SD.TrickPlcmt, SD.TrickScore, TrickNops, TrickPoints"
-			. ", JumpSkierName, SD.JumpPlcmt, SD.JumpScore, JumpNops, JumpPoints "
-			. "From TeamScore S "
-			. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode AND S.AgeGroup = SD.AgeGroup "
-			. "Where S.SanctionId = '" . $SanctionId . "'"
-			. "AND S.TeamCode = '" . $TeamCode . "'"
-			. "AND S.AgeGroup = '" . $TeamDiv . "'"
-			. "Order by S.AgeGroup, S.OverallPlcmt, SD.SkierCategory, SD.LineNum ";
+		if ( strlen($TeamDiv) > 0 ) {
+			$RecapQry = "Select S.SanctionId, S.TeamCode, S.AgeGroup, Name, ReportFormat, SD.SkierCategory, LineNum"
+				. ", S.OverallPlcmt AS OverallPlcmtTeam, S.SlalomPlcmt AS SlalomPlcmtTeam, S.TrickPlcmt AS TrickPlcmtTeam, S.JumpPlcmt AS JumpPlcmtTeam"
+				. ", S.OverallScore AS OverallScoreTeam, S.SlalomScore AS SlalomScoreTeam, S.TrickScore AS TrickScoreTeam, S.JumpScore AS JumpScoreTeam"
+				. ", SlalomSkierName, SD.SlalomPlcmt, SD.SlalomScore, SlalomNops, SlalomPoints"
+				. ", TrickSkierName, SD.TrickPlcmt, SD.TrickScore, TrickNops, TrickPoints"
+				. ", JumpSkierName, SD.JumpPlcmt, SD.JumpScore, JumpNops, JumpPoints "
+				. "From TeamScore S "
+				. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode AND S.AgeGroup = SD.AgeGroup "
+				. "Where S.SanctionId = '" . $SanctionId . "' "
+				. "AND S.TeamCode = '" . $TeamCode . "' "
+				. "AND S.AgeGroup = '" . $TeamDiv . "' "
+				. "Order by S.AgeGroup, S.OverallPlcmt, SD.SkierCategory, SD.LineNum ";
+		} else {
+			$RecapQry = "Select S.SanctionId, S.TeamCode, '' as AgeGroup, Name, ReportFormat, SD.SkierCategory, LineNum"
+				. ", S.OverallPlcmt AS OverallPlcmtTeam, S.SlalomPlcmt AS SlalomPlcmtTeam, S.TrickPlcmt AS TrickPlcmtTeam, S.JumpPlcmt AS JumpPlcmtTeam"
+				. ", S.OverallScore AS OverallScoreTeam, S.SlalomScore AS SlalomScoreTeam, S.TrickScore AS TrickScoreTeam, S.JumpScore AS JumpScoreTeam"
+				. ", SlalomSkierName, SD.SlalomPlcmt, SD.SlalomScore, SlalomNops, SlalomPoints"
+				. ", TrickSkierName, SD.TrickPlcmt, SD.TrickScore, TrickNops, TrickPoints"
+				. ", JumpSkierName, SD.JumpPlcmt, SD.JumpScore, JumpNops, JumpPoints "
+				. "From TeamScore S "
+				. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode "
+				. "Where S.SanctionId = '" . $SanctionId . "' AND SD.SkierCategory is not null "
+				. "AND S.TeamCode = '" . $TeamCode . "' "
+				. "Order by SD.SkierCategory, SD.LineNum ";
+		}
 
 		$RecapResult = $dbConnect->query($RecapQry);
 		if ($dbConnect->error) {

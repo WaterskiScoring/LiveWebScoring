@@ -14,9 +14,9 @@ if (checkReqVars()) {
 	$thisGroup = $_POST['groupID'];
 	$curRegion = strtoupper(substr($thisSanc, 2, 1));
 
-	$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.RunOrder, ER.RankingScore ";
+	$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.ReadyForPlcmt, ER.RunOrder, ER.RankingScore ";
 	if ( $thisSkiEvent == "Jump" AND $curRegion != "U") {
-		$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.RunOrder, TR.JumpHeight, ER.RankingScore ";
+		$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.ReadyForPlcmt, ER.RunOrder, TR.JumpHeight, ER.RankingScore ";
 	}
 	if ( $curRegion == "U") {
 		$thisSortOrder = "TR.SanctionId, ER.Event, ER.AgeGroup, ER.RunOrder, ER.RankingScore ";
@@ -24,7 +24,7 @@ if (checkReqVars()) {
 
 	if ($thisGroup == "All" ) {
 		$QueryCmd = "Select TR.SanctionId, TR.MemberId, TR.SkierName, TR.AgeGroup "
-		. ", ER.Event, ER.EventGroup, ER.EventClass, ER.RunOrder, ER.RankingScore, ER.TeamCode, LastSkied "
+		. ", ER.Event, ER.EventGroup, ER.ReadyForPlcmt, ER.EventClass, ER.RunOrder, ER.RankingScore, ER.TeamCode, LastSkied "
 		. "From TourReg TR "
 		. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 		. "Left Outer Join "
@@ -36,7 +36,7 @@ if (checkReqVars()) {
 	} else {
 		// Retrieve scores for single group and round
 		$QueryCmd = "Select TR.SanctionId, TR.MemberId, TR.SkierName, TR.AgeGroup "
-		. ", ER.Event, ER.EventGroup, ER.EventClass, ER.RunOrder, ER.RankingScore, ER.TeamCode, LastSkied "
+		. ", ER.Event, ER.EventGroup, ER.ReadyForPlcmt, ER.EventClass, ER.RunOrder, ER.RankingScore, ER.TeamCode, LastSkied "
 		. "From TourReg TR "
 		. "Inner Join EventReg ER on ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND TR.AgeGroup = ER.AgeGroup "
 		. "Left Outer Join "
@@ -89,7 +89,7 @@ if (checkReqVars()) {
 			echo $curDataRow['SkierName'] . " (" . $curDataRow['AgeGroup'] . ")"
 				. "<span class='DataHidden'>MemberId: " . $curDataRow['MemberId'] . "</span>"
 				. " Class: <Strong>" . $curDataRow['EventClass'] . "</Strong>"
-				. " Order: <Strong>" . $curDataRow['RunOrder'] . "</Strong>"
+				. " Order: <Strong>" . $curDataRow['RunOrder'] . " :(RFP=" . $curDataRow['ReadyForPlcmt'] . ")</Strong>"
 				. " Rank: <Strong>" . number_format($curDataRow['RankingScore'],1) . "</Strong>"
 				. " Team: <Strong>" . $curDataRow['TeamCode'] . "</Strong>";
 			if ( $curDataRow['LastSkied'] == null ) {
