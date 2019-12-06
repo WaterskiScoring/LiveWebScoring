@@ -17,6 +17,9 @@ if ($dbConnect->connect_error) {
 } else {
 	/* This statement was added because otherwise MAX_JOIN_SIZE errors occurred on every select statement */
 	$dbConnect->query("SET SQL_BIG_SELECTS=1");
+
+	/* turn autocommit on */
+	$dbConnect->autocommit(TRUE);
 }
 
 ini_set( 'display_errors', true );

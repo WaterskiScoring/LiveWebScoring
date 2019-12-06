@@ -66,7 +66,8 @@ $EventName = $_GET['EventName'];
 	</div><!-- /header -->
 
 	<div data-role="header">
-	   	<a href='wfwShowTourScores.php' class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false' data-iconpos="notext">Scores</a>
+	   	<a href='wfwShowTourScores.php?sanctionID=<?php echo $SanctionID ?>&EventName=<?php echo $EventName?>'
+	   	class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false' data-iconpos="notext">Scores</a>
 		<h1>
         <div id="navContainer">
         	<div id="panel" style="display:none;"></div>

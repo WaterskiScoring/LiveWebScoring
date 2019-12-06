@@ -16,10 +16,10 @@ if (checkReqVars()) {
 
 	$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.ReadyForPlcmt, ER.RunOrder, ER.RankingScore ";
 	if ( $thisSkiEvent == "Jump" AND $curRegion != "U") {
-		$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, ER.ReadyForPlcmt, ER.RunOrder, TR.JumpHeight, ER.RankingScore ";
+		$thisSortOrder = "TR.SanctionId, ER.Event, ER.EventGroup, TR.JumpHeight, ER.ReadyForPlcmt, ER.RunOrder, ER.RankingScore ";
 	}
 	if ( $curRegion == "U") {
-		$thisSortOrder = "TR.SanctionId, ER.Event, ER.AgeGroup, ER.RunOrder, ER.RankingScore ";
+		$thisSortOrder = "TR.SanctionId, ER.Event, ER.AgeGroup, ER.EventGroup, ER.RunOrder, ER.RankingScore ";
 	}
 
 	if ($thisGroup == "All" ) {

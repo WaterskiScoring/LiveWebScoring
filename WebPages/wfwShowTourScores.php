@@ -12,6 +12,9 @@ if (isset($_POST['sanctionID'])) {
 	$SanctionID = $_POST['sanctionID'];
 	$EventName = $_POST['EventName'];
 	$EventTourClass = $_POST['EventClass'];
+} else if (isset($_GET['sanctionID'])) {
+	$SanctionID = $_GET['sanctionID'];
+	$EventName = $_GET['EventName'];
 } else {
 	  header('Location: http://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
 }
