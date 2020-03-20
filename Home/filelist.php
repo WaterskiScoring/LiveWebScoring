@@ -1,3 +1,14 @@
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+$FolderName = ".";
+$ParentFolderName = "";
+if (isset($_GET['FolderName'])) {
+	$FolderName = "./" . $_GET['FolderName'];
+	$ParentFolderName = $_GET['FolderName'] . "/";
+	$PrevFolderName = substr(strrchr($ParentFolderName, '/'), 1);
+}
+?>
 <html>
 <head>
 	<title>WSTIMS For Window Deployment Files</title>
@@ -14,7 +25,13 @@
 
 	<div>
 	<div style="margin-left: 16px;">
-	<a href="http://www.waterskiresults.com">Home</a>
+	<a href="http://www.waterskiresults.com">Home</a></BR>
+	<?php if ( strlen($PrevFolderName) > 0 ) {
+			echo "<a href=\"./filelist.php?FolderName=$PrevFolderName\">Back to $PrevFolderName</a>";
+		} else {
+			echo "<a href=\"./filelist.php\">Back to file list</a>";
+		}
+	?>
 	</div>
 	</div>
 
@@ -23,7 +40,7 @@
 	ini_set( 'display_errors', true );
 
 	$curFileList = array();
-	if ($handle = opendir('.')) {
+	if ($handle = opendir($FolderName)) {
 		while (false !== ($curFile = readdir($handle))) {
 			if ($curFile != "." && $curFile != "..") {
 				$curFileList[] = $curFile;
@@ -41,17 +58,25 @@
 	echo "</tr>\n";
 	foreach($curFileList as $curFile) {
 
+		$fullFilename = $ParentFolderName . $curFile;
  		$curFileExtn = strtolower(substr(strrchr($curFile, '.'), 1));
  		if ( $curFile == "admin_awsaeast"
 			|| $curFile == "WaterskiScoringSystem.application"
 			|| $curFileExtn == "xxx"
 			|| $curFileExtn == "zzz"
  		) {
+ 		} else if ( $curFileExtn == "" ) {
+			echo "<tr><td class=\"DataLeft\"><a href=\"./filelist.php?FolderName=$ParentFolderName$curFile\">$curFile</a></td>";
+			echo "<td class=\"DataRight\"></td>";
+			echo "<td class=\"DataLeft\"></td>";
+			echo "<td class=\"DataLeft\">".date( "D d M Y g:i A", filemtime($fullFilename)) . "</td>";
+			echo "</tr>\n";
+
  		} else {
-			echo "<tr><td class=\"DataLeft\"><a href=\"$curFile\">$curFile</a></td>";
-			echo "<td class=\"DataRight\">" . friendly_filesize(filesize($curFile)) . "</td>";
-			echo "<td class=\"DataLeft\">".date( "D d M Y g:i A", filemtime($curFile)) . "</td>";
-			echo "<td class=\"DataLeft\">".date( "D d M Y g:i A", filemtime($curFile)) . "</td>";
+			echo "<tr><td class=\"DataLeft\"><a target=\”_blank\” href=\"$ParentFolderName$curFile\">$curFile</a></td>";
+			echo "<td class=\"DataRight\">" . friendly_filesize(filesize($fullFilename)) . "</td>";
+			echo "<td class=\"DataLeft\">".date( "D d M Y g:i A", filemtime($fullFilename)) . "</td>";
+			echo "<td class=\"DataLeft\">".date( "D d M Y g:i A", filemtime($fullFilename)) . "</td>";
 			echo "</tr>\n";
 		}
 

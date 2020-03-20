@@ -20,8 +20,8 @@
 	<br><li><a href="publish.htm">WSTIMS For Windows Download and Deployment</a></li>
 	<br><li><a href="https://waterskiresults.vids.io/" target="blank">Trick Video Site</a></li>
 	<br><li><a href="Newsletters/HOW TO ARTICLES PUBLISHED IN NEWSLETTERS.pdf">WSTIMS For Windows Newsletter -  - How to Index</a>.</li>
-	<br><li><a href="Newsletters">WSTIMS For Windows Newsletter Archive</a>.</li>
-	<br><li><a href="RegistrationTemplateManuals">Registration Template Instructions</a>.</li>
+	<br><li><a href="filelist.php?FolderName=Newsletters">WSTIMS For Windows Newsletter Archive</a>.</li>
+	<br><li><a href="filelist.php?FolderName=RegistrationTemplateManuals">Registration Template Instructions</a>.</li>
 	<br><li><a href="Clinic">Clinic Downloads</a>.</li>
 	<br><li><a href="http://www.awsaeast.org/officials/wstims-for-windows/" target="_blank">WSTIMS for Windows Overview</a></li>
 	<br><li><a href="filelist.php">WSTIMS For Windows File List</a></li>

@@ -1,0 +1,76 @@
+{
+  "version": 3,
+  "nodes": [
+    {
+      "modifiedLocally": true,
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "sanctionID",
+              "value": "19W029"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "skiEvent",
+              "value": "Slalom"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "changeRoundSelector",
+              "value": "1"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "divisionID",
+              "value": "All"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "www.waterskiresults.com",
+        "path": "/WfwWeb/getScores_json.php"
+      },
+      "id": "a8e1958f-b254-4138-928f-986117099ee6",
+      "lastModified": "2018-08-27T22:03:43.180-04:00",
+      "name": "Live Web Get Scores",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {
+        "ownerId": null
+      },
+      "parent": null,
+      "parentId": ""
+    }
+  ]
+}
