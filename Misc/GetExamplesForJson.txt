@@ -1,0 +1,25 @@
+2,000,000
+
+curl -i -X POST -H 'Content-Type: application/json' -d '{"data1": "data goes here", "data2": "data2 goes here"}' http:localhost/path/to/api
+
+curl -X POST -F 'sanctionID=20E998' -F 'skiEvent=Slalom' -F 'groupID=All' http://www.waterskiresults.com/WfwWeb/getRunningOrder_json.php
+
+http://www.waterskiresults.com/WfwWeb/getRunningOrder_json.php?sanctionID=20E998&skiEvent=Slalom&groupID=All
+
+http://www.waterskiresults.com/WfwWeb/getEventScores_json.php?sanctionID=20E998&skiEvent=Slalom&divisionID=All&Round=1
+
+sanctionID=6 character sanction
+divisionID=All, Recent, or any 2 character division code 
+skiEvent=Recent, Slalom, Trick, TrickVideo, Jump, Overall, Team
+Round=number
+
+
+I can look at breaking out the components of the EventScoreDesc but that maybe difficult in SQL
+
+I can look into providing options for excluding certain fields but that also is a bit of challenge but not impossible.  You don't have any control regarding filtering which fields you use and which are excluded?
+
+I can also look at an optional control on number of returned rows
+
+Returning the skier's rank is not really possible.  WSTIMS and the Live Web doesn't really have  the concept of a rank.  Each skier has a Ranking Average which is used to sort the running order but there is no concept of a rank per se.  I have can include the ranking average.  We frequently view a skier's score as compared to their ranking average to see how well they did relative to their expectations.  I understand at the high end that is not as useful but for the vast majority of our tournaments it is extremely useful information.
+
+I believe you can return team results.  If you check the information I sent with the URL I think you will see that there is a team option for skiEvent.  Although I'm not entirely sure if  that works for collegiate.  I will look into that.

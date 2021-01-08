@@ -8,28 +8,32 @@ function checkReqVars() {
 	$skiEvent = false;
 	$sanctionID = false;
 
-	if ( isset($_POST['skiEvent']) ) {
-		$skiEvent = $_POST['skiEvent'];
+	if ( isset($_GET['skiEvent']) ) {
+		$skiEvent = $_GET['skiEvent'];
 		if ( $skiEvent == 'Recent') {
 			return true;
 		} else if ( $skiEvent == 'Team') {
-			return isset($_POST['sanctionID']);
+			return isset($_GET['sanctionID']);
 		} else {
-			return isset($_POST['sanctionID'],$_POST['divisionID'], $_POST['skiEvent'], $_POST['changeRoundSelector']);
+			return isset($_GET['sanctionID'],$_GET['divisionID'], $_GET['skiEvent'], $_GET['Round']);
 		}
 	}
 }
 
 if (checkReqVars()) {
-	$thisSanc = $_POST['sanctionID'];
-	$thisSkiEvent = $_POST['skiEvent'];
+	$thisSanc = $_GET['sanctionID'];
+	$thisSkiEvent = $_GET['skiEvent'];
+	$thisShow = "US";
+	if ( isset($_GET['show']) ) {
+		$thisShow = $_GET['show'];
+	}
 	$thisDivision = '';
 
 	if ( $thisSkiEvent == 'Recent') {
 		$scoreField = "EventScore";
 		$thisDivision = 'Recent';
 
-		$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, tri.MemberId, tri.AgeGroup as AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
+		$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, tri.AgeGroup as AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
 			. ", 'Slalom' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 			. ", CONCAT( CAST(ssi.Score as CHAR), ' buoys '"
 			. ", CAST(FinalPassScore as CHAR), ' @ ', CAST(FinalSpeedMph as CHAR), 'mph ', FinalLenOff"
@@ -39,7 +43,7 @@ if (checkReqVars()) {
 			. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = 'Slalom' "
 			. "WHERE ssi.SanctionID='" .  $thisSanc . "' AND ssi.LastUpdateDate >= CURDATE() "
 			. "UNION "
-			. "SELECT tri.SanctionId, tri.SkierName, tri.MemberId, tri.AgeGroup as AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
+			. "SELECT tri.SanctionId, tri.SkierName, tri.AgeGroup as AgeGroup, ssi.Score as EventScore, er.TeamCode, Round"
 			. ", 'Trick' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 			. ", CONCAT(CAST(ssi.Score as CHAR), ' POINTS (P1:', CAST(ssi.ScorePass1 as CHAR), ' P2:', CAST(ssi.ScorePass2 as CHAR), ')' ) as EventScoreDesc "
 			. "FROM TourReg tri "
@@ -47,7 +51,7 @@ if (checkReqVars()) {
 			. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = 'Trick' "
 			. "WHERE ssi.SanctionID='" .  $thisSanc . "' AND ssi.LastUpdateDate >= CURDATE() "
 			. "UNION "
-			. "SELECT tri.SanctionId, tri.SkierName, tri.MemberId, tri.AgeGroup as AgeGroup, ssi.ScoreFeet as EventScore, er.TeamCode, Round"
+			. "SELECT tri.SanctionId, tri.SkierName, tri.AgeGroup as AgeGroup, ssi.ScoreFeet as EventScore, er.TeamCode, Round"
 			. ", 'Jump' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 			. ", CONCAT(CAST(ROUND(ssi.ScoreFeet, 0) as CHAR), 'FT (', CAST(ROUND(ssi.ScoreMeters, 1) as CHAR), 'M)' ) as EventScoreDesc "
 			. "FROM TourReg tri "
@@ -65,11 +69,11 @@ if (checkReqVars()) {
 			. "Order by S.AgeGroup, S.OverallPlcmt ";
 
 	} else if ( $thisSkiEvent == 'Overall') {
-		$_SESSION['skiRound'] = $_POST['changeRoundSelector'];
-		$_SESSION['skiDivision'] = $_POST['divisionID'];
+		$_SESSION['skiRound'] = $_GET['Round'];
+		$_SESSION['skiDivision'] = $_GET['divisionID'];
 
-		$thisRound = $_POST['changeRoundSelector'];
-		$thisDivision = $_POST['divisionID'];
+		$thisRound = $_GET['Round'];
+		$thisDivision = $_GET['divisionID'];
 		$thisDivisionFilter = "";
 		if ($thisDivision == "All" ) {
 			$thisDivisionFilter = "";
@@ -77,7 +81,7 @@ if (checkReqVars()) {
 			$thisDivisionFilter = "AND TR.AgeGroup='" .  $thisDivision . "' ";
 		}
 
-		$QueryCmd = "SELECT TR.SanctionId, TR.SkierName, TR.MemberId, TR.AgeGroup, 'Overall' as Event "
+		$QueryCmd = "SELECT TR.SanctionId, TR.SkierName, TR.AgeGroup, 'Overall' as Event "
 			. ", COALESCE(SS.NopsScore,0) + COALESCE(TS.NopsScore,0) + COALESCE(JS.NopsScore,0) as OverallScore "
 			. ", SS.NopsScore as SlalomNopsScore, TS.NopsScore as TrickNopsScore, JS.NopsScore as JumpNopsScore "
 			. ", COALESCE(SS.Round,COALESCE(TS.Round,COALESCE(JS.Round,0))) as Round "
@@ -96,11 +100,11 @@ if (checkReqVars()) {
 			//. "		AND TR.AgeGroup in ('B1', 'G1', 'W8', 'W9', 'WA', 'WB', 'M8', 'M9', 'MA', 'MB')) "
 
 	} else {
-		$_SESSION['skiRound'] = $_POST['changeRoundSelector'];
-		$_SESSION['skiDivision'] = $_POST['divisionID'];
+		$_SESSION['skiRound'] = $_GET['Round'];
+		$_SESSION['skiDivision'] = $_GET['divisionID'];
 
-		$thisRound = $_POST['changeRoundSelector'];
-		$thisDivision = $_POST['divisionID'];
+		$thisRound = $_GET['Round'];
+		$thisDivision = $_GET['divisionID'];
 		$eventTable = $thisSkiEvent . "Score";
 		if ($thisSkiEvent == "Jump") {
 			$scoreField = "ScoreFeet";
@@ -122,15 +126,17 @@ if (checkReqVars()) {
 		// Retrieve scores includes runoff score if available, assumes runoff applies to current round
 		// Not sure how this is impacted for multi-round events
 		if ($thisSkiEvent == "Slalom") {
-			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.MemberId, ssi.AgeGroup, Round"
+			$ShowFinalPassScore = ", CONCAT( CAST(FinalPassScore as CHAR), ' @ ', CAST(FinalSpeedMph as CHAR), 'mph ', FinalLenOff) as LastPassScore";
+			if ( $thisShow == "Metric" || $thisShow == "metric" ) {
+				$ShowFinalPassScore = ", CONCAT( CAST(FinalPassScore as CHAR), ' @ ', CAST(FinalSpeedKph as CHAR), 'kph ', FinalLen, 'M') as LastPassScore";
+			}
+
+			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.AgeGroup, Round"
 				. ", '" . $thisSkiEvent . "' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate "
 				. ", DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
-				. ", ssi.Score as EventScore, er.TeamCode "
-				. ", CONCAT( CAST(ssi.Score as CHAR), ' buoys '"
-				. ", CAST(FinalPassScore as CHAR), ' @ ', CAST(FinalSpeedMph as CHAR), 'mph ', FinalLenOff"
-				. ", ' (', CAST(FinalSpeedKph as CHAR), 'kph ', FinalLen, 'm)') as EventScoreDesc "
-				. ", (SELECT IFNULL(ssi2.Score,0) "
-				. "   FROM TourReg tri2 "
+				. ", ssi.Score as EventBouyCount"
+				. $ShowFinalPassScore
+				. ", (SELECT IFNULL(ssi2.Score,0) FROM TourReg tri2 "
 				. "   JOIN SlalomScore ssi2 on ssi2.MemberId=tri2.MemberId AND ssi2.SanctionId=tri2.SanctionId AND ssi2.AgeGroup = tri2.AgeGroup "
 				. "   WHERE ssi2.AgeGroup = ssi.AgeGroup AND ssi2.SanctionID = ssi.SanctionID AND ssi2.memberid = ssi.memberid AND ssi2.Round >= '25')"
 				. "     AS RunOffScore "
@@ -142,14 +148,32 @@ if (checkReqVars()) {
 				. $OrderCmd;
 
 		} else if ($thisSkiEvent == "Trick") {
-			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.MemberId, ssi.AgeGroup, ssi.Round"
+			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.AgeGroup, ssi.Round"
+				. ", '" . $thisSkiEvent . "' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate "
+				. ", DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
+				. ", ssi.Score as EventScore, er.TeamCode "
+				. ", CONCAT(CAST(ssi.Score as CHAR), ' POINTS (P1:', CAST(ssi.ScorePass1 as CHAR), ' P2:', CAST(ssi.ScorePass2 as CHAR), ')' ) as EventScoreDesc "
+				. ", (SELECT IFNULL(ssi2.Score,0) FROM TourReg tri2 "
+				. "JOIN TrickScore ssi2 on ssi2.MemberId=tri2.MemberId AND ssi2.SanctionId=tri2.SanctionId AND ssi2.AgeGroup = tri2.AgeGroup "
+				. "WHERE ssi2.AgeGroup = ssi.AgeGroup "
+				. "  AND ssi2.SanctionID = ssi.SanctionID "
+				. "  AND ssi2.memberid = ssi.memberid "
+				. "  AND ssi2.Round >= '25') AS RunOffScore "
+				. "FROM TourReg tri "
+				. "JOIN TrickScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup "
+				. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = '" . $thisSkiEvent . "' "
+				. "WHERE ssi.SanctionID='" .  $thisSanc . "'  AND ssi.Round = '" . $thisRound . "' "
+				. $WhereDivCmd
+				. $OrderCmd;
+
+		} else if ($thisSkiEvent == "TrickVideo") {
+			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.AgeGroup, ssi.Round"
 				. ", '" . $thisSkiEvent . "' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate "
 				. ", DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
 				. ", ssi.Score as EventScore, er.TeamCode "
 				. ", CONCAT(CAST(ssi.Score as CHAR), ' POINTS (P1:', CAST(ssi.ScorePass1 as CHAR), ' P2:', CAST(ssi.ScorePass2 as CHAR), ')' ) as EventScoreDesc "
 				. ", IFNULL(V.Pass1VideoUrl, '') as Pass1VideoUrl, IFNULL(V.Pass2VideoUrl, '') as Pass2VideoUrl "
-				. ", (SELECT IFNULL(ssi2.Score,0) "
-				. "FROM TourReg tri2 "
+				. ", (SELECT IFNULL(ssi2.Score,0) FROM TourReg tri2 "
 				. "JOIN TrickScore ssi2 on ssi2.MemberId=tri2.MemberId AND ssi2.SanctionId=tri2.SanctionId AND ssi2.AgeGroup = tri2.AgeGroup "
 				. "WHERE ssi2.AgeGroup = ssi.AgeGroup "
 				. "  AND ssi2.SanctionID = ssi.SanctionID "
@@ -164,18 +188,18 @@ if (checkReqVars()) {
 				. $OrderCmd;
 
 		} else if ($thisSkiEvent == "Jump") {
-			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.MemberId, ssi.AgeGroup, Round"
+			$ShowScore = ", CONCAT(CAST(ROUND(ssi.ScoreFeet, 0) as CHAR), ' Feet' ) as JumpDistance ";
+			if ( $thisShow == "Metric" || $thisShow == "metric" ) {
+				$ShowScore = ", CONCAT(CAST(ROUND(ssi.ScoreMeters, 1) as CHAR), ' Meters' ) as JumpDistance ";
+			}
+			$QueryCmd = "SELECT tri.SanctionId, tri.SkierName, ssi.AgeGroup, Round"
 				. ", '" . $thisSkiEvent . "' as Event, DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate "
 				. ", DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, ssi.LastUpdateDate AS SortLastUpdateDate "
-				. ", ssi.ScoreFeet as EventScore, er.TeamCode "
-				. ", CONCAT(CAST(ROUND(ssi.ScoreFeet, 0) as CHAR), 'FT (', CAST(ROUND(ssi.ScoreMeters, 1) as CHAR), 'M)' ) as EventScoreDesc "
-				. ", (SELECT IFNULL(ssi2.ScoreFeet,0) "
-				. "FROM TourReg tri2 "
-				. "JOIN JumpScore ssi2 on ssi2.MemberId=tri2.MemberId AND ssi2.SanctionId=tri2.SanctionId AND ssi2.AgeGroup = tri2.AgeGroup "
-				. "WHERE ssi2.AgeGroup = ssi.AgeGroup "
-				. "  AND ssi2.SanctionID = ssi.SanctionID "
-				. "  AND ssi2.memberid = ssi.memberid "
-				. "  AND ssi2.Round >= '25') AS RunOffScore "
+				. $ShowScore
+				. ", (SELECT IFNULL(ssi2.ScoreFeet,0) FROM TourReg tri2 "
+				. "   JOIN JumpScore ssi2 on ssi2.MemberId=tri2.MemberId AND ssi2.SanctionId=tri2.SanctionId AND ssi2.AgeGroup = tri2.AgeGroup "
+				. "   WHERE ssi2.AgeGroup = ssi.AgeGroup AND ssi2.SanctionID = ssi.SanctionID AND ssi2.memberid = ssi.memberid AND ssi2.Round >= '25')"
+				. "   AS RunOffScore "
 				. "FROM TourReg tri "
 				. "JOIN JumpScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup "
 				. "JOIN EventReg er on er.MemberId=tri.MemberId AND er.SanctionId=tri.SanctionId AND er.AgeGroup=tri.AgeGroup AND er.Event = '" . $thisSkiEvent . "' "
