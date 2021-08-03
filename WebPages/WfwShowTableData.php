@@ -41,7 +41,7 @@ if ($dbConnect->error) {
 			echo "<table border='1'><tr>";
 			// printing table headers
 			for($i=0; $i<$fieldCount; $i++) {
-				$field = $QueryResult->fetch_field()
+				$field = $QueryResult->fetch_field();
 				echo "<td>{$field->name}</td>";
 			}
 			echo "</tr>\n";

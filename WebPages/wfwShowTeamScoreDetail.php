@@ -105,7 +105,7 @@ $thisSanctionId = $_SESSION['sanctionID'];
 					$prevTeam = $curDataRow['TeamCode'];
 				}
 			} else {
-				echo "<span class='noScores'>No running orders available yet for " . $_SESSION['divisionID'] . ".</span>";
+				echo "<span class='noScores'>No team scoring details for " . $thisSanctionId . ".</span>";
 			}
 		?>
 		</Table><!-- /listview -->

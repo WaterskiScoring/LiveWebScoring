@@ -22,7 +22,7 @@ if (checkReqVars()) {
 		. ", TrickSkierName, SD.TrickPlcmt, SD.TrickScore, TrickNops, TrickPoints"
 		. ", JumpSkierName, SD.JumpPlcmt, SD.JumpScore, JumpNops, JumpPoints "
 		. "From TeamScore S "
-		. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode AND S.AgeGroup = SD.AgeGroup "
+		. "Inner Join TeamScoreDetail SD on S.SanctionId = SD.SanctionId AND S.TeamCode = SD.TeamCode AND S.AgeGroup = SD.AgeGroup ";
 	$QueryCmd = $QueryCmd . "Order by " . $SortOrder;
 
 	$QueryResult = $dbConnect->query($QueryCmd) or die ($dbConnect->error);

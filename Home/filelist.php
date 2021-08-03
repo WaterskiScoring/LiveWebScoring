@@ -3,6 +3,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 $FolderName = ".";
 $ParentFolderName = "";
+$PrevFolderName = "";
 if (isset($_GET['FolderName'])) {
 	$FolderName = "./" . $_GET['FolderName'];
 	$ParentFolderName = $_GET['FolderName'] . "/";

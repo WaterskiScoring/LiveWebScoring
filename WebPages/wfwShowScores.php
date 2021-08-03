@@ -21,7 +21,7 @@ function checkSessionSet() {
 }
 
 // SET SESSION DATA WITH POST DATA
-$SanctionID = '';
+$sanctionID = '';
 $divisionID = '';
 $skiRound = '';
 $skiEvent = '';
@@ -33,7 +33,7 @@ $scoreField = '';
 
 if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 	if ( isset($_POST['formID']) ) {
-		if ( isset($_SESSION['SanctionID']) ) $SanctionID = $_SESSION['SanctionID'];
+		if ( isset($_SESSION['sanctionID']) ) $sanctionID = $_SESSION['sanctionID'];
 		if ( isset($_SESSION['divisionID']) ) $divisionID = $_SESSION['divisionID'];
 		if ( isset($_SESSION['skiRound']) ) $skiRound = $_SESSION['skiRound'];
 		if ( isset($_SESSION['skiEvent']) ) $skiEvent = $_SESSION['skiEvent'];
@@ -57,7 +57,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 			}
 			if (isset($_POST['eventTypeID'])) {
 				$eventTypeID = $_POST['eventTypeID'];
-				$_SESSION['skiEvent'] = $myEventTypeID;
+				$_SESSION['skiEvent'] = $skiEvent;
 				$eventTable = $eventTypeID . "Score";
 				$_SESSION['eventTable'] = $eventTable;
 			}
@@ -121,7 +121,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					) AS RunOffScore
 				from TourReg tri
 				JOIN JumpScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup
-				WHERE ssi.SanctionID='" .  $SanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
+				WHERE ssi.SanctionID='" .  $sanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
 				ORDER BY ssi.ScoreFeet DESC, ssi.ScoreMeters, RunOffScore DESC";
 			}
 			if ($skiEvent == "Trick") {
@@ -133,7 +133,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					) AS RunOffScore
 				from TourReg tri
 				JOIN TrickScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup
-				WHERE ssi.SanctionID='" .  $SanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
+				WHERE ssi.SanctionID='" .  $sanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
 				ORDER BY ssi.Score DESC, RunOffScore DESC";
 			}
 			if ($skiEvent == "Slalom") {
@@ -145,7 +145,7 @@ if (checkPostSet() != FALSE || checkSessionSet() != FALSE) {
 					) AS RunOffScore
 				from TourReg tri
 				JOIN SlalomScore ssi on ssi.MemberId=tri.MemberId AND ssi.SanctionId=tri.SanctionId AND ssi.AgeGroup=tri.AgeGroup
-				WHERE ssi.SanctionID='" .  $SanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
+				WHERE ssi.SanctionID='" .  $sanctionID . "'  AND ssi.AgeGroup='" .  $divisionID . "' AND Round = '" . $skiRound . "'
 				ORDER BY ssi.Score DESC, RunOffScore DESC";
 			}
 

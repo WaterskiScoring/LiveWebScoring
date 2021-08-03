@@ -4,14 +4,24 @@ ini_set("display_errors", 1);
 session_start();
 include_once( "WfwInit.php" );
 
-$SanctionID = $_GET['sanctionID'];
-$EventName = $_GET['EventName'];
+$sanctionID = '';
+$EventName = '';
+
+if ( isset($_GET['sanctionID']) ) {
+	$sanctionID = $_GET['sanctionID'];
+	$EventName = $_GET['EventName'];
+	$_SESSION['sanctionID'] = $sanctionID;
+	$_SESSION['EventName'] = $EventName;
+} else {
+	if ( isset($_SESSION['sanctionID']) ) $sanctionID = $_SESSION['sanctionID'];
+	if ( isset($_SESSION['EventName']) ) $EventName = $_SESSION['EventName'];
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title><?php echo $EventName ?> (<?php echo $SanctionID ?>) - Tournament Running Order</title>
+	<title><?php echo $EventName ?> (<?php echo $sanctionID ?>) - Tournament Running Order</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,7 +37,7 @@ $EventName = $_GET['EventName'];
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
 	<script>
-		var TournamentInfo = new Tournament("<?php echo $SanctionID ?>", "<?php echo $EventName ?>");
+		var TournamentInfo = new Tournament("<?php echo $sanctionID ?>", "<?php echo $EventName ?>");
 
 		function getURLParameter(name) {
 			return decodeURI(
@@ -50,7 +60,7 @@ $EventName = $_GET['EventName'];
 		$( document ).ajaxStop(function() {
 			$("#toggle").click();
 			$("#toggle").html("Select...");
-			document.title = "<?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Running Order";
+			document.title = "<?php echo $EventName?> (<?php echo $sanctionID ?>) - Tournament Running Order";
 			buildRunOrderNavHTML();
 		});
 
@@ -62,11 +72,11 @@ $EventName = $_GET['EventName'];
 <div data-role="page" id="RunOrder">
 
 	<div data-role="header">
-		<h2><?php echo $EventName?> (<?php echo $SanctionID ?>) - Tournament Running Orders</h2>
+		<h2><?php echo $EventName?> (<?php echo $sanctionID ?>) - Tournament Running Orders</h2>
 	</div><!-- /header -->
 
 	<div data-role="header">
-	   	<a href='wfwShowTourScores.php?sanctionID=<?php echo $SanctionID ?>&EventName=<?php echo $EventName?>'
+	   	<a href='wfwShowTourScores.php?sanctionID=<?php echo $sanctionID ?>&EventName=<?php echo $EventName?>'
 	   	class='ui-btn-left' data-role='button' data-icon='back' data-mini='true' data-ajax='false' data-iconpos="notext">Scores</a>
 		<h1>
         <div id="navContainer">

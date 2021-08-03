@@ -30,6 +30,6 @@ if (isset($_POST['sanctionID']) && isset($_POST['skiEvent'])) {
 
 	echo json_encode($eventGroups);
 } else {
-	echo "Tournament sanction and event information not provided: SanctionId=" . $_POST['sanctionID'] . " - Evemt=" . $_POST['skiEvent'];
+	echo "Tournament sanction and event information not provided";
 }
 ?>
