@@ -16,7 +16,7 @@ if (isset($_POST['sanctionID'])) {
 	$SanctionID = $_GET['sanctionID'];
 	$EventName = $_GET['EventName'];
 } else {
-	  header('Location: http://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
+	  header('Location: https://www.waterskiresults.com/WfwWeb/wfwShowTourList.php');
 }
 
 ?>
@@ -28,10 +28,10 @@ if (isset($_POST['sanctionID'])) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="stylesheet" type="text/css" href="wfwMobile.css">
-	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 	<script type="text/javascript" src="wfwMobile.js"></script>
 
 	<link rel="apple-touch-icon" href="customIcon.png" />
@@ -98,9 +98,9 @@ if (isset($_POST['sanctionID'])) {
 		}
 		?>
 		</h2>
-	    <a id='RunOrderBtn' class='ui-btn-right' data-role='button' data-icon='grid' data-mini='true' data-ajax='false' data-iconpos="left"
-			<?php echo "href='wfwShowTourRunOrder.php?sanctionID=" . $SanctionID
-			. "&EventName=" . str_replace("'","&#039;", $EventName) . "'>Running Orders</a>";
+	    <a id='PublishResultsBtn' class='ui-btn-right' data-role='button' data-icon='grid' data-mini='true' data-ajax='false' data-iconpos="left"
+			<?php echo "href='wfwShowPublishResults.php?sanctionID=" . $SanctionID
+			. "&EventName=" . str_replace("'","&#039;", $EventName) . "'>Published Reports</a>";
 			?>
 	</div><!-- /header -->
 
@@ -116,7 +116,8 @@ if (isset($_POST['sanctionID'])) {
             </span>
         </div>
         </h1>
-			<a href='#' id='refreshBtn' class='ui-btn-right' data-role='button' data-icon='refresh' data-mini='true' data-ajax='true' data-iconpos="notext"></a>
+
+			<a id="ui-header-refresh" href='#' onclick='location.replace()' class='ui-btn-right RefreshLink' data-role='button' data-icon='refresh' data-mini='true' data-ajax='true'>Refresh</a>
 	</div><!-- /header -->
 
     <div data-role="content" data-theme="c" id="scoresID"></div> <!-- // Content -->

@@ -11,12 +11,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 	<link rel="stylesheet"  href="wfwMobile.css">
 	<link rel="stylesheet" href="wfw.css" type="text/css" />
 
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 	<script language="JavaScript" type="text/javascript" src="wfw.js" ></script>
 
 	<link rel="apple-touch-icon" href="customIcon.png" />
@@ -50,8 +50,8 @@
     	<div data-role="footer" data-position="fixed" data-theme="b">
 			<div data-role="navbar">
 				<ul>
-					<li><a href="http://www.waterskiresults.com/WfwWeb/wfwShowScoreboard.php" data-ajax="false">WSTIMS For Window Web Scoreboard</a></li>
-					<li><a href="http://www.usawaterski.org" data-ajax="false">USA Water Ski</a></li>
+					<li><a href="https://www.waterskiresults.com/WfwWeb/wfwShowScoreboard.php" data-ajax="false">WSTIMS For Window Web Scoreboard</a></li>
+					<li><a href="https://www.usawaterski.org" data-ajax="false">USA Water Ski</a></li>
 				</ul>
 			</div><!-- /navbar -->
 		</div><!-- /footer -->

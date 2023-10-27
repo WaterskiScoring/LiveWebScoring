@@ -18,6 +18,8 @@
 	<div style="margin-left: 16px;">
 	<br><li><a href="WfwWeb/wfwShowScoreboard.php">WSTIMS For Windows Web Scoreboard</a></li>
 	<br><li><a href="publish.htm">WSTIMS For Windows Download and Deployment</a></li>
+	<br><li><a href="WscMessageHandler/publish.htm">WaterSkiConnect Message Handler Download and Deployment</a></li>
+	<br><li><a href="WaterSkiConnectMonitor/publish.htm">WaterSkiConnect Monitor Download and Deployment</a></li>
 	<br><li><a href="waterski.sdf" download="waterski.sdf" >WSTIMS For Windows Database Download</a></li>
 	<br><li><a href="Newsletters/Volume20/HOW%20TO%20ARTICLES%20PUBLISHED%20IN%20NEWSLETTERS%206-28-2020.pdf">WSTIMS For Windows Newsletter -  - How to Index</a>.</li>
 	<br><li><a href="filelist.php?FolderName=Newsletters">WSTIMS For Windows Newsletter Archive</a>.</li>
