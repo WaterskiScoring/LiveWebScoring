@@ -1,0 +1,1130 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+LiveWebScorebook22vb
+</name>
+</assembly>
+<members>
+<member name="T:LiveWebScorebook22vb.My.MyWebExtension">
+ <summary>
+ Module used to define the properties that are available in the My Namespace for Web projects.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:LiveWebScorebook22vb.My.MyWebExtension.Computer">
+ <summary>
+ Returns information about the host computer.
+ </summary>
+</member>
+<member name="P:LiveWebScorebook22vb.My.MyWebExtension.User">
+ <summary>
+ Returns information for the current Web user.
+ </summary>
+</member>
+<member name="P:LiveWebScorebook22vb.My.MyWebExtension.Request">
+ <summary>
+ Returns Request object.
+ </summary>
+</member>
+<member name="P:LiveWebScorebook22vb.My.MyWebExtension.Response">
+ <summary>
+ Returns Response object.
+ </summary>
+</member>
+<member name="P:LiveWebScorebook22vb.My.MyWebExtension.Log">
+ <summary>
+ Returns the Asp log object.
+ </summary>
+</member>
+<member name="F:LiveWebScorebook22vb._Default1._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb._Default1._ddl_PkYear">
+<summary>
+ddl_PkYear control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb._Default1._Btn_LoadTList">
+<summary>
+Btn_LoadTList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.SiteMaster._MainContent">
+<summary>
+MainContent control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._HF_SanctionID">
+<summary>
+HF_SanctionID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._HF_SkierID">
+<summary>
+HF_SkierID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._HF_Event">
+<summary>
+HF_Event control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._HF_AgeGroup">
+<summary>
+HF_AgeGroup control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._HF_YearPkd">
+<summary>
+HF_YearPkd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._HF_TournName">
+<summary>
+HF_TournName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._Btn_ToSkierList">
+<summary>
+Btn_ToSkierList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._Btn_2TournHome">
+<summary>
+Btn_2TournHome control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._Btn_2TList">
+<summary>
+Btn_2TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._SlalomScore">
+<summary>
+SlalomScore control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._TrickScore">
+<summary>
+TrickScore control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TIndScores._JumpScore">
+<summary>
+JumpScore control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TList._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TList._Lbl_Errors">
+<summary>
+Lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TList._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TList._TList">
+<summary>
+TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_SanctionID">
+<summary>
+HF_SanctionID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_SkierID">
+<summary>
+HF_SkierID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_Event">
+<summary>
+HF_Event control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_AgeGroup">
+<summary>
+HF_AgeGroup control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_YearPkd">
+<summary>
+HF_YearPkd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_TournName">
+<summary>
+HF_TournName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._HF_FormatCode">
+<summary>
+HF_FormatCode control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._Btn_ScoreXSkier">
+<summary>
+Btn_ScoreXSkier control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._Btn_PlacementXDv">
+<summary>
+Btn_PlacementXDv control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._Btn_Back2TList">
+<summary>
+Btn_Back2TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._DisplayText">
+<summary>
+DisplayText control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._cb_UseNOPS">
+<summary>
+cb_UseNOPS control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._ddl_SelectFeatures">
+<summary>
+ddl_SelectFeatures control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._Officials">
+<summary>
+Officials control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._HF_SanctionID">
+<summary>
+HF_SanctionID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._HF_SkierID">
+<summary>
+HF_SkierID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._HF_Event">
+<summary>
+HF_Event control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._HF_AgeGroup">
+<summary>
+HF_AgeGroup control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._HF_YearPkd">
+<summary>
+HF_YearPkd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._HF_TournName">
+<summary>
+HF_TournName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._Btn_2Tournament">
+<summary>
+Btn_2Tournament control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._Btn_2TList">
+<summary>
+Btn_2TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierList._SkierList">
+<summary>
+SkierList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._HF_SanctionID">
+<summary>
+HF_SanctionID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._HF_SkierID">
+<summary>
+HF_SkierID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._HF_Event">
+<summary>
+HF_Event control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._HF_AgeGroup">
+<summary>
+HF_AgeGroup control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._HF_YearPkd">
+<summary>
+HF_YearPkd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._HF_TournName">
+<summary>
+HF_TournName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._Btn_2Tournament">
+<summary>
+Btn_2Tournament control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._Btn_2TList">
+<summary>
+Btn_2TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._ddl_ColumnSelector">
+<summary>
+ddl_ColumnSelector control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._InsertHere">
+<summary>
+InsertHere control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._InsertHere2">
+<summary>
+InsertHere2 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TSkierListPro._InsertHere3">
+<summary>
+InsertHere3 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._Panel_HF">
+<summary>
+Panel_HF control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_SanctionID">
+<summary>
+HF_SanctionID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_SkierID">
+<summary>
+HF_SkierID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_Event">
+<summary>
+HF_Event control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_AgeGroup">
+<summary>
+HF_AgeGroup control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_YearPkd">
+<summary>
+HF_YearPkd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_TournName">
+<summary>
+HF_TournName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_FormatCode">
+<summary>
+HF_FormatCode control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HF_UseNOPS">
+<summary>
+HF_UseNOPS control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._Btn_2Tournament">
+<summary>
+Btn_2Tournament control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._Btn_2TList">
+<summary>
+Btn_2TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._ddl_ColumnSelector">
+<summary>
+ddl_ColumnSelector control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._UpdatePanelResults">
+<summary>
+UpdatePanelResults control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._Btn_UpdateDisplay">
+<summary>
+Btn_UpdateDisplay control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._ColumnOne">
+<summary>
+ColumnOne control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._ColumnTwo">
+<summary>
+ColumnTwo control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._ColumnThree">
+<summary>
+ColumnThree control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_SanctionID">
+<summary>
+HF_SanctionID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_SkierID">
+<summary>
+HF_SkierID control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_Event">
+<summary>
+HF_Event control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_AgeGroup">
+<summary>
+HF_AgeGroup control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_YearPkd">
+<summary>
+HF_YearPkd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_TournName">
+<summary>
+HF_TournName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_FormatCode">
+<summary>
+HF_FormatCode control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._HF_UseNOPS">
+<summary>
+HF_UseNOPS control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Btn_2Tournament">
+<summary>
+Btn_2Tournament control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Btn_2TList">
+<summary>
+Btn_2TList control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Btn_Home">
+<summary>
+Btn_Home control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._ddl_ColumnSelector">
+<summary>
+ddl_ColumnSelector control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._UpdatePanelResults">
+<summary>
+UpdatePanelResults control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Btn_UpdateDisplay">
+<summary>
+Btn_UpdateDisplay control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._ColumnOne">
+<summary>
+ColumnOne control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._ColumnTwo">
+<summary>
+ColumnTwo control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._ColumnThree">
+<summary>
+ColumnThree control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Div1">
+<summary>
+Div1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Div2">
+<summary>
+Div2 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.T_Test._Div3">
+<summary>
+Div3 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Site_Mobile._Head1">
+<summary>
+Head1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Site_Mobile._HeadContent">
+<summary>
+HeadContent control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Site_Mobile._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Site_Mobile._FeaturedContent">
+<summary>
+FeaturedContent control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Site_Mobile._MainContent">
+<summary>
+MainContent control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Site_Mobile._ViewSwitcher1">
+<summary>
+ViewSwitcher1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+</members>
+</doc>
