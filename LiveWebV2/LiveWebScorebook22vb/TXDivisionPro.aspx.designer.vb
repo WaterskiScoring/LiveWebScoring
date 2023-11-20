@@ -122,6 +122,24 @@ Partial Public Class TXDivisionPro
     Protected WithEvents lbl_Errors As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''HyperLink1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents HyperLink1 As Global.System.Web.UI.WebControls.HyperLink
+
+    '''<summary>
+    '''HyperLink2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents HyperLink2 As Global.System.Web.UI.WebControls.HyperLink
+
+    '''<summary>
     '''Btn_2Tournament control.
     '''</summary>
     '''<remarks>
@@ -149,13 +167,31 @@ Partial Public Class TXDivisionPro
     Protected WithEvents Btn_Home As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''ddl_ColumnSelector control.
+    '''DDL_Events control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddl_ColumnSelector As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents DDL_Events As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''DDL_Round control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DDL_Round As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''DDL_Divisions control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DDL_Divisions As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
     '''UpdatePanelResults control.

@@ -38,8 +38,8 @@
         <div class="text-center">
             
            <asp:Button ID="Btn_ToSkierList" runat="server" Text="New Skier" />
-           <asp:Button ID="Btn_2TournHome" runat="server" Text="This Tournament" />
-            <asp:Button ID="Btn_2TList" runat="server" Text="New Tournament" />
+           <asp:Button ID="Btn_2TournHome" runat="server" Text="Tournament Detail" />
+            <asp:Button ID="Btn_2TList" runat="server" Text="Tournament List" />
             <asp:Button ID="Btn_Home" runat="server" Text="Home Page" />
             
         </div>

@@ -262,6 +262,15 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:LiveWebScorebook22vb.Tournament._Panel1">
+<summary>
+Panel1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:LiveWebScorebook22vb.Tournament._HF_SanctionID">
 <summary>
 HF_SanctionID control.
@@ -334,15 +343,6 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:LiveWebScorebook22vb.Tournament._lbl_Errors">
-<summary>
-lbl_Errors control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
 <member name="F:LiveWebScorebook22vb.Tournament._Btn_ScoreXSkier">
 <summary>
 Btn_ScoreXSkier control.
@@ -379,6 +379,33 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:LiveWebScorebook22vb.Tournament._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._DDL_Events">
+<summary>
+DDL_Events control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.Tournament._DDL_Division">
+<summary>
+DDL_Division control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:LiveWebScorebook22vb.Tournament._DisplayText">
 <summary>
 DisplayText control.
@@ -409,6 +436,69 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:LiveWebScorebook22vb.Tournament._Officials">
 <summary>
 Officials control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._TName">
+<summary>
+TName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._lbl_Errors">
+<summary>
+lbl_Errors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._SlalomRecap">
+<summary>
+SlalomRecap control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._TrickRecap">
+<summary>
+TrickRecap control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._JumpRecap">
+<summary>
+JumpRecap control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TRecap._OverallRecap">
+<summary>
+OverallRecap control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -784,6 +874,24 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HyperLink1">
+<summary>
+HyperLink1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._HyperLink2">
+<summary>
+HyperLink2 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:LiveWebScorebook22vb.TXDivisionPro._Btn_2Tournament">
 <summary>
 Btn_2Tournament control.
@@ -811,9 +919,27 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:LiveWebScorebook22vb.TXDivisionPro._ddl_ColumnSelector">
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._DDL_Events">
 <summary>
-ddl_ColumnSelector control.
+DDL_Events control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._DDL_Round">
+<summary>
+DDL_Round control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:LiveWebScorebook22vb.TXDivisionPro._DDL_Divisions">
+<summary>
+DDL_Divisions control.
 </summary>
 <remarks>
 Auto-generated field.

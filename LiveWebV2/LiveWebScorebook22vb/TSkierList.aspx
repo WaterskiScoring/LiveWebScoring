@@ -28,8 +28,8 @@
        </div>
         <!-- Display droplist and button controls -->
         <div class="text-center">
-            <asp:Button ID="Btn_2Tournament" runat="server" Text="This Tournament" />
-           <asp:Button ID="Btn_2TList" runat="server" Text="New Tournament" />
+            <asp:Button ID="Btn_2Tournament" runat="server" Text="Tournament Detail" />
+           <asp:Button ID="Btn_2TList" runat="server" Text="Tournament List" />
             <asp:Button ID="Btn_Home" runat="server" Text="Home Page" />
            
         </div>

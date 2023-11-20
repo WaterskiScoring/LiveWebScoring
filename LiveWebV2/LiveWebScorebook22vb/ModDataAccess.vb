@@ -87,6 +87,7 @@ Module ModDataAccess
     End Function
     Friend Function GetTournamentSpecs(ByVal SanctionID As String) As Array
         Dim sMsg As String = ""
+        Dim sErrDetails As String = ""
         Dim SQL As String = ""
         Dim sSanctionID As String = Trim(SanctionID)
         SQL = "Select SanctionID, Name, Class, EventDates, EventLocation, Rules, SlalomRounds, TrickRounds, JumpRounds from Tournament WHERE SanctionID = '" & sSanctionID & "'"
@@ -95,7 +96,10 @@ Module ModDataAccess
         Dim sEventDates As String = ""
         Dim sEventLocation As String = ""
         Dim sRules As String = ""
-        Dim arrSpecs(0 To 7, 0 To 2)
+        Dim sSlalomRounds As Int16 = 0
+        Dim sTrickRounds As Int16 = 0
+        Dim sJumpRounds As Int16 = 0
+        Dim arrSpecs(0 To 9, 0 To 2)
         Dim sConn As String = ""
         Try
             sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
@@ -128,6 +132,9 @@ Module ModDataAccess
                             sEventDates = MyDataReader.Item("EventDates")
                             sEventLocation = MyDataReader.Item("EventLocation")
                             sRules = MyDataReader.Item("Rules")
+                            sSlalomRounds = MyDataReader.Item("SlalomRounds")
+                            sTrickRounds = MyDataReader.Item("TrickRounds")
+                            sJumpRounds = MyDataReader.Item("JumpRounds")
 
                             arrSpecs(1, 1) = "SanctionID:"
                             arrSpecs(1, 2) = sSanctionID.ToString
@@ -139,12 +146,19 @@ Module ModDataAccess
                             arrSpecs(4, 2) = sEventLocation
                             arrSpecs(5, 1) = "Rules:"
                             arrSpecs(5, 2) = sRules
+                            arrSpecs(6, 1) = "Slalom Rounds"
+                            arrSpecs(6, 2) = sSlalomRounds
+                            arrSpecs(7, 1) = "Trick Rounds"
+                            arrSpecs(7, 2) = sTrickRounds
+                            arrSpecs(8, 1) = "Jump Rounds"
+                            arrSpecs(8, 2) = sJumpRounds
+
                         Loop
                     End If 'end of has rows
                 End Using
             Catch ex As Exception
-                sMsg += "Error: SQL= " & SQL & "<br>GetTournamentSpecs Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
-                arrSpecs(0, 0) = sMsg
+                sErrDetails += "Error: SQL= " & SQL & "<br>GetTournamentSpecs Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
+                arrSpecs(0, 0) = "Error retrieving tournament information."
             End Try
         End Using
         Return arrSpecs
@@ -574,12 +588,14 @@ and TR.Notes = 'Appointed Official'"
         'Will probably have to add round number, number of qualifiers, and how ties are handled as optional parameters
         Dim sSanctionID As String = SanctionID
         Dim sEventCode As String = EventCode
+        Dim sErrDetails As String = ""
         Dim sRnd As Byte = 0
         'Use zero 0 for fields not in use
         Dim sFormatCode As String = CompetitionFormatCode
         Dim sSql As String = PlacementSQL(sSanctionID, sEventCode, sFormatCode, 0, False)  'Make sure Select works with , separated list
         If Left(sSql, 5) = "Error" Then
-            Return sSql
+            Return "Error at PlacementSQL"
+            sErrDetails = sSql
             Exit Function
         End If
         'Process the data by class, division, score desc
@@ -607,24 +623,25 @@ and TR.Notes = 'Appointed Official'"
         Dim j As Int16 = 0
         Dim sSkipPlace As Int16 = 0
         Dim sStopHere As Boolean = False
-        Dim sSlalomHeader As String = "<thead><tr class=""table-primary""><th colspan=""5"">Slalom Results</th></tr>"
-        sSlalomHeader += "<tr><th>Place</th><th>Name</th><th>DV</th><th>Class</th><th>Rnd</th><th>Buoys</th><th>Detail</th></tr></thead>"
-        Dim sTrickHeader As String = "<tr class=""table-primary""><th colspan=""5"">Trick Results</th></tr>"
-        sTrickHeader += "<tr><th>Place</th><th>Name</th><th>DV</th><th>Class</th><th>Rnd</th><th>Points</th><th>Detail</th></tr>"
-        Dim sJumpHeader As String = "<tr class=""table-primary""><th colspan=""5"">Jump Results</th></tr>"
-        sJumpHeader += "<tr><th>Place</th><th>Name</th><th>DV</th><th>Class</th><th>Rnd</th><th>Length</th><th>Detail</th></tr>"
+        Dim sSlalomHeader As String = "<thead><tr class=""table-primary""><th colspan=""6"">Slalom Results</th></tr>"
+        sSlalomHeader += "<tr><th>Place</th><th>Name</th><th>Class</th><th>Rnd</th><th>Buoys</th><th>Detail</th></tr></thead>"
+        Dim sTrickHeader As String = "<tr class=""table-primary""><th colspan=""6"">Trick Results</th></tr>"
+        sTrickHeader += "<tr><th>Place</th><th>Name</th><th>Class</th><th>Rnd</th><th>Points</th><th>Detail</th></tr>"
+        Dim sJumpHeader As String = "<tr class=""table-primary""><th colspan=""6"">Jump Results</th></tr>"
+        sJumpHeader += "<tr><th>Place</th><th>Name</th><th>Class</th><th>Rnd</th><th>Length</th><th>Detail</th></tr>"
         Try
             sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
 
         Catch ex As Exception
-            sMsg = "Error: " & sEventCode & "PlacementBestRound could not get connection string." & ex.Message & "  " & ex.StackTrace
+            sMsg = "Error: Connection Failure Try again."
+            sErrDetails = sEventCode & "PlacementBestRound could not get connection string." & ex.Message & "  " & ex.StackTrace
             Return sMsg
             Exit Function
         End Try
         Dim sLine As String = ""
         Dim Cnnt As New OleDb.OleDbConnection(sConn)
         Dim sTableWidth As String = "100%"
-        Dim sText As String = "<Table class=""table table-striped border-1 "">"
+        Dim sText As String = "<Table Class=""table table-striped border-1 "">"
         Select Case sEventCode
             Case "S"
                 sText += sSlalomHeader
@@ -649,6 +666,8 @@ and TR.Notes = 'Appointed Official'"
                             sMemberID = CStr(MyDataReader.Item("MemberID"))
                             sSanctionID = CStr(MyDataReader.Item("SanctionID"))
                             sSkierName = CStr(MyDataReader.Item("SkierName"))
+                            Replace(sSkierName, "'", "")
+                            Replace(sSkierName, ",", "")
                             sAgeGroup = CStr(MyDataReader.Item("AgeGroup"))
                             sEventClass = CStr(MyDataReader.Item("EventClass"))
                             sEventScore = CStr(MyDataReader.Item("EventScore"))
@@ -659,11 +678,12 @@ and TR.Notes = 'Appointed Official'"
                                 sTmpAgeGroup = sAgeGroup
                                 sFirstLoop = False
                                 j = 0
-                                sText += "<tr><td class=""table-primary"" colspan=""7"">Class " & sEventClass & "</td></tr>"
+                                '        sText += "<trClass=""table-primary""><td  colspan=""6"">Class " & sEventClass & "</td></tr>"
+                                sText += "<tr><td class=""table-warning"" colspan=""3"" ><b>" & sAgeGroup & "</b></td><td colspan=""3"" class=""table-light"">&nbsp;</td></tr>"
                                 sTmpEventClass = sEventClass
                             End If
                             If sTmpEventClass <> sEventClass Then
-                                sText += "<tr><td colspan=""7"">Class " & sEventClass & "</td></tr>"
+                                '  sText += "<tr><td colspan=""6"">Class " & sEventClass & "</td></tr>"
                                 sTmpEventClass = sEventClass
                             End If
                             If sTmpAgeGroup = sAgeGroup Then  'In same division - continue
@@ -682,10 +702,15 @@ and TR.Notes = 'Appointed Official'"
                                             j += 1  'Normal increment
                                         End If
                                         sFirstPlace = ""
-                                        If j = 1 Then sFirstPlace = " class=""table-warning"" "
+                                        If j = 1 Then sFirstPlace = " Class=""table-warning"" "
                                         sStringMemberIDs += sMemberID & ","
                                     End If
-                                    sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td>" & sSkierName & "&nbsp; &nbsp;</td><td" & sFirstPlace & ">" & sAgeGroup & "&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td> " & sRound & " &nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
+                                    sFirstPlace = "" 'don't emphasize placement per David
+
+
+                                    '                                   sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td><a asp-page=""/Trecap.aspx?SID=" & sSanctionID & "&MID=" & sMemberID & "&DV=" & sAgeGroup & "&SN=" & sSkierName & " target=""_blank"" >" & sSkierName & "</a>&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td> " & sRound & " &nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
+                                    '                                   sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td>" & sSkierName & "&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td> " & sRound & " &nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
+                                    sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td><a href=""http://localhost:53474/Trecap?SID=" & sSanctionID & "&MID=" & sMemberID & "&DV=" & sAgeGroup & "&SN=" & sSkierName & """ target=""_blank"" >" & sSkierName & "</a>&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td> " & sRound & " &nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
 
                                 End If
                             Else  'Division changed.  Reset the variables. Put first skier in this division in first place
@@ -693,20 +718,25 @@ and TR.Notes = 'Appointed Official'"
                                 sStringMemberIDs += sMemberID & ","
                                 sSkipPlace = 0
                                 sTmpAgeGroup = sAgeGroup
+                                sText += "<tr><td class=""table-warning"" colspan=""3"" ><b>" & sAgeGroup & "</b></td><td colspan=""3"" class=""table-light"">&nbsp;</td></tr>"
                                 sTmpEventScore = sEventScore
                                 j = 1
                                 sFirstPlace = ""
-                                If j = 1 Then sFirstPlace = " class=""table-warning"" "
-                                sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td>" & sSkierName & "&nbsp; &nbsp;</td><td" & sFirstPlace & ">" & sAgeGroup & "&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td>" & sRound & "&nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
+                                If j = 1 Then sFirstPlace = ""  ' Class=""table-warning"" "
+
+                                sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td><a href=""http://localhost:53474/Trecap?SID=" & sSanctionID & "&MID=" & sMemberID & "&DV=" & sAgeGroup & "&SN=" & sSkierName & "  >" & sSkierName & "</a>&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td> " & sRound & " &nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
+
+                                '                               sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td>" & sSkierName & " &nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td>" & sRound & "&nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
+                                '                              sText += "<tr><td" & sFirstPlace & ">" & j & "</td><td><a asp-page=""/Trecap.aspx?SID=" & sSanctionID & "&MID=" & sMemberID & "&DV=" & sAgeGroup & "&SN=" & sSkierName & " target=""_blank"" >" & sSkierName & "</a>&nbsp; &nbsp;</td><td>" & sEventClass & "&nbsp; &nbsp;</td><td>" & sRound & "&nbsp; &nbsp;</td><td>" & sEventScore & "&nbsp; &nbsp;</td><td>" & sEventScoreDesc & "&nbsp; &nbsp;</td></tr>"
                             End If
                         Loop
                     Else
-                        sText += "<tr><td colspan=""7"">No Scores Found.</td></tr>"
+                        sText += "<tr><td colspan=""6"">No Scores Found.</td></tr>"
                     End If 'end of has rows
                 End Using
             Catch ex As Exception
-                sMsg += "Error: SQL= " & sSql & "<br>" & sEventCode & "PlacementBestRound Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
-
+                sMsg += "Error at BestRound"
+                sErrDetails = "SQL= " & sSql & "<br>" & sEventCode & "PlacementBestRound Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
             Finally
                 sText += "</table>"
             End Try
@@ -1281,14 +1311,6 @@ and TR.Notes = 'Appointed Official'"
         Dim sSanctionID As String = SanctionID
         Dim sMemberID As String = MemberID
 
-        'Below comments are history.  Have created a view which supplies the required data.  Below refers to sql code in LiveScorebook project.
-        '       From Dave's PHP code -  Made it work in sql server with modifications listd below
-        '       SQLite doesn't like fully qualified names, has no Concat function and probably has other complaints.
-        '       This query needs to be reworked into SQLite syntax
-        '       Added fully qualified database table name.
-        '       Removed date formatting at DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, put bogus date in ssi.LastUpdateDate >= '1/1/2022'.
-        '       Generates list of all performances in all events by all skiers.  Need to fix the formatting and figure out what CURDATE() is in ssi.LastUpdateDate >= CURDATE() "
-        'NOW() didn't work.  Maybe CreateDAte()?
         Dim SQL As String = ""
         SQL = "SELECT * from dbo.vSlalomResults "
         SQL += " Where SanctionID ='" & sSanctionID & "' And MemberID = '" & Trim(sMemberID) & "'"
@@ -1448,14 +1470,7 @@ and TR.Notes = 'Appointed Official'"
         Dim sSanctionID As String = SanctionID
         Dim sMemberID As String = MemberID
 
-        'Below comments are history.  Have created a view which supplies the required data.  Below refers to sql code in LiveScorebook project.
-        '       From Dave's PHP code -  Made it work in sql server with modifications listd below
-        '       SQLite doesn't like fully qualified names, has no Concat function and probably has other complaints.
-        '       This query needs to be reworked into SQLite syntax
-        '       Added fully qualified database table name.
-        '       Removed date formatting at DATE_FORMAT(ssi.LastUpdateDate, '%Y/%m/%d %h:%i %p') as LastUpdateDate, put bogus date in ssi.LastUpdateDate >= '1/1/2022'.
-        '       Generates list of all performances in all events by all skiers.  Need to fix the formatting and figure out what CURDATE() is in ssi.LastUpdateDate >= CURDATE() "
-        'NOW() didn't work.  Maybe CreateDAte()?
+
         Dim SQL As String = ""
         SQL = "SELECT * from dbo.vJumpResults "
         SQL += " Where SanctionID ='" & sSanctionID & "' And MemberID = '" & Trim(sMemberID) & "'"
@@ -1468,8 +1483,6 @@ and TR.Notes = 'Appointed Official'"
         Dim sRound As String = ""
         Dim sEventScoreDesc As String = ""
         Dim sConn As String = ""
-
-
         Try
             sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
 
@@ -1527,10 +1540,11 @@ and TR.Notes = 'Appointed Official'"
         Return sText
     End Function
     Friend Function ChkRnd4Scores(ByVal SanctionID As String, ByVal EventCode As String, ByVal Rnd As Byte) As String
-
+        'Checks to see if any scores have been posted in the speified event and round
         Dim sSanctionID As String = SanctionID
         Dim sEventCode As String = EventCode
         Dim sRound As Byte = Rnd
+        Dim sErrDetails As String = ""
         Dim sMsg As String = ""
         Dim sView2Use As String = ""
         Select Case sEventCode
@@ -1547,7 +1561,8 @@ and TR.Notes = 'Appointed Official'"
             sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
 
         Catch ex As Exception
-            sMsg = "Error: ChkRnd4Scores could not get connection string." & ex.Message & "  " & ex.StackTrace
+            sMsg = "Error - Close App and Try Again"
+            sErrDetails = "Error: ChkRnd4Scores could not get connection string." & ex.Message & "  " & ex.StackTrace
             Return sMsg
             Exit Function
         End Try
@@ -1560,13 +1575,632 @@ and TR.Notes = 'Appointed Official'"
                 cmd.Connection.Open()
                 sMsg = CStr(cmd.ExecuteScalar)
             Catch ex As Exception
-                sMsg = "Error: ChkRnd4Scores caught SQL= " & sSQL & " " & ex.Message & " " & ex.StackTrace
+                sMsg = "Error at ChkRnd4Scores"
+                sErrDetails = "ChkRnd4Scores caught SQL= " & sSQL & " " & ex.Message & " " & ex.StackTrace
             End Try
         End Using
         If sMsg = Nothing Then
             sMsg = "0"
         End If
-
         Return sMsg
+    End Function
+    Friend Function RecapSlalom(ByVal SanctionID As String, ByVal MemberID As String, ByVal ageGroup As String, ByVal SkierName As String) As String
+        'Pulled from wfwShowScoreRecap.php
+        ' 
+        Dim sMsg As String = ""
+        Dim sErrDetails As String = ""
+        Dim sText As String = ""
+        Dim sSanctionID As String = SanctionID
+        Dim sMemberID As String = MemberID
+        Dim sAgeGroup As String = ageGroup
+        Dim sSkierName As String = ""
+        Dim sSkierRound As String = ""
+        Dim sSkierEvent As String = ""
+        Dim sSQL As String = ""
+        Dim sRound As Int16 = 0
+        Dim sTmpRound As Int16 = 0
+        Dim sTmpName As String = ""
+        Dim sScore As String = ""
+        Dim sPsLnLngth As String = ""
+        Dim sNote As String = ""
+        Dim sReride As String = ""
+        Dim sProtected As String = ""
+        Dim sRerideReason As String = ""
+
+        ' 3 event scores in available data.
+        ' 23S108, James Bryans,             OM, 000107150,  at least 1 round overall
+        ' 23S108, Tristan Duplan-Fribourg, JM, 000181068, at least 1 round overall
+        '       If sSkierEvent = "Slalom" Then
+        sSQL = "Select [Round], Score, PassLineLength, Note, Reride, ScoreProt, RerideReason "
+        sSQL += " From WaterskiProd23.dbo.SlalomRecap "
+        sSQL += "Where SanctionId ='" & sSanctionID & "' AND MemberId='" & sMemberID & "' And AgeGroup='" & sAgeGroup & "' "
+        sSQL += " Order By [Round], SkierRunNum ASC "
+        '       End If
+        Dim sConn As String = ""
+        Try
+            sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
+
+        Catch ex As Exception
+            sMsg = "Error: RecapSlalom could not get connection string." & ex.Message & "  " & ex.StackTrace
+            Return sMsg
+            Exit Function
+        End Try
+        Dim sEventClass As String = ""
+        Dim sLine As String = ""
+        Dim Cnnt As New OleDb.OleDbConnection(sConn)
+        sText = "<Table class=""table table-striped border-1 "">"
+        sText += "<thead><tr><td colspan=""6"" clase=""table-warning""><b>Slalom Recap</b></td></tr>"
+        sText += "<tr><th>Score</th><th>Pass/ Line Length</th><th>Note</th><th>Reride</th><th>Protest</th><th>Reride Reason</th></tr></thead>"
+        Dim cmdRead As New OleDb.OleDbCommand
+        Dim MyDataReader As OleDb.OleDbDataReader = Nothing
+        Dim sCkRows As Boolean = False
+        Using Cnnt
+            Try
+                Using cmdRead
+                    cmdRead.Connection = Cnnt 'New OleDbConnection(sConn)
+                    cmdRead.Connection.Open()
+                    cmdRead.CommandText = sSQL
+                    MyDataReader = cmdRead.ExecuteReader
+                    If MyDataReader.HasRows = True Then
+                        Do While MyDataReader.Read()
+                            If IsDBNull(MyDataReader.Item("Score")) Then
+                                sScore = "N/A"
+                            Else
+                                sScore = CStr(MyDataReader.Item("Score"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("PassLineLength")) Then
+                                sPsLnLngth = "N/A"
+                            Else
+                                sPsLnLngth = CStr(MyDataReader.Item("PassLineLength"))
+                            End If
+
+                            If IsDBNull(MyDataReader.Item("Note")) Then
+                                sNote = "N/A"
+                            Else
+                                sNote = CStr(MyDataReader.Item("Note"))
+
+                            End If
+                            If IsDBNull(MyDataReader.Item("Reride")) Then
+                                sReride = "N/A"
+                            Else
+                                sReride = CStr(MyDataReader.Item("Reride"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScoreProt")) Then
+                                sProtected = "N/A"
+                            Else
+                                sProtected = CStr(MyDataReader.Item("ScoreProt"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("RerideReason")) Then
+                                sRerideReason = ""
+                            Else
+                                sRerideReason = CStr(MyDataReader.Item("RerideReason"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("Round")) Then
+                                sRound = ""
+                            Else
+                                sRound = CStr(MyDataReader.Item("Round"))
+                            End If
+                            If sTmpName <> sSkierName Then  'display skier name once
+                                sText += "<tr><td colspan="" 6"">Recap for " & sSkierName & "</td></tr>"
+                                sTmpName = sSkierName
+                            End If
+                            If sTmpRound <> sRound Then  '
+                                sText += "<tr><td colspan=""2""><b>Slalom Round " & sRound & "</b></td><td colspan=""4"">&nbsp;</td></tr>"
+                                sTmpRound = sRound
+                            End If
+                            sText += "<tr><td>" & sScore & "&nbsp; &nbsp;</td><td>" & sPsLnLngth & "&nbsp; &nbsp;</td><td>" & sNote & "&nbsp; &nbsp;</td><td>" & sReride & "&nbsp; &nbsp;</td><td>" & sProtected & "&nbsp; &nbsp;</td><td>" & sRerideReason & "&nbsp; &nbsp;</td></tr>"
+                        Loop
+                    Else
+                        sText += "<tr><td colspan=""6"">No Slalom results Found For selected skier.</td></tr>"
+                    End If 'end of has rows
+                End Using
+
+            Catch ex As Exception
+                sMsg += "Error Can 't retrieve Slalom Scores. " 'SQL= " & SQL & "<br>IndivJumpResults Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
+                sErrDetails = ex.Message & "<br> " & ex.StackTrace & "<br>""error at SRecapQry:SQL= " & sSQL
+            Finally
+                sText += "</table>"
+            End Try
+        End Using
+        If Len(sMsg) > 2 Then
+            Return sMsg
+            Exit Function
+        End If
+        Return sText
+    End Function
+    Friend Function RecapTrick(ByVal SanctionID As String, ByVal MemberID As String, ByVal ageGroup As String, ByVal SkierName As String) As String
+        'Pulled from wfwShowScoreRecap.php
+        ' 
+        Dim sMsg As String = ""
+        Dim sErrDetails As String = ""
+        Dim sText As String = ""
+        Dim sSanctionID As String = SanctionID
+        Dim sMemberID As String = MemberID
+        Dim sAgeGroup As String = ageGroup
+        Dim sSkierName As String = SkierName
+        Dim sSkierRound As String = ""
+        Dim sSkierEvent As String = ""
+        Dim sSQL As String = ""
+        Dim sRound As Int16 = 0
+        Dim sTmpRound As Int16 = 0
+        Dim sScore As String = ""
+        Dim sPsLnLngth As String = ""
+        Dim sNote As String = ""
+        Dim sReride As String = ""
+        Dim sProtected As String = ""
+        Dim sRerideReason As String = ""
+
+        ' 3 event scores in available data.
+        ' 23S108, James Bryans,             OM, 000107150,  at least 1 round overall
+        ' 23S108, Tristan Duplan-Fribourg, JM, 000181068, at least 1 round overall
+        '       If sSkierEvent = "Slalom" Then
+        sSQL = "Select P.PassNum, P.Seq, P.Skis, P.Score, P.Code, P.Results, S.ScorePass1, S.ScorePass2, S.Score As TotalScore "
+        sSQL += " , V.Pass1VideoUrl, V.Pass2VideoUrl, S.Pass1VideoUrl as Pass1VideoUrlX, S.Pass2VideoUrl as Pass2VideoUrlX  "
+        sSQL += " From TrickPass P "
+        sSQL += " Join TrickScore S on S.SanctionId = P.SanctionId And S.MemberId = P.MemberId And S.AgeGroup = P.AgeGroup And S.Round = P.Round "
+        sSQL += " Left Outer Join TrickVideo V ON V.SanctionId = P.SanctionId And V.MemberId = P.MemberId And V.AgeGroup = P.AgeGroup And V.Round = P.Round "
+        sSQL += "  WHERE P.SanctionId ='" & sSanctionID & "' AND P.MemberId='" & sMemberID & "' And P.AgeGroup='" & sAgeGroup & "' "
+        sSQL += " Order By P.PassNum ASC, P.Seq ASC "
+        '       End If
+        Dim sConn As String = ""
+        Try
+            sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
+
+        Catch ex As Exception
+            sMsg = "Error: IndivJumpResults could not get connection string." & ex.Message & "  " & ex.StackTrace
+            Return sMsg
+            Exit Function
+        End Try
+        Dim sEventClass As String = ""
+        Dim sLine As String = ""
+        Dim Cnnt As New OleDb.OleDbConnection(sConn)
+        sText = "<Table class=""table table-striped border-1 "">"
+        sText += "<thead><tr><td colspan=""6"">Slalom Recap</td></tr>"
+        sText += "<tr><th>Name</th><th>Score</th><th>Pass</th><th>Feet</th><th>Meters</th><th>Speed</th><th>RmpHt</th><th>Score Protect</th><th>Reride Reason</th></tr></thead>"
+        Dim cmdRead As New OleDb.OleDbCommand
+        Dim MyDataReader As OleDb.OleDbDataReader = Nothing
+        Dim sCkRows As Boolean = False
+        Using Cnnt
+            Try
+                Using cmdRead
+                    cmdRead.Connection = Cnnt 'New OleDbConnection(sConn)
+                    cmdRead.Connection.Open()
+                    cmdRead.CommandText = sSQL
+                    MyDataReader = cmdRead.ExecuteReader
+                    If MyDataReader.HasRows = True Then
+                        Do While MyDataReader.Read()
+
+                            sScore = CStr(MyDataReader.Item("ScoreFeet"))
+                            sPsLnLngth = CStr(MyDataReader.Item("SkierName"))
+                            sNote = CStr(MyDataReader.Item("AgeGroup"))
+                            sReride = CStr(MyDataReader.Item("EventClass"))
+                            sProtected = CStr(MyDataReader.Item("EventScore"))
+                            If IsDBNull(MyDataReader.Item("RerideReason")) Then
+                                sRerideReason = ""
+                            Else
+                                sRerideReason = CStr(MyDataReader.Item("RerideReason"))
+                            End If
+                            sRound = CStr(MyDataReader.Item("Round"))
+                            If sTmpRound <> sRound Then
+                                sText += "<tr><td colspan="" 6"">Jump Round " & sRound & "</td></tr>"
+                                sTmpRound = sRound
+                            End If
+                            sText += "<tr><td>" & sScore & "&nbsp; &nbsp;</td><td>" & sPsLnLngth & "&nbsp; &nbsp;</td><td>" & sNote & "&nbsp; &nbsp;</td><td>" & sReride & "&nbsp; &nbsp;</td><td>" & sProtected & "&nbsp; &nbsp;</td><td>" & sRerideReason & "&nbsp; &nbsp;</td></tr>"
+                        Loop
+                    Else
+                        sText += "<tr><td colspan=""6"">No Slalom results Found For selected skier.</td></tr>"
+                    End If 'end of has rows
+                End Using
+
+            Catch ex As Exception
+                sMsg += "Error Can 't retrieve Trick Scores. " 'SQL= " & SQL & "<br>IndivJumpResults Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
+                sErrDetails = "error at RecapTrick:SQL= " & sSQL & "<br>" & ex.Message & " " & ex.StackTrace & "<br>"
+            Finally
+                sText += "</table>"
+            End Try
+        End Using
+        If Len(sMsg) > 2 Then
+            Return sMsg
+            Exit Function
+        End If
+        Return sText
+    End Function
+    Friend Function RecapJump(ByVal SanctionID As String, ByVal MemberID As String, ByVal AgeGroup As String, ByVal SkierName As String) As String
+        'Pulled from wfwShowScoreRecap.php
+        ' 
+        Dim sMsg As String = ""
+        Dim sErrDetails As String = ""
+        Dim sText As String = ""
+        Dim sSanctionID As String = SanctionID
+        Dim sMemberID As String = MemberID
+        Dim sAgeGroup As String = AgeGroup
+        Dim sSkierName As String = SkierName
+        Dim sSkierRound As String = ""
+        Dim sSkierEvent As String = ""
+        Dim sSQL As String = ""
+        Dim sRound As Int16 = 0
+        Dim sTmpRound As Int16 = 0
+        Dim sTmpName As String = ""
+        Dim sFeet As String = ""
+        Dim sMeters As String = ""
+        Dim sPass As String = ""
+        Dim sBSpeed As String = ""
+        Dim sRmpHt As String = ""
+        Dim sNote As String = ""
+        Dim sReride As String = ""
+        Dim sProtected As String = ""
+        Dim sRerideReason As String = ""
+
+        ' 3 event scores in available data.
+        ' 23S108, James Bryans,             OM, 000107150,  at least 1 round overall
+        ' 23S108, Tristan Duplan-Fribourg, JM, 000181068, at least 1 round overall
+        sSQL = "Select SanctionID, AgeGroup, [round], ScoreFeet, ScoreMeters, PassNum, "
+        sSQL += " Results, BoatSpeed, RampHeight, ScoreProt, Reride, RerideReason "
+        sSQL += " From JumpRecap "
+        sSQL += " Where SanctionId ='" & sSanctionID & "' AND MemberId='" & sMemberID & "' And AgeGroup='" & sAgeGroup & "' "
+        sSQL += " Order By [round], PassNum ASC , ScoreFeet "
+
+        Dim sConn As String = ""
+        Try
+            sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
+
+        Catch ex As Exception
+            sMsg = "Error: JumpRecap could not get connection string." & ex.Message & "  " & ex.StackTrace
+            Return sMsg
+            Exit Function
+        End Try
+        Dim sEventClass As String = ""
+        Dim sLine As String = ""
+        Dim Cnnt As New OleDb.OleDbConnection(sConn)
+        sText = "<Table class=""table table-striped border-1 "">"
+        sText += "<thead><tr><td colspan=""6"">Jump Recap</td></tr>"
+        sText += "<tr><th>Age Grp<th>Pass</th><th> Ft  Mtr </th><th>Speed</th><th>RmpHt</th>Reride<th>Reride</th><th>Score Protect</th><th>Reride Reason</th></tr></thead>"
+        Dim cmdRead As New OleDb.OleDbCommand
+        Dim MyDataReader As OleDb.OleDbDataReader = Nothing
+        Dim sCkRows As Boolean = False
+        Using Cnnt
+            Try
+                Using cmdRead
+                    cmdRead.Connection = Cnnt 'New OleDbConnection(sConn)
+                    cmdRead.Connection.Open()
+                    cmdRead.CommandText = sSQL
+                    MyDataReader = cmdRead.ExecuteReader
+                    If MyDataReader.HasRows = True Then
+                        Do While MyDataReader.Read()
+                            If IsDBNull(MyDataReader.Item("PassNum")) Then
+                                sPass = "N/A"
+                            Else
+                                sPass = CStr(MyDataReader.Item("PassNum"))
+                            End If
+
+                            If IsDBNull(MyDataReader.Item("ScoreFeet")) Then
+                                sFeet = "N/A"
+                            Else
+                                sFeet = CStr(MyDataReader.Item("ScoreFeet"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScoreMeters")) Then
+                                sMeters = "N/A"
+                            Else
+                                sMeters = CStr(MyDataReader.Item("ScoreMeters"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("AgeGroup")) Then
+                                sAgeGroup = "N/A"
+                            Else
+                                sAgeGroup = CStr(MyDataReader.Item("AgeGroup"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("BoatSpeed")) Then
+                                sBSpeed = "N/A"
+                            Else
+                                sBSpeed = CStr(MyDataReader.Item("BoatSpeed"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("RampHeight")) Then
+                                sRmpHt = "N/A"
+                            Else
+                                sRmpHt = CStr(MyDataReader.Item("RampHeight"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("Reride")) Then
+                                sReride = "N"
+                            Else
+                                sReride = CStr(MyDataReader.Item("Reride"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScoreProt")) Then
+                                sProtected = "N/A"
+                            Else
+                                sProtected = CStr(MyDataReader.Item("ScoreProt"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("RerideReason")) Then
+                                sRerideReason = ""
+                            Else
+                                sRerideReason = CStr(MyDataReader.Item("RerideReason"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("Round")) Then
+                                sRound = "N/A"
+                            Else
+                                sRound = CStr(MyDataReader.Item("Round"))
+                            End If
+                            If sTmpName <> sSkierName Then
+                                sText += "<tr><td colspan=""11"">Recap for " & sSkierName & "</td></tr>"
+                            End If
+                            If sTmpRound <> sRound Then
+                                sText += "<tr><td colspan="" 2""><b>Round " & sRound & "</b></td><td colspan="" 9""></td></tr>"
+                                sTmpRound = sRound
+                            End If
+                            sText += "<tr><td>" & sAgeGroup & "&nbsp; &nbsp;</td><td>" & sPass & "&nbsp; &nbsp;</td><td>" & sFeet & "&nbsp;" & sMeters & "</td><td>" & sBSpeed & "&nbsp; &nbsp;</td><td>" & sRmpHt & "&nbsp; &nbsp;</td><td>" & sReride & "&nbsp; &nbsp;</td><td>" & sProtected & "&nbsp; &nbsp;</td><td>" & sRerideReason & "&nbsp; &nbsp;</td></tr>"
+                        Loop
+                    Else
+                        sText += "<tr><td colspan=""6"">No Jump results Found For selected skier.</td></tr>"
+                    End If 'end of has rows
+                End Using
+
+            Catch ex As Exception
+                sMsg += "Error Can 't retrieve Jump Scores. "
+                sErrDetails = ex.Message & " " & ex.StackTrace & "error at RecapJump:SQL= " & sSQL
+            Finally
+                sText += "</table>"
+            End Try
+        End Using
+        If Len(sMsg) > 2 Then
+            Return sMsg
+            Exit Function
+        End If
+        Return sText
+    End Function
+    Friend Function RecapOverall(ByVal SanctionID As String, ByVal MemberID As String, ByVal AgeGroup As String, ByVal SkierName As String) As String
+        'Pulled from wfwShowScoreRecap.php
+        ' 
+        Dim sMsg As String = ""
+        Dim sErrDetails As String = ""
+        Dim sText As String = ""
+        Dim sSanctionID As String = SanctionID
+        Dim sMemberID As String = MemberID
+        Dim sAgeGroup As String = AgeGroup
+        Dim sSkierName As String = SkierName
+        Replace(sSkierName, "'", "")
+        Replace(sSkierName, ",", "")
+        Dim sSkierRound As String = ""
+        Dim sSkierEvent As String = ""
+        Dim sSQL As String = ""
+        Dim sRound As Int16 = 0
+        Dim sTmpRound As Int16 = 0
+        Dim sEvent As String = ""
+        Dim sOverallScore As String = ""
+        Dim sSlalomNopsScore As String = ""
+        Dim sTrickNopsScore As String = ""
+        Dim sJumpNopsScore As String = ""
+        Dim sSlalomScore As String = ""
+        Dim sFinalPassScore As String = ""
+        Dim sFinalSpeedMPH As String = ""
+        Dim sFinalspeedKPH As String = ""
+        Dim sFinalLen As String = ""
+        Dim sFinalLenOff As String = ""
+        Dim sTrickScore As String = ""
+        Dim sScorePass1 As String = ""
+        Dim sScorePass2 As String = ""
+        Dim sScoreFeet As String = ""
+        Dim sScoreMeters As String = ""
+
+        ' 3 event scores in available data.
+        ' 23S108, James Bryans,             OM, 000107150,  at least 1 round overall
+        ' 23S108, Tristan Duplan-Fribourg, JM, 000181068, at least 1 round overall
+
+        'NOTE:  IS AGEGROUP REQUIRED?  MUST ALL PERFORMANCES BE IN THE SAME AGE GROUP?
+        'Can modification of this be used to put overall in with other events by division?
+
+        sSQL = "SELECT TR.SkierName, TR.MemberId, TR.AgeGroup, 'Overall' as Event "
+        sSQL += ", COALESCE(SS.NopsScore,0) + COALESCE(TS.NopsScore,0) + COALESCE(JS.NopsScore,0) as OverallScore "
+        sSQL += ", SS.NopsScore as SlalomNopsScore, TS.NopsScore as TrickNopsScore, JS.NopsScore as JumpNopsScore "
+        sSQL += ", COALESCE(SS.Round,COALESCE(TS.Round,COALESCE(JS.Round,0))) as Round "
+        sSQL += ", SS.Score as SlalomScore, FinalPassScore, FinalSpeedMph, FinalSpeedKph, FinalLen, FinalLenOff "
+        sSQL += " , TS.Score as TrickScore, ScorePass1, ScorePass2 "
+        sSQL += ", JS.ScoreFeet, JS.ScoreMeters  "
+        sSQL += "From waterskiProd23.dbo.TourReg TR 	"
+        sSQL += "Left OUTER JOIN waterskiProd23.dbo.SlalomScore SS on SS.MemberId=TR.MemberId And SS.SanctionId=TR.SanctionId And SS.AgeGroup = TR.AgeGroup "
+        sSQL += "Left OUTER JOIN waterskiProd23.dbo.TrickScore TS on TS.MemberId=TR.MemberId And TS.SanctionId=TR.SanctionId And TS.AgeGroup = TR.AgeGroup And TS.Round = SS.Round "
+        sSQL += " Left OUTER JOIN waterskiProd23.dbo.JumpScore JS on JS.MemberId=TR.MemberId And JS.SanctionId=TR.SanctionId And JS.AgeGroup = TR.AgeGroup And JS.Round = SS.Round "
+        sSQL += "WHERE TR.SanctionID ='" & sSanctionID & "' AND TR.MemberId='" & sMemberID & "' And TR.AgeGroup='" & sAgeGroup & "'  "
+        sSQL += " And COALESCE(SS.Round, COALESCE(TS.Round, COALESCE(JS.Round, 0))) > 0 "
+        sSQL += " Order By TR.AgeGroup, TR.SkierName, OverallScore DESC "
+
+        Dim sConn As String = ""
+        Try
+            sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
+
+        Catch ex As Exception
+            sMsg = "Error: RecapOverall could not get connection string." & ex.Message & "  " & ex.StackTrace
+            Return sMsg
+            Exit Function
+        End Try
+        Dim sEventClass As String = ""
+        Dim sLine As String = ""
+        Dim Cnnt As New OleDb.OleDbConnection(sConn)
+        sText = "<Table class=""table table-striped border-1 "">"
+        sText += "<thead><tr><td colspan=""6""><b>Overall Recap</b></td></tr>"
+        sText += "<tr><th>Age Group</th><th>Round</th><th>OverallScore</th><th>SlalomNopsScore</th><th>TrickNopsScore</th><th>JumpNopsScore</th>"
+        sText += "<th>SlalomScore</th><th>FinalPassScore</th><th>FinalLen</th><th>FinalLenOff</th><th>TrickScore</th>"
+        sText += "<th>ScorePass1</th><th>ScorePass2</th><th>ScoreFeet</th><th>ScoreMeters</th></tr></thead>"
+        Dim cmdRead As New OleDb.OleDbCommand
+        Dim MyDataReader As OleDb.OleDbDataReader = Nothing
+        Dim sCkRows As Boolean = False
+        Using Cnnt
+            Try
+                Using cmdRead
+                    cmdRead.Connection = Cnnt 'New OleDbConnection(sConn)
+                    cmdRead.Connection.Open()
+                    cmdRead.CommandText = sSQL
+                    MyDataReader = cmdRead.ExecuteReader
+                    If MyDataReader.HasRows = True Then
+                        Do While MyDataReader.Read()
+                            If IsDBNull(MyDataReader.Item("Round")) Then
+                                sRound = "N/A"
+                            Else
+                                sRound = CStr(MyDataReader.Item("Round"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("Event")) Then
+                                sEvent = "N/A"
+                            Else
+                                sEvent = CStr(MyDataReader.Item("Event"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("OverallScore")) Then
+                                sEvent = "N/A"
+                            Else
+                                sOverallScore = CStr(MyDataReader.Item("OverallScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("SlalomNopsScore")) Then
+                                sSlalomNopsScore = "N/A"
+                            Else
+                                sSlalomNopsScore = CStr(MyDataReader.Item("SlalomNopsScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("TrickNopsScore")) Then
+                                sTrickNopsScore = "N/A"
+                            Else
+                                sTrickNopsScore = CStr(MyDataReader.Item("TrickNopsScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("JumpNopsScore")) Then
+                                sJumpNopsScore = "N/A"
+                            Else
+                                sJumpNopsScore = CStr(MyDataReader.Item("JumpNopsScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("SlalomScore")) Then
+                                sSlalomScore = "N/A"
+                            Else
+                                sSlalomScore = CStr(MyDataReader.Item("SlalomScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("FinalPassScore")) Then
+                                sFinalPassScore = "N/A"
+                            Else
+                                sFinalPassScore = CStr(MyDataReader.Item("FinalPassScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("FinalSpeedMPH")) Then
+                                sFinalSpeedMPH = "N/A"
+                            Else
+                                sFinalSpeedMPH = CStr(MyDataReader.Item("FinalSpeedMPH"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("FinalSpeedKPH")) Then
+                                sFinalspeedKPH = "N/A"
+                            Else
+                                sFinalspeedKPH = CStr(MyDataReader.Item("FinalspeedKPH"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("FinalLen")) Then
+                                sFinalLen = "N/A"
+                            Else
+                                sFinalLen = CStr(MyDataReader.Item("FinalLen"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("FinalLenOff")) Then
+                                sFinalLenOff = "N/A"
+                            Else
+                                sFinalLenOff = CStr(MyDataReader.Item("FinalLenOff"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("TrickScore")) Then
+                                sTrickScore = "N/A"
+                            Else
+                                sTrickScore = CStr(MyDataReader.Item("TrickScore"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScorePass1")) Then
+                                sScorePass1 = "N/A"
+                            Else
+                                sScorePass1 = CStr(MyDataReader.Item("ScorePass1"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScorePass2")) Then
+                                sScorePass2 = "N/A"
+                            Else
+                                sScorePass2 = CStr(MyDataReader.Item("ScorePass2"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScoreFeet")) Then
+                                sScoreFeet = "N/A"
+                            Else
+                                sScoreFeet = CStr(MyDataReader.Item("ScoreFeet"))
+                            End If
+                            If IsDBNull(MyDataReader.Item("ScoreMeters")) Then
+                                sScoreMeters = "N/A"
+                            Else
+                                sScoreMeters = CStr(MyDataReader.Item("ScoreMeters"))
+                            End If
+
+                            sText += "<tr><td>" & sAgeGroup & "</td><td>" & sRound & "</td><td>" & sOverallScore & "</td><td>" & sSlalomNopsScore & "</td><td>" & sTrickNopsScore & "</td><td>" & sJumpNopsScore & "</td>"
+                            sText += "<td>" & sSlalomScore & "</td><td>" & sFinalPassScore & "</td><td>" & sFinalLen & "</td><td>" & sFinalLenOff & "</td><td>" & sTrickScore & "</td>"
+                            sText += "<td>" & sScorePass1 & "</td><td>" & sScorePass2 & "</td><td>" & sScoreFeet & "</td><td>" & sScoreMeters & "</td></tr>"
+
+                        Loop
+                    Else
+                        sText += "<tr><td colspan=""15"">No Overall results Found For selected skier.</td></tr>"
+                    End If 'end of has rows
+                End Using
+
+            Catch ex As Exception
+                sMsg += "Error Can 't retrieve Overall Scores. " 'SQL= " & SQL & "<br>IndivJumpResults Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
+                sErrDetails = ex.Message & " " & ex.StackTrace & "<br>error at RecapOverall:  SQL= " & sSQL
+            Finally
+                sText += "<tr><td colspan=""15""><b>Close browser window when done</b></td></tr></table>"
+            End Try
+        End Using
+        If Len(sMsg) > 2 Then
+            Return sMsg
+            Exit Function
+        End If
+        Return sText
+    End Function
+    Friend Function LoadDvList(ByVal sanctionID As String, ByVal EventCode As String, ByRef DDL_Division As DropDownList) As String
+        Dim sMsg As String = ""
+        Dim sErrDetails As String = ""
+        Dim sAgeGroup As String = ""
+        Dim sSanctionID As String = sanctionID
+        Dim sEventCode As String = EventCode
+        Dim sEVWhere As String = ""
+        Select Case sEventCode
+            Case "A"
+                sEVWhere = ""
+            Case "S"
+                sEVWhere = " and Event = 'Slalom' "
+            Case "T"
+                sEVWhere = " and Event = 'Trick' "
+            Case "J"
+                sEVWhere = " and Event = 'Jump' "
+            Case Else
+        End Select
+        Dim sSQL As String = "Select distinct AgeGroup from EventReg where SanctionID = '" & sSanctionID & "' " & sEVWhere
+        Dim sConn As String = ""
+        Try
+            sConn = ConfigurationManager.ConnectionStrings("Local_SS_WP23").ConnectionString
+
+        Catch ex As Exception
+            sMsg = "Error: LoadDVList could not get connection string." & ex.Message & "  " & ex.StackTrace
+            Return sMsg
+            Exit Function
+        End Try
+        Dim Cnnt As New OleDb.OleDbConnection(sConn)
+        Dim cmdRead As New OleDb.OleDbCommand
+        Dim MyDataReader As OleDb.OleDbDataReader = Nothing
+        Dim sCkRows As Boolean = False
+        Using Cnnt
+            Try
+                With DDL_Division
+                    .Items.Clear()
+                    .Items.Add(New ListItem("ALL", "A"))
+                    Using cmdRead
+                        cmdRead.Connection = Cnnt 'New OleDbConnection(sConn)
+                        cmdRead.CommandText = sSQL
+                        cmdRead.Connection.Open()
+                        MyDataReader = cmdRead.ExecuteReader
+                        If MyDataReader.HasRows = True Then
+                            Do While MyDataReader.Read()
+                                sAgeGroup = CStr(MyDataReader.Item("AgeGroup"))
+                                .Items.Add(New ListItem(sAgeGroup, sAgeGroup))
+                            Loop
+                        Else
+                            sMsg = " No Entries Found for selected tournament. "
+                            .Items.Clear()
+                        End If 'end of has rows
+                    End Using
+                End With
+            Catch ex As Exception
+                sMsg += "Error: Can't retrieve Divisions Entered. "
+                sErrDetails = "'SQL= " & sSQL & "<br>LoadDvList Caught: <br />" & ex.Message & " " & ex.StackTrace & "<br>"
+                DDL_Division.Items.Clear()
+            End Try
+        End Using
+        If Len(sMsg) > 2 Then
+            Return sMsg
+        End If
+        Return "Success"
     End Function
 End Module

@@ -23,6 +23,15 @@ Partial Public Class Tournament
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
+    '''Panel1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Panel1 As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
     '''HF_SanctionID control.
     '''</summary>
     '''<remarks>
@@ -95,15 +104,6 @@ Partial Public Class Tournament
     Protected WithEvents TName As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
     '''<summary>
-    '''lbl_Errors control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lbl_Errors As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''Btn_ScoreXSkier control.
     '''</summary>
     '''<remarks>
@@ -138,6 +138,33 @@ Partial Public Class Tournament
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents Btn_Home As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''lbl_Errors control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lbl_Errors As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''DDL_Events control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DDL_Events As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''DDL_Division control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DDL_Division As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
     '''DisplayText control.

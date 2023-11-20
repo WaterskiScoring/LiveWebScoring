@@ -208,6 +208,7 @@
     <Content Include="TIndScores.aspx" />
     <Content Include="TList.aspx" />
     <Content Include="Tournament.aspx" />
+    <Content Include="TRecap.aspx" />
     <Content Include="TSkierList.aspx" />
     <Content Include="TSkierListPro.aspx" />
     <Content Include="TXDivisionPro.aspx" />
@@ -296,6 +297,13 @@
     </Compile>
     <Compile Include="Tournament.aspx.vb">
       <DependentUpon>Tournament.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="TRecap.aspx.designer.vb">
+      <DependentUpon>TRecap.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TRecap.aspx.vb">
+      <DependentUpon>TRecap.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="TSkierList.aspx.designer.vb">

@@ -3,7 +3,7 @@
     Friend Function DisplayOrganizer(ByVal SanctionID As String, ByVal TourName As String, ByVal EventCode As String, ByVal FormatCode As String) As String
 
         'This controls the display of tournaments run with Preliminary round and Final(no tie break previous round)
-        'Code loads 1 column with an alphabetical list of all skiers entered in all events in SanctionID.
+        'Code loads 1 column with an alphabetical list of all skiers entered in all events in [SanctionID].
         'Code loads second column with results from round 1 as they come in.  The cut off to proceed to Finals is clearly marked.
         'Code checks for scores in round 2 on every refresh.
         'If no scores in round 2 - continue to show placement in Round 1 in column 2.
@@ -63,8 +63,6 @@
             Case Else
                 sText2Insert = "Error retrieving data. Invalid number of rounds."
         End Select
-
-
         Return sText2Insert
         Return sReturn
     End Function

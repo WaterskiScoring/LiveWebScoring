@@ -28,30 +28,45 @@
     <form id="form1" runat="server">
     <asp:ScriptManager runat="server"></asp:ScriptManager>
 
-    
    <!-- Store user selections -->
         <asp:Panel ID="Panel_HF" runat="server" Visible="false">
-        <asp:HiddenField ID="HF_SanctionID" runat="server" />
-        <asp:HiddenField ID="HF_SkierID" runat="server" />
-        <asp:HiddenField ID="HF_Event" runat="server" />
-        <asp:HiddenField ID="HF_AgeGroup" runat="server" />
-        <asp:HiddenField ID="HF_YearPkd" runat="server" /> <!-- Stores ddl_PkYear.selected value on home page.  Recent = 0 -->
-        <asp:HiddenField ID="HF_TournName" runat="server" />
-        <asp:HiddenField ID="HF_FormatCode" runat="server" />
-        <asp:HiddenField ID="HF_UseNOPS" runat="server" />
-            </asp:Panel>
+            <asp:HiddenField ID="HF_SanctionID" runat="server" />
+            <asp:HiddenField ID="HF_SkierID" runat="server" />
+            <asp:HiddenField ID="HF_Event" runat="server" />
+            <asp:HiddenField ID="HF_AgeGroup" runat="server" />
+            <asp:HiddenField ID="HF_YearPkd" runat="server" /> <!-- Stores ddl_PkYear.selected value on home page.  Recent = 0 -->
+            <asp:HiddenField ID="HF_TournName" runat="server" />
+            <asp:HiddenField ID="HF_FormatCode" runat="server" />
+            <asp:HiddenField ID="HF_UseNOPS" runat="server" />
+         </asp:Panel>
         <!-- Display title bar and error label -->
         <div id="TName" class="text-bg-dark text-center" runat="Server">
            <asp:Label ID="lbl_Errors" runat="server" Text="Here I am" ForeColor="Red"/>
         
        </div>
-        <!-- Display droplist and button controls -->
-        <div class="text-center">
-            <asp:Button ID="Btn_2Tournament" runat="server" Text="This Tournament" />
-           <asp:Button ID="Btn_2TList" runat="server" Text="New Tournament" />
-            <asp:Button ID="Btn_Home" runat="server" Text="Home Page" />
-            <asp:DropDownList ID="ddl_ColumnSelector" runat="server"></asp:DropDownList>
+        <div>
+            TEST RECAP<asp:HyperLink ID="HyperLink1" runat="server" target = "_blank">James Bryans OM</asp:HyperLink>
+            <br />TEST RECAP<asp:HyperLink ID="HyperLink2" runat="server" target = "_blank">Tristan Duplan-Fribourg JM</asp:HyperLink>
         </div>
+
+
+        <!-- Display navivigation buttons -->
+        <div class="text-center">
+            <asp:Button ID="Btn_2Tournament" runat="server" Text="Tournament Detail" />
+           <asp:Button ID="Btn_2TList" runat="server" Text="Tournament List" />
+            <asp:Button ID="Btn_Home" runat="server" Text="Home Page" />
+        </div>
+        <!-- Display Filter Droplists -->
+<div class="text-bg-info text-center">
+    <table>
+        <tr><td width="33%"><b>Event Selector:</b> 
+            <asp:DropDownList ID="DDL_Events" runat="server" AutoPostBack="true"></asp:DropDownList></td>
+            <td width="33%"><b>Round Selector: </b><asp:DropDownList ID="DDL_Round" runat="server"></asp:DropDownList> </td>
+            <td width="33%"><b>Division Selector: </b><asp:DropDownList ID="DDL_Divisions" runat="server"></asp:DropDownList></td></tr>
+    </table>
+    
+     
+</div>
         <asp:UpdatePanel ID="UpdatePanelResults" 
              runat="server">
             <ContentTemplate>

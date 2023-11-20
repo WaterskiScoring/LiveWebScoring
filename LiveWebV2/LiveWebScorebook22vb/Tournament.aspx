@@ -15,24 +15,39 @@
 <body>
     <form id="form1" runat="server">
         <!-- Store user selections -->
-        <asp:HiddenField ID="HF_SanctionID" runat="server" />
-        <asp:HiddenField ID="HF_SkierID" runat="server" />
-        <asp:HiddenField ID="HF_Event" runat="server" />
-        <asp:HiddenField ID="HF_AgeGroup" runat="server" />
-        <asp:HiddenField ID="HF_YearPkd" runat="server" /> <!-- Stores ddl_PkYear.selected value on home page.  Recent = 0 -->
-        <asp:HiddenField ID="HF_TournName" runat="server" />
-        <asp:HiddenField ID="HF_FormatCode" runat="server" />
+        <asp:Panel ID="Panel1" runat="server" Visible="false">
+            <asp:HiddenField ID="HF_SanctionID" runat="server" />
+            <asp:HiddenField ID="HF_SkierID" runat="server" />
+            <asp:HiddenField ID="HF_Event" runat="server" />
+            <asp:HiddenField ID="HF_AgeGroup" runat="server" />
+            <asp:HiddenField ID="HF_YearPkd" runat="server" /> <!-- Stores ddl_PkYear.selected value on home page.  Recent = 0 -->
+            <asp:HiddenField ID="HF_TournName" runat="server" />
+            <asp:HiddenField ID="HF_FormatCode" runat="server" />
+       </asp:Panel>
         <!-- display Tournament Name and error messages if any -->
-       <div id="TName" class="text-bg-dark text-center" runat="Server">
-           <asp:Label ID="lbl_Errors" runat="server" Text="Here I am" ForeColor="Red"/>
+       <div id="TName" class="text-bg-dark text-center" runat="Server"><br>
+
         </div>
 
         <!-- Display navivigation buttons -->
-        <div class="text-center">
+        <div class=" text-center">
             <asp:Button ID="Btn_ScoreXSkier" runat="server" Text="Scores by Skier" />
            <asp:Button ID="Btn_PlacementXDv" runat="server" Text="Placement by Division" />
-            <asp:Button ID="Btn_Back2TList" runat="server" Text="Different Tournament" />
-            <asp:Button ID="Btn_Home" runat="server" Text="Home Page" />
+            <asp:Button ID="Btn_Back2TList" runat="server" Text="Tournament List" />
+            <asp:Button ID="Btn_Home" runat="server" Text="Home Page" /><br />
+            <asp:Label ID="lbl_Errors" runat="server" ForeColor="Red"/><br />
+        </div>
+        <!-- Display Filter Droplists -->
+        <div class="text-bg-info text-center">
+            <table>
+                <tr><td width="33%"><b>Event Selector:</b> 
+                    <asp:DropDownList ID="DDL_Events" runat="server" AutoPostBack="true"></asp:DropDownList></td>
+                    <td width="33%">&nbsp;</td>
+                <td width="33%"><b>Division Selector: </b>
+                    <asp:DropDownList ID="DDL_Division" runat="server"></asp:DropDownList></td></tr>
+            </table>
+             
+             
         </div>
 
         <div class="container-fluid">
