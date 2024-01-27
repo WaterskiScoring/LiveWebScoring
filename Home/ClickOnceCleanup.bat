@@ -1,2 +1,0 @@
-rundll32 dfshim CleanOnlineAppCache
-pause
