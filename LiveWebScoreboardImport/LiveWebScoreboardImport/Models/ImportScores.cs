@@ -299,10 +299,13 @@ namespace LiveWebScoreboardImport.Models {
 					if ( curIdx > 1 ) curSqlStmt.Append( ", " );
 					curColValue = HelperFunctions.getAttributeValue( curRow, curColumn );
 					if ( curColValue.Equals( "False" ) ) {
-						curSqlStmt.Append( String.Format( "{0} = 0}", curColumn ) );
+						curSqlStmt.Append( String.Format( "{0} = 0", curColumn ) );
 
 					} else if ( curColValue.Equals( "True" ) ) {
-						curSqlStmt.Append( String.Format( "{0} = 1}", curColumn ) );
+						curSqlStmt.Append( String.Format( "{0} = 1", curColumn ) );
+
+					} else if ( HelperFunctions.isObjectEmpty( curColValue ) ) {
+						curSqlStmt.Append( String.Format( "{0} = null", curColumn ) );
 
 					} else {
 						curSqlStmt.Append( String.Format( "{0} = '{1}'", curColumn, curColValue ) );

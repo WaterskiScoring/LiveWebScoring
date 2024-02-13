@@ -18,4 +18,5 @@ bld/
 [Oo]bj/
 [Ll]og/
 Backup*/
+.vs/
 

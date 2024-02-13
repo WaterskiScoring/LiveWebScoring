@@ -9,11 +9,11 @@ namespace LiveWebScoreboardImport.Common {
 		public static char[] TabDelim = new char[] { '\t' };
 		public static char[] SingleQuoteDelim = new char[] { '\'' };
 		public static String TabChar = "\t";
-		//public static readonly String WebDomainUri = "https://www.waterskiresults.com";
-		public static readonly String WebDomainUri = "https://localhost:7007";
-		//public static readonly String PublishWebFolder = "D:\\waterskiresults.com";
-		public static readonly String PublishWebFolder = "C:\\WaterskiScoring\\LiveWebScoreboard";
-		public static readonly String PublishImportFolderUri = "/import/tournament/";
+		public static readonly String WebDomainUri = "https://www.waterskiresults.com";
+		public static readonly String PublishWebFolder = "D:\\waterskiresults.com";
+		public static readonly String PublishImportFolderUri = "/publish/tournament/";
+		//public static readonly String WebDomainUri = "https://localhost:7007";
+		//public static readonly String PublishWebFolder = "C:\\WaterskiScoring\\LiveWebScoreboard";
 
 
 		//private static String myEnv = Environment.GetEnvironmentVariable( "ASPNETCORE_ENVIRONMENT" );
