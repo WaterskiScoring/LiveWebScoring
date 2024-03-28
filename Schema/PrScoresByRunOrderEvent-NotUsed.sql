@@ -14,6 +14,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 /* ****************************************************************************
+Note:			I think this is obsolete because I replaced it with separate procedures per event
 Object:			StoredProcedure dbo.PrScoresByRunOrderEvent
 Author:			David Allen
 Create date: 	January 31, 2024

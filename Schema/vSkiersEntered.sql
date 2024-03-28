@@ -31,7 +31,7 @@ SELECT TR.SkierName, TR.SanctionId, TR.MemberId, TR.SkiYearAge, TR.AgeGroup, TR.
 FROM TourReg AS TR 
 INNER JOIN EventReg AS ER ON ER.SanctionId = TR.SanctionId AND ER.MemberId = TR.MemberId AND ER.AgeGroup = TR.AgeGroup
 LEFT OUTER JOIN DivOrder D ON D.SanctionId = TR.SanctionId AND D.AgeGroup = TR.AgeGroup AND D.Event = ER.Event
-Where TR.Withdrawn IS NULL OR TR.Withdrawn = 'N'
+Where (TR.Withdrawn IS NULL OR TR.Withdrawn = 'N' OR TR.Withdrawn = '')
 GO
 
 GRANT SELECT ON dbo.vSkiersEntered TO PUBLIC

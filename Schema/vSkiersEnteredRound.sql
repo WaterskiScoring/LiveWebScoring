@@ -19,7 +19,7 @@ Description:	Retrieve running order when there is a run order for a round
 CREATE VIEW dbo.vSkiersEnteredRound AS 
 
 SELECT TR.SkierName, TR.SanctionId, TR.MemberId, TR.SkiYearAge, TR.AgeGroup, TR.AgeGroup as Div, TR.City, TR.State, TR.Federation
-, ER.Event, O.EventGroup, COALESCE(O.RunOrderGroup, '') as RunOrderGroup, O.RunOrder, COALESCE(D.RunOrder, 999) as DivOrder
+, ER.Event, O.Round, O.EventGroup, COALESCE(O.RunOrderGroup, '') as RunOrderGroup, O.RunOrder, COALESCE(D.RunOrder, 999) as DivOrder
 , ER.EventClass, COALESCE(ER.ReadyForPlcmt, 'N') as ReadyForPlcmt, ER.RankingRating, ER.RankingScore, ER.Rotation, TR.ReadyToSki, COALESCE(TR.ReadyForPlcmt, 'N') AS ReadyForPlcmtOverall
 , ER.TeamCode as Team, TR.TrickBoat, TR.JumpHeight
 , CASE 

@@ -29,6 +29,7 @@ BEGIN
 	DECLARE @curPropKey1 varchar(256);
 	DECLARE @curPropKey2 varchar(256);
 	DECLARE @curDivFilter varchar(256);
+	DECLARE @curRoundFilter varchar(256);
 	DECLARE @curPropValue VARCHAR(MAX);
 	DECLARE @curSqlStmt NVARCHAR(MAX);
 	SET @curPropKey1 = 'RunningOrderSort' + @InEvent + 'Round';
@@ -42,10 +43,16 @@ BEGIN
 		SET @curDivFilter = '';
 	ELSE 
 		SET @curDivFilter = 'AND AgeGroup = ''' + @InDiv + ''' ';
+	
+	IF @InRound = 0 
+		SET @curRoundFilter = '';
+	ELSE 
+		SET @curRoundFilter = 'AND Round = ' + CONVERT(char(1), @InRound) + ' ';
 
 	SET @curSqlStmt = 'Select * From vSkiersEnteredRound '
 		+ 'Where SanctionId = ''' + @InSanctionId + ''' '
 		+ 'AND Event = ''' + @InEvent + ''' '
+		+ @curRoundFilter
 		+ @curDivFilter
 		+ 'Order by ' + @curSortCmd;
 	EXEC sp_executesql @curSqlStmt;

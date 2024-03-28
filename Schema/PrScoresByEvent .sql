@@ -4,7 +4,7 @@ GO
 /* ****************************************************************************
 Drop StoredProcedure to allow it to be created again
 **************************************************************************** */
-IF OBJECT_ID ('dbo.PrScoresByEvent ') IS NOT NULL
+IF OBJECT_ID ('dbo.PrScoresByEvent') IS NOT NULL
 	DROP PROCEDURE dbo.PrScoresByEvent 
 GO
 
@@ -26,25 +26,30 @@ CREATE PROCEDURE dbo.PrScoresByEvent  @InSanctionId AS varchar(6), @InEvent AS v
 AS
 BEGIN
 	DECLARE @curSortCmd varchar(256);
-	DECLARE @curPropKey varchar(256);
 	DECLARE @curDivFilter varchar(256);
-	DECLARE @curPropValue VARCHAR(MAX);
+	DECLARE @curRoundFilter varchar(256);
 	DECLARE @curSqlStmt NVARCHAR(MAX);
 	
-	--SET @curPropKey = @InEvent + 'SlalomSummaryPlcmtOrg';
-	--SET @curPropValue = (Select PropValue From TourProperties Where SanctionId = @InSanctionId AND PropKey = @curPropKey)
-	--SET @curSortCmd = (Select COALESCE(@curPropValue, 'EventGroup ASC, DivOrder ASC, ReadyForPlcmt ASC, RunOrder ASC, RankingScore ASC, SkierName ASC') )
-	SET @curSortCmd = 'AgeGroup ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+	SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
 
 	IF @InDiv = 'All' 
 		SET @curDivFilter = '';
 	ELSE 
 		SET @curDivFilter = 'AND AgeGroup = ''' + @InDiv + ''' ';
 
+	IF @InRound = '0' BEGIN
+		SET @curRoundFilter = '';
+		SET @curSortCmd = 'AgeGroup ASC, SkierName ASC, Round ASC'
+	END
+	ELSE BEGIN
+		SET @curRoundFilter = 'AND Round = ' + @InRound + ' ';
+		SET @curSortCmd = 'AgeGroup ASC, EventScore DESC, ScoreRunoff DESC'
+	END
+
 	SET @curSqlStmt = 'Select * From v' + @InEvent + 'Results '
 		+ 'Where SanctionId = ''' + @InSanctionId + ''' '
 		+ 'AND Event = ''' + @InEvent + ''' '
-		+ 'AND Round = ' + @InRound + ' '
+		+ @curRoundFilter
 		+ @curDivFilter
 		+ 'Order by ' + @curSortCmd;
 	
