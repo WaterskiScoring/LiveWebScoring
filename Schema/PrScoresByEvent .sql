@@ -22,15 +22,21 @@ Value Values: 	Event (Slalom, Trick, Jump)
 				Div (All or any valid age group code 
 
 **************************************************************************** */
-CREATE PROCEDURE dbo.PrScoresByEvent  @InSanctionId AS varchar(6), @InEvent AS varchar(12), @InRound as Char(1), @InDiv as varchar(3) = 'All'
+CREATE PROCEDURE dbo.PrScoresByEvent  @InSanctionId AS varchar(6), @InEvent AS varchar(12), @InRound as Char(1), @InDiv as varchar(3) = 'All', @InMemberId as varchar(9) = ''
 AS
 BEGIN
 	DECLARE @curSortCmd varchar(256);
+	DECLARE @curMemberFilter varchar(256);
 	DECLARE @curDivFilter varchar(256);
 	DECLARE @curRoundFilter varchar(256);
 	DECLARE @curSqlStmt NVARCHAR(MAX);
 	
 	SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+
+	IF @InMemberId = '' 
+		SET @curMemberFilter = '';
+	ELSE 
+		SET @curMemberFilter = 'AND MemberId = ''' + @InMemberId + ''' ';
 
 	IF @InDiv = 'All' 
 		SET @curDivFilter = '';
@@ -49,6 +55,7 @@ BEGIN
 	SET @curSqlStmt = 'Select * From v' + @InEvent + 'Results '
 		+ 'Where SanctionId = ''' + @InSanctionId + ''' '
 		+ 'AND Event = ''' + @InEvent + ''' '
+		+ @curMemberFilter
 		+ @curRoundFilter
 		+ @curDivFilter
 		+ 'Order by ' + @curSortCmd;

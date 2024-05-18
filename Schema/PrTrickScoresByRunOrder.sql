@@ -65,6 +65,7 @@ BEGIN
 			+ ', TRIM(CAST(SS.Score AS CHAR)) + '' POINTS (P1:'' + TRIM(CAST(SS.ScorePass1 AS CHAR)) + '' P2:'' + TRIM(CAST(SS.ScorePass2 AS CHAR)) + '')'' AS EventScoreDesc '
 			+ ', TV.Pass1VideoUrl, TV.Pass2VideoUrl'
 			+ ', SS.InsertDate, SS.LastUpdateDate, SS.LastUpdateDate AS SortLastUpdateDate '
+			+ ', SortCmd = ''' + @curSortCmd + ''''
 			+ 'FROM TourReg AS TR '
 			+ 'INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = ''Trick'' '
 			+ 'LEFT OUTER JOIN TrickScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup ' + @curRoundFilter
@@ -73,7 +74,7 @@ BEGIN
 			+ 'Where TR.SanctionId = ''' + @InSanctionId + ''' '
 			+ @curDivFilter
 			+ @curGroupFilter
-			+ 'Order by ' + @curSortCmd;
+			+ 'Order by ' + @curSortCmd + ', SS.Round ASC';
 	END
 	ELSE BEGIN
 		SET @curPropKey = 'RunningOrderSortTrickRound';
@@ -88,6 +89,7 @@ BEGIN
 			+ ', TRIM(CAST(SS.Score AS CHAR)) + '' POINTS (P1:'' + TRIM(CAST(SS.ScorePass1 AS CHAR)) + '' P2:'' + TRIM(CAST(SS.ScorePass2 AS CHAR)) + '')'' AS EventScoreDesc '
 			+ ', TV.Pass1VideoUrl, TV.Pass2VideoUrl'
 			+ ', SS.LastUpdateDate '
+			+ ', SortCmd = ''' + @curSortCmd + ''''
 			+ 'FROM TourReg AS TR '
 			+ 'INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = ''Trick'' '
 			+ 'INNER JOIN EventRunOrder as RO ON RO.MemberId = TR.MemberId AND RO.SanctionId = TR.SanctionId AND RO.AgeGroup = TR.AgeGroup AND RO.Event = ER.Event AND RO.Round = ' + @InRound + ' '
@@ -97,7 +99,7 @@ BEGIN
 			+ 'Where TR.SanctionId = ''' + @InSanctionId + ''' '
 			+ @curDivFilter
 			+ @curGroupFilter
-			+ 'Order by ' + @curSortCmd;
+			+ 'Order by ' + @curSortCmd + ', SS.Round ASC';
 	END
 
 	EXEC sp_executesql @curSqlStmt;

@@ -32,7 +32,7 @@ namespace LiveWebScoreboardImport.Controllers {
 		public ActionResult<String> Get( String SanctionId, String ReportType ) {
 			String curMethodName = myModuleName + "Get: ";
 
-			if ( HelperFunctions.isObjectEmpty( SanctionId ) || SanctionId.Equals( "xxxxxx" ) ) {
+			if ( HelperFunctions.isObjectEmpty( SanctionId ) || SanctionId.Equals( "" ) ) {
 				HelperFunctions.writeLogger( myLogger, "Error", curMethodName, "Input variable SanctionId not provided" );
 				return BadRequest();
 			}

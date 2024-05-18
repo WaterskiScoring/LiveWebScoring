@@ -64,6 +64,7 @@ BEGIN
 			+ ', (Select RO.ScoreFeet From JumpScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff'
 			+ ', TRIM(CAST(ROUND(SS.ScoreFeet, 0) AS CHAR)) + ''FT ('' + TRIM(CAST(ROUND(SS.ScoreMeters, 1) AS CHAR)) + ''M)'' AS EventScoreDesc'
 			+ ', SS.InsertDate, SS.LastUpdateDate, SS.LastUpdateDate AS SortLastUpdateDate '
+			+ ', SortCmd = ''' + @curSortCmd + ''''
 			+ 'FROM TourReg AS TR '
 			+ 'INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = ''Jump'' '
 			+ 'LEFT OUTER JOIN JumpScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup ' + @curRoundFilter
@@ -71,7 +72,7 @@ BEGIN
 			+ 'Where TR.SanctionId = ''' + @InSanctionId + ''' '
 			+ @curDivFilter
 			+ @curGroupFilter
-			+ 'Order by ' + @curSortCmd;
+			+ 'Order by ' + @curSortCmd + ', SS.Round ASC';
 	END
 	ELSE BEGIN
 		SET @curPropKey = 'RunningOrderSortJumpRound';
@@ -85,6 +86,7 @@ BEGIN
 			+ ', (Select RO.ScoreFeet From JumpScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff'
 			+ ', TRIM(CAST(ROUND(SS.ScoreFeet, 0) AS CHAR)) + ''FT ('' + TRIM(CAST(ROUND(SS.ScoreMeters, 1) AS CHAR)) + ''M)'' AS EventScoreDesc'
 			+ ', SS.LastUpdateDate '
+			+ ', SortCmd = ''' + @curSortCmd + ''''
 			+ 'FROM TourReg AS TR '
 			+ 'INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = ''Jump'' '
 			+ 'INNER JOIN EventRunOrder as RO ON RO.MemberId = TR.MemberId AND RO.SanctionId = TR.SanctionId AND RO.AgeGroup = TR.AgeGroup AND RO.Event = ER.Event AND RO.Round = ' + @InRound + ' '
@@ -93,7 +95,7 @@ BEGIN
 			+ 'Where TR.SanctionId = ''' + @InSanctionId + ''' '
 			+ @curDivFilter
 			+ @curGroupFilter
-			+ 'Order by ' + @curSortCmd;
+			+ 'Order by ' + @curSortCmd + ', SS.Round ASC';
 	END
 
 	EXEC sp_executesql @curSqlStmt;

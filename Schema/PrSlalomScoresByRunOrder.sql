@@ -67,6 +67,7 @@ BEGIN
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + ''kph '' + TRIM(SS.FinalLen) + ''m'' AS EventScoreDescMeteric'
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedMph AS CHAR)) + ''mph '' + TRIM(SS.FinalLenOff) AS EventScoreDescImperial'
 			+ ', SS.InsertDate, SS.LastUpdateDate, SS.LastUpdateDate AS SortLastUpdateDate '
+			+ ', SortCmd = ''' + @curSortCmd + ''''
 			+ 'FROM TourReg AS TR '
 			+ 'INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = ''Slalom'' '
 			+ 'LEFT OUTER JOIN SlalomScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup ' + @curRoundFilter
@@ -74,7 +75,7 @@ BEGIN
 			+ 'Where TR.SanctionId = ''' + @InSanctionId + ''' '
 			+ @curDivFilter
 			+ @curGroupFilter
-			+ 'Order by ' + @curSortCmd;
+			+ 'Order by ' + @curSortCmd + ', SS.Round ASC';
 	END
 	ELSE BEGIN
 		SET @curPropKey = 'RunningOrderSortSlalomRound';
@@ -91,6 +92,7 @@ BEGIN
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + ''kph '' + TRIM(SS.FinalLen) + ''m'' AS EventScoreDescMeteric'
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedMph AS CHAR)) + ''mph '' + TRIM(SS.FinalLenOff) AS EventScoreDescImperial'
 			+ ', SS.LastUpdateDate '
+			+ ', SortCmd = ''' + @curSortCmd + ''''
 			+ 'FROM TourReg AS TR '
 			+ 'INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = ''Slalom'' '
 			+ 'INNER JOIN EventRunOrder as RO ON RO.MemberId = TR.MemberId AND RO.SanctionId = TR.SanctionId AND RO.AgeGroup = TR.AgeGroup AND RO.Event = ER.Event AND RO.Round = ' + @InRound + ' '
@@ -99,7 +101,7 @@ BEGIN
 			+ 'Where TR.SanctionId = ''' + @InSanctionId + ''' '
 			+ @curDivFilter
 			+ @curGroupFilter
-			+ 'Order by ' + @curSortCmd;
+			+ 'Order by ' + @curSortCmd + ', SS.Round ASC';
 	END
 
 	EXEC sp_executesql @curSqlStmt;

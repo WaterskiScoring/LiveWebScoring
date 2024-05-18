@@ -76,7 +76,7 @@ namespace LiveWebScoreboardImport.Models {
 			}
 		}
 
-		public string importAllTables( List<Dictionary<string, object>> curListTables ) {
+		private string importAllTables( List<Dictionary<string, object>> curListTables ) {
 			String curMethodName = myModuleName + "importAllTables: ";
 			HelperFunctions.writeLogger( myLogger, "Debug", curMethodName, "Import request contains " + curListTables.Count + " tables" );
 
@@ -135,7 +135,7 @@ namespace LiveWebScoreboardImport.Models {
 				if ( curResultMsg.StartsWith( "OK" ) ) {
 					String curMsg = String.Format( "Table import {0} completed: {1}", curTableName, curResultMsg );
 					curReturnMsg.Append( curMsg + "\n" );
-					HelperFunctions.writeLogger( myLogger, "Info", curMethodName, curMsg );
+					HelperFunctions.writeLogger( myLogger, "Debug", curMethodName, curMsg );
 				
 				} else {
 					String curMsg = String.Format( "Table import {0} failed: {1}", curTableName, curResultMsg );
@@ -152,7 +152,7 @@ namespace LiveWebScoreboardImport.Models {
 			}
 		}
 
-		public string updateTableData( String curTableName, String curCommand, List<String> curListKeys, List<String> curListColumns, List<Dictionary<string, object>> curListRows ) {
+		private string updateTableData( String curTableName, String curCommand, List<String> curListKeys, List<String> curListColumns, List<Dictionary<string, object>> curListRows ) {
 			String curMethodName = myModuleName + "updateTableData: ";
 			StringBuilder curReturnMsg = new StringBuilder("" );
 
@@ -198,7 +198,7 @@ namespace LiveWebScoreboardImport.Models {
 			return "OK: " + curReturnMsg.ToString();
 		}
 
-		public bool isRowFound( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
+		private bool isRowFound( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
 			String curMethodName = myModuleName + "isRowFound: ";
 			int curIdx = 0;
 			String curColValue = "";
@@ -234,7 +234,7 @@ namespace LiveWebScoreboardImport.Models {
 			}
 		}
 
-		public int insertRow( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
+		private int insertRow( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
 			String curMethodName = myModuleName + "insertRow: ";
 			int curIdx = 0;
 			String curColValue;
@@ -276,7 +276,7 @@ namespace LiveWebScoreboardImport.Models {
 					return -1;
 				}
 
-				HelperFunctions.writeLogger( myLogger, "Debug", curMethodName, String.Format( "{0} Rows successfully inserted {1}", curRowsInserted, curSqlStmt.ToString() ) );
+				HelperFunctions.writeLogger( myLogger, "Info", curMethodName, String.Format( "{0} Rows successfully inserted {1}", curRowsInserted, curSqlStmt.ToString() ) );
 				return curRowsInserted;
 
 			} catch ( Exception ex ) {
@@ -285,7 +285,7 @@ namespace LiveWebScoreboardImport.Models {
 			}
 		}
 
-		public int updateRow( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
+		private int updateRow( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
 			String curMethodName = myModuleName + "updateRow: ";
 			String curColValue = "";
 			int curIdx = 0;
@@ -327,7 +327,7 @@ namespace LiveWebScoreboardImport.Models {
 					return -1;
 				}
 
-				HelperFunctions.writeLogger( myLogger, "Debug", curMethodName, String.Format( "{0} Rows successfully updated {1}", curRowsUpdated, curSqlStmt.ToString() ) );
+				HelperFunctions.writeLogger( myLogger, "Info", curMethodName, String.Format( "{0} Rows successfully updated {1}", curRowsUpdated, curSqlStmt.ToString() ) );
 				return curRowsUpdated;
 
 			} catch ( Exception ex ) {
@@ -336,7 +336,7 @@ namespace LiveWebScoreboardImport.Models {
 			}
 		}
 
-		public int deleteRow( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
+		private int deleteRow( String curTableName, List<String> curListKeys, List<String> curListColumns, Dictionary<string, object> curRow ) {
 			String curMethodName = myModuleName + "deleteRow: ";
 
 			int curIdx = 0;
@@ -357,7 +357,7 @@ namespace LiveWebScoreboardImport.Models {
 					return -1;
 				}
 
-				HelperFunctions.writeLogger( myLogger, "Debug", curMethodName, String.Format( "{0} Rows successfully deleted {1}", curRowsDeleted, curSqlStmt.ToString() ) );
+				HelperFunctions.writeLogger( myLogger, "Info", curMethodName, String.Format( "{0} Rows successfully deleted {1}", curRowsDeleted, curSqlStmt.ToString() ) );
 				return curRowsDeleted;
 
 			} catch ( Exception ex ) {

@@ -283,9 +283,9 @@ C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboa
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.LiveWebScoreboardImport.props
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\staticwebassets.pack.json
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\scopedcss\bundle\LiveWebScoreboardImport.styles.css
-C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\LiveWebScoreboardImport.csproj.CopyComplete
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\LiveWebScoreboardImport.dll
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\refint\LiveWebScoreboardImport.dll
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\LiveWebScoreboardImport.pdb
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\LiveWebScoreboardImport.genruntimeconfig.cache
 C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\ref\LiveWebScoreboardImport.dll
+C:\WaterskiScoring\GitHub\LiveWebScoring\LiveWebScoreboardImport\LiveWebScoreboardImport\obj\Debug\net8.0\LiveWebS.4DFD14F4.Up2Date

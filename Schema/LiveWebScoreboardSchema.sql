@@ -288,8 +288,8 @@ CREATE TABLE [TrickVideo] (
 , [MemberId] nchar(9) NOT NULL
 , [AgeGroup] nvarchar(12) NOT NULL
 , [Round] tinyint NOT NULL
-, [Pass1VideoUrl] nvarchar(256) NULL
-, [Pass2VideoUrl] nvarchar(256) NULL
+, [Pass1VideoUrl] nvarchar(512) NULL
+, [Pass2VideoUrl] nvarchar(512) NULL
 , [LastUpdateDate] datetime NULL
 , CONSTRAINT [TrickVideoPKIndex] PRIMARY KEY NONCLUSTERED ([SanctionId] ASC, [MemberId] ASC, [AgeGroup] ASC, [Round] ASC) 
 )
