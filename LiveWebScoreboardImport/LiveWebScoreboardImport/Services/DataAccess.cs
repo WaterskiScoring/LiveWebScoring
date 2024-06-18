@@ -267,14 +267,6 @@ namespace LiveWebScoreboardImport.Services {
 			}
 		}
 
-		/*
-		usawaterski-prod.cgmg2itmb6sa.us-east-1.rds.amazonaws.com; 
-		Initial Catalog=LiveWebScoreboard; 
-		Persist Security Info=True; 
-		User ID=WaterskiResults; 
-		Password=Live#Web$Score@board2024#; 
-		Trust Server Certificate=True (581757a7)
-		*/
 		public static string obscurreConnectionString( string inConnectionString ) {
 			int curDelimStart = inConnectionString.IndexOf( "Password=" );
 			int curDelimEnd = inConnectionString.IndexOf( ";", curDelimStart + 9 );

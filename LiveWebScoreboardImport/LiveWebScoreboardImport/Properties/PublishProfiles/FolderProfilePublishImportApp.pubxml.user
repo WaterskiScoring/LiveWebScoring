@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\WaterskiScoring\GitHub\LiveWebScoring\PublishImport</_PublishTargetUrl>
+    <History>True|2024-04-17T16:17:33.6686684Z;True|2024-02-07T11:25:23.0837860-05:00;True|2024-02-07T10:06:47.6915943-05:00;True|2024-02-01T18:47:58.3072644-05:00;True|2024-01-26T17:44:56.2137980-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Controllers/ImportFilesController.cs">
+      <publishTime>01/17/2024 11:28:14</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

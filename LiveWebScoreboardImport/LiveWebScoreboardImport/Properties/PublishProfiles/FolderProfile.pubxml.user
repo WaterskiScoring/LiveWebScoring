@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\WaterskiScoring\GitHub\LiveWebScoreboard\LiveWebScoreboardImport\LiveWebScoreboardImport\bin\Release\net8.0\publish\</_PublishTargetUrl>
+    <History>True|2024-01-22T19:46:36.1486623Z;True|2024-01-07T13:16:16.2508236-05:00;False|2024-01-07T13:06:26.2629630-05:00;True|2024-01-07T11:43:17.4206859-05:00;True|2023-12-04T16:05:00.5135542-05:00;</History>
+    <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+</Project>
