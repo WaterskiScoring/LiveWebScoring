@@ -5,6 +5,8 @@ logs/
 
 # Click-Once directory
 PublishImport/
+Documentation
+web.config
 
 # Build results
 [Dd]ebug/
@@ -19,4 +21,6 @@ bld/
 [Ll]og/
 Backup*/
 .vs/
+obj/
+bin/
 

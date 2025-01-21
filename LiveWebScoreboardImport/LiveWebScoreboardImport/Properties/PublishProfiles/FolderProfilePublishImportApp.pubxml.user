@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\WaterskiScoring\GitHub\LiveWebScoring\PublishImport</_PublishTargetUrl>
-    <History>True|2024-04-17T16:17:33.6686684Z;True|2024-02-07T11:25:23.0837860-05:00;True|2024-02-07T10:06:47.6915943-05:00;True|2024-02-01T18:47:58.3072644-05:00;True|2024-01-26T17:44:56.2137980-05:00;</History>
+    <History>True|2024-07-16T15:31:28.3275452Z||;True|2024-07-16T11:20:29.9702088-04:00||;True|2024-07-03T21:35:56.6748499-04:00||;True|2024-06-29T21:18:44.5662728-04:00||;True|2024-04-17T12:17:33.6686684-04:00||;True|2024-02-07T11:25:23.0837860-05:00||;True|2024-02-07T10:06:47.6915943-05:00||;True|2024-02-01T18:47:58.3072644-05:00||;True|2024-01-26T17:44:56.2137980-05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>

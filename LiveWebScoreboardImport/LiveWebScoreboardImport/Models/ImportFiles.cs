@@ -16,21 +16,29 @@ namespace LiveWebScoreboardImport.Models {
 		}
 
 		public DataTable getPublishedFileList( String inSanctionId, String inReportType ) {
-			StringBuilder curSqlStmt = new StringBuilder( "" );
-			curSqlStmt.Append( "Select PK, Event, SanctionId, ReportType, ReportTitle, ReportFilePath, LastUpdateDate" );
-			curSqlStmt.Append( ", '" + HelperFunctions.WebDomainUri + "' + ReportFilePath AS ReportFileUri " );
-			curSqlStmt.Append( "From PublishReport " );
-			if ( inReportType.Equals( "Export" ) ) {
-				curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType = '{1}' ", inSanctionId, inReportType ) );
+            String curMethodName = myModuleName + "getPublishedFileList: ";
+            StringBuilder curSqlStmt = new StringBuilder( "" );
 
-			} else if ( inReportType.Equals( "All" ) ) {
-				curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' ", inSanctionId ) );
+            try {
+                curSqlStmt.Append( "Select PK, Event, SanctionId, ReportType, ReportTitle, ReportFilePath, LastUpdateDate" );
+                curSqlStmt.Append( ", '" + HelperFunctions.WebDomainUri + "' + ReportFilePath AS ReportFileUri " );
+                curSqlStmt.Append( "From PublishReport " );
+                if (inReportType.Equals( "Export" )) {
+                    curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType = '{1}' ", inSanctionId, inReportType ) );
 
-			} else {
-				curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType != 'Export' ", inSanctionId ) );
-			}
-			curSqlStmt.Append( "Order By ReportType, Event, LastUpdateDate Desc " );
-			return DataAccess.getDataTable( curSqlStmt.ToString(), myLogger );
+                } else if (inReportType.Equals( "All" )) {
+                    curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' ", inSanctionId ) );
+
+                } else {
+                    curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType != 'Export' ", inSanctionId ) );
+                }
+                curSqlStmt.Append( "Order By ReportType, Event, LastUpdateDate Desc " );
+                return DataAccess.getDataTable( curSqlStmt.ToString() );
+
+            } catch (Exception ex) {
+                HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Exception encountered retrieving published file list for Sanction {0} ReportType {1} Message: {2}", inSanctionId, inReportType, ex.Message ) );
+				return new DataTable();
+            }
 		}
 
 		public string deleteFile( String inPK ) {
@@ -91,27 +99,40 @@ namespace LiveWebScoreboardImport.Models {
 		private bool isRowFound( String inReportType, String inSkiEvent, String inSanctionId, String inReportTitle ) {
 			String curMethodName = myModuleName + "isRowFound: ";
 			StringBuilder curSqlStmt = new StringBuilder( "" );
-			curSqlStmt.Append( "Select PK From PublishReport " );
-			curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType = '{1}' AND Event = '{2}' AND ReportTitle = '{3}' ", inSanctionId, inReportType, inSkiEvent, inReportTitle ) );
-			DataTable curDataTable = DataAccess.getDataTable( curSqlStmt.ToString(), myLogger );
-			if ( curDataTable == null || curDataTable.Rows.Count == 0 ) return false;
-			return true;
+			try {
+                curSqlStmt.Append( "Select PK From PublishReport " );
+                curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType = '{1}' AND Event = '{2}' AND ReportTitle = '{3}' ", inSanctionId, inReportType, inSkiEvent, inReportTitle ) );
+                DataTable curDataTable = DataAccess.getDataTable( curSqlStmt.ToString() );
+                if (curDataTable == null || curDataTable.Rows.Count == 0) return false;
+                return true;
+
+            } catch (Exception ex) {
+                HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Exception encountered: Message: {0}", ex.Message ) );
+                return false;
+			}
 		}
 
 		private string getFileRef( String inPK ) {
 			String curMethodName = myModuleName + "getFileRef: ";
 			StringBuilder curSqlStmt = new StringBuilder( "" );
-			curSqlStmt.Append( String.Format( "Select ReportFilePath From PublishReport Where PK = '{0}'", inPK ) );
-			DataTable curDataTable = DataAccess.getDataTable( curSqlStmt.ToString(), myLogger );
-			if ( curDataTable == null || curDataTable.Rows.Count == 0 ) return "";
+            try {
+                curSqlStmt.Append( String.Format( "Select ReportFilePath From PublishReport Where PK = '{0}'", inPK ) );
+                DataTable curDataTable = DataAccess.getDataTable( curSqlStmt.ToString() );
+                if (curDataTable == null || curDataTable.Rows.Count == 0) return "";
 
-			String curReportFileUri = HelperFunctions.getDataRowColValue( curDataTable.Rows[0], "ReportFilePath", "" );
-			if ( HelperFunctions.isObjectEmpty( curReportFileUri ) ) return "";
-			String curReportFileRef = curReportFileUri.Substring( 1 );
-			return Path.Combine( HelperFunctions.PublishWebFolder, curReportFileRef.Replace( "/", "\\" ) );
-		}
+                String curReportFileUri = HelperFunctions.getDataRowColValue( curDataTable.Rows[0], "ReportFilePath", "" );
+                if (HelperFunctions.isObjectEmpty( curReportFileUri )) return "";
+                String curReportFileRef = curReportFileUri.Substring( 1 );
+                return Path.Combine( HelperFunctions.PublishWebFolder, curReportFileRef.Replace( "/", "\\" ) );
 
-		private bool insertRecord( String inReportType, String inSkiEvent, String inSanctionId, String inReportTitle, String inImportFileUri ) {
+            } catch (Exception ex) {
+                HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Exception encountered: Message: {0}", ex.Message ) );
+                return "";
+            }
+
+        }
+
+        private bool insertRecord( String inReportType, String inSkiEvent, String inSanctionId, String inReportTitle, String inImportFileUri ) {
 			String curMethodName = myModuleName + "insertRecord: ";
 			StringBuilder curSqlStmt = new StringBuilder( "" );
 
@@ -120,7 +141,7 @@ namespace LiveWebScoreboardImport.Models {
 				curSqlStmt.Append( "SanctionId, ReportType, Event, ReportTitle, ReportFilePath, LastUpdateDate" );
 				curSqlStmt.Append( " ) VALUES ( " );
 				curSqlStmt.Append( String.Format( "'{0}', '{1}', '{2}', '{3}', '{4}', GetDate() ) ", inSanctionId, inReportType, inSkiEvent, inReportTitle, inImportFileUri ) );
-				int curRowsInserted = DataAccess.ExecuteCommand( curSqlStmt.ToString(), myLogger );
+				int curRowsInserted = DataAccess.ExecuteCommand( curSqlStmt.ToString() );
 				if ( curRowsInserted <= 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Insert failed SQL={0} ", curSqlStmt.ToString() ) );
 					return false;
@@ -143,7 +164,7 @@ namespace LiveWebScoreboardImport.Models {
 				curSqlStmt.Append( String.Format( "Set ReportFilePath = '{0}'", inImportFileUri ) );
 				curSqlStmt.Append( ", LastUpdateDate = GetDate() " );
 				curSqlStmt.Append( String.Format( "Where SanctionId = '{0}' AND ReportType = '{1}' AND Event = '{2}' AND ReportTitle = '{3}' ", inSanctionId, inReportType, inSkiEvent, inReportTitle ) );
-				int curRowsUpdated = DataAccess.ExecuteCommand( curSqlStmt.ToString(), myLogger );
+				int curRowsUpdated = DataAccess.ExecuteCommand( curSqlStmt.ToString() );
 				if ( curRowsUpdated <= 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Update failed SQL={0} ", curSqlStmt.ToString() ) );
 					return false;
@@ -165,7 +186,7 @@ namespace LiveWebScoreboardImport.Models {
 			try {
 				curSqlStmt.Append( "Delete PublishReport " );
 				curSqlStmt.Append( String.Format( "Where PK = '{0}' ", inPK ) );
-				int curRowsUpdated = DataAccess.ExecuteCommand( curSqlStmt.ToString(), myLogger );
+				int curRowsUpdated = DataAccess.ExecuteCommand( curSqlStmt.ToString() );
 				if ( curRowsUpdated <= 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Delete failed SQL={0} ", curSqlStmt.ToString() ) );
 					return false;

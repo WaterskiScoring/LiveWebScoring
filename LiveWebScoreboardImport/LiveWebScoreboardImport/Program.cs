@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-app.Logger.LogInformation( "LiveWebScoreboardImport starting with build version 2024-04-17" );
+app.Logger.LogInformation( "LiveWebScoreboardImport starting with build version 2024-07-16" );
 
 // Configure the HTTP request pipeline.
 if ( app.Environment.IsDevelopment() ) {

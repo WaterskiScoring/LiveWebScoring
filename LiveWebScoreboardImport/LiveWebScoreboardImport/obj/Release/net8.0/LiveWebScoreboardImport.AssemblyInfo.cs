@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LiveWebScoreboardImport")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d0f889e577808714648243b73876705d0fd06e4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+699ae93a8e77bc714d1832862ba59b9af1a37916")]
 [assembly: System.Reflection.AssemblyProductAttribute("LiveWebScoreboardImport")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LiveWebScoreboardImport")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

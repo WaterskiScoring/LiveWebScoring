@@ -26,25 +26,39 @@ namespace LiveWebScoreboardImport.Models {
 		}
 
 		public DataTable getTournament( String inSanctionId ) {
-			StringBuilder curSqlStmt = new StringBuilder( "" );
-			curSqlStmt.Append( "Select[Name], Class, Federation, SanctionEditCode" );
-			curSqlStmt.Append( ", SlalomRounds, TrickRounds, JumpRounds" );
-			curSqlStmt.Append( ", Rules, EventDates, EventLocation " );
-			curSqlStmt.Append( "From Tournament " );
-			curSqlStmt.Append( String.Format( "Where SanctionId = '{0}'", inSanctionId ) );
-			return DataAccess.getDataTable( curSqlStmt.ToString(), myLogger );
-		}
+            String curMethodName = myModuleName + "getTournament: ";
+            try {
+                StringBuilder curSqlStmt = new StringBuilder( "" );
+                curSqlStmt.Append( "Select[Name], Class, Federation, SanctionEditCode" );
+                curSqlStmt.Append( ", SlalomRounds, TrickRounds, JumpRounds" );
+                curSqlStmt.Append( ", Rules, EventDates, EventLocation " );
+                curSqlStmt.Append( "From Tournament " );
+                curSqlStmt.Append( String.Format( "Where SanctionId = '{0}'", inSanctionId ) );
+                return DataAccess.getDataTable( curSqlStmt.ToString() );
 
-		public DataTable getTournamentList() {
-			StringBuilder curSqlStmt = new StringBuilder( "" );
-			curSqlStmt.Append( "Select[Name], Class, Federation, SanctionEditCode" );
-			curSqlStmt.Append( ", SlalomRounds, TrickRounds, JumpRounds" );
-			curSqlStmt.Append( ", Rules, EventDates, EventLocation " );
-			curSqlStmt.Append( "From Tournament " );
-			return DataAccess.getDataTable( curSqlStmt.ToString(), myLogger );
-		}
+            } catch (Exception ex) {
+                HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Exception encountered: Message: {0}", ex.Message ) );
+                return new DataTable();
+            }
+        }
 
-		public string importEventScores( JsonDocument inJsonDoc ) {
+        public DataTable getTournamentList() {
+            String curMethodName = myModuleName + "getTournamentList: ";
+            try {
+                StringBuilder curSqlStmt = new StringBuilder( "" );
+                curSqlStmt.Append( "Select[Name], Class, Federation, SanctionEditCode" );
+                curSqlStmt.Append( ", SlalomRounds, TrickRounds, JumpRounds" );
+                curSqlStmt.Append( ", Rules, EventDates, EventLocation " );
+                curSqlStmt.Append( "From Tournament " );
+                return DataAccess.getDataTable( curSqlStmt.ToString() );
+            
+				} catch (Exception ex) {
+                HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Exception encountered: Message: {0}", ex.Message ) );
+                return new DataTable();
+            }
+        }
+
+        public string importEventScores( JsonDocument inJsonDoc ) {
 			String curMethodName = myModuleName + "importEventScores: ";
 			String curReturnMsg = "";
 
@@ -220,7 +234,7 @@ namespace LiveWebScoreboardImport.Models {
 					curSqlStmt.Append( String.Format( "{0} = '{1}'", curKey, curColValue ) );
 				}
 
-				DataTable curDataTable = DataAccess.getDataTable( curSqlStmt.ToString(), myLogger );
+				DataTable curDataTable = DataAccess.getDataTable( curSqlStmt.ToString() );
 				if ( curDataTable == null || curDataTable.Rows.Count == 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Debug", curMethodName, String.Format( "Row not found for {0}", curSqlStmt.ToString() ) );
 					return false;
@@ -270,7 +284,7 @@ namespace LiveWebScoreboardImport.Models {
 				}
 				curSqlStmt.Append( " )" );
 
-				int curRowsInserted = DataAccess.ExecuteCommand( curSqlStmt.ToString(), myLogger );
+				int curRowsInserted = DataAccess.ExecuteCommand( curSqlStmt.ToString() );
 				if ( curRowsInserted <= 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Insert failed SQL={0} ", curSqlStmt.ToString() ) );
 					return -1;
@@ -321,7 +335,7 @@ namespace LiveWebScoreboardImport.Models {
 					curSqlStmt.Append( String.Format( "{0} = '{1}'", curKey, curColValue ) );
 				}
 
-				int curRowsUpdated = DataAccess.ExecuteCommand( curSqlStmt.ToString(), myLogger );
+				int curRowsUpdated = DataAccess.ExecuteCommand( curSqlStmt.ToString() );
 				if ( curRowsUpdated <= 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Update failed SQL={0} ", curSqlStmt.ToString() ) );
 					return -1;
@@ -351,7 +365,7 @@ namespace LiveWebScoreboardImport.Models {
 					curSqlStmt.Append( String.Format( "{0} = '{1}'", curKey, curColValue ) );
 				}
 
-				int curRowsDeleted = DataAccess.ExecuteCommand( curSqlStmt.ToString(), myLogger );
+				int curRowsDeleted = DataAccess.ExecuteCommand( curSqlStmt.ToString() );
 				if ( curRowsDeleted < 0 ) {
 					HelperFunctions.writeLogger( myLogger, "Error", curMethodName, String.Format( "Delete failed SQL={0} ", curSqlStmt.ToString() ) );
 					return -1;

@@ -43,7 +43,7 @@ BEGIN
 		INNER JOIN SlalomScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
 		INNER JOIN SlalomRecap AS SR ON SR.MemberId = TR.MemberId AND SR.SanctionId = TR.SanctionId AND SR.AgeGroup = TR.AgeGroup AND SR.Round = SS.Round
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, SS.Round;
+		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, SS.Round, SkierRunNum;
 	END
 
 	ELSE IF @InEvent = 'Jump' 
@@ -66,7 +66,7 @@ BEGIN
 		INNER JOIN JumpScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
 		INNER JOIN JumpRecap AS SR ON SR.MemberId = TR.MemberId AND SR.SanctionId = TR.SanctionId AND SR.AgeGroup = TR.AgeGroup AND SR.Round = SS.Round
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, SS.Round, PassNum;
+		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, SS.Round, PassNum;
 	END
 
 	ELSE IF @InEvent = 'Trick' 
@@ -89,7 +89,7 @@ BEGIN
 		INNER JOIN TrickPass AS SR ON SR.MemberId = TR.MemberId AND SR.SanctionId = TR.SanctionId AND SR.AgeGroup = TR.AgeGroup AND SR.Round = SS.Round
 		LEFT OUTER JOIN TrickVideo AS TV ON TV.SanctionId = TR.SanctionId AND TV.MemberId = TR.MemberId AND TV.AgeGroup = TR.AgeGroup AND TV.Round = SS.Round
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, SS.Round, PassNum, Seq;
+		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, SS.Round, PassNum, Seq;
 	END
 
 	ELSE IF @InEvent = 'Overall' 
@@ -111,7 +111,7 @@ BEGIN
 		LEFT OUTER JOIN TrickScore AS TS ON TS.MemberId = TR.MemberId AND TS.SanctionId = TR.SanctionId AND TS.AgeGroup = TR.AgeGroup
 		LEFT OUTER JOIN JumpScore AS JS ON JS.MemberId = TR.MemberId AND JS.SanctionId = TR.SanctionId AND JS.AgeGroup = TR.AgeGroup
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, COALESCE(SS.Round, TS.Round, JS.Round) ;
+		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, COALESCE(SS.Round, TS.Round, JS.Round) ;
 	END
 END
 GO

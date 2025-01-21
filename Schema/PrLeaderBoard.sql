@@ -23,8 +23,9 @@ Value Values: 	Div (All or any valid age group code
 				Format (Best, Final, First, Round)
 
 EXEC PrLeaderBoard  '24U312', 'Slalom', 'BEST', 'All'
+EXEC LiveWebScoreboard.dbo.PrLeaderBoard  @InSanctionId = '25S017', @InEvent = 'Slalom', @InFormat = 'Best', @InDiv  = 'OM'
 **************************************************************************** */
-CREATE PROCEDURE dbo.PrLeaderBoard  @InSanctionId AS varchar(6), @InEvent AS varchar(12), @InFormat AS varchar(12), @InDiv as varchar(3) = 'All'
+CREATE PROCEDURE dbo.PrLeaderBoard  @InSanctionId AS varchar(6), @InEvent AS varchar(12), @InFormat AS varchar(12) = 'Best', @InDiv as varchar(3) = 'All'
 AS
 BEGIN
 	DECLARE @curSortCmd varchar(256);
@@ -52,17 +53,17 @@ BEGIN
 	SET @curNumPreLim = (Select COALESCE(@curNumPreLim, '1'));
 	
 	IF @curScoreFormat = 'NCWSA'
-		SET @curSortCmd = 'AgeGroup DESC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup DESC, ReadyForPlcmt DESC, EventScore DESC, EventScoreBackup DESC, ScoreRunoff DESC'
 	ELSE IF @curScoreFormat = 'BEST'
-		SET @curSortCmd = 'AgeGroup ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup ASC, ReadyForPlcmt DESC, EventScore DESC, EventScoreBackup DESC, ScoreRunoff DESC'
 	ELSE IF @curScoreFormat = 'FINAL' OR @curScoreFormat = 'H2H'
-		SET @curSortCmd = 'AgeGroup ASC, FinalRound DESC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup ASC, FinalRound DESC, ReadyForPlcmt DESC, EventScore DESC, ScoreRunoff DESC'
 	ELSE IF @curScoreFormat = 'FIRST'
-		SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt DESC, EventScore DESC, ScoreRunoff DESC'
 	ELSE IF @curScoreFormat = 'ROUND'
-		SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt DESC, EventScore DESC, EventScoreBackup DESC, ScoreRunoff DESC'
 	ELSE
-		SET @curSortCmd = 'AgeGroup ASC, ReadyForPlcmt ASC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup ASC, ReadyForPlcmt DESC, EventScore DESC, EventScoreBackup DESC, ScoreRunoff DESC'
 
 	IF @InDiv = 'All' 
 		SET @curDivFilter = '';
@@ -99,7 +100,7 @@ BEGIN
 			+ ', ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, ''N'') as ReadyForPlcmt'
 			+ ', ER.RankingRating, ER.RankingScore, ''' + @curScoreFormat + ''' AS PlcmtFormat, ' + @curNumPreLim + ' AS NumPreLim'
 			+ ', SS.Round, (Select Max(Round) as MaxRound From JumpScore SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) as FinalRound'
-			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.ScoreFeet as EventScore, SS.ScoreMeters'
+			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.ScoreFeet as EventScore, SS.ScoreMeters, SS.ScoreMeters as EventScoreBackup'
 			+ ', (Select RO.ScoreFeet From JumpScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff'
 			+ ', TRIM(CAST(ROUND(SS.ScoreFeet, 0) AS CHAR)) + ''FT ('' + TRIM(CAST(ROUND(SS.ScoreMeters, 1) AS CHAR)) + ''M)'' AS EventScoreDesc '
 
@@ -117,6 +118,7 @@ BEGIN
 			+ ', ER.RankingRating, ER.RankingScore, ''' + @curScoreFormat + ''' AS PlcmtFormat, ' + @curNumPreLim + ' AS NumPreLim'
 			+ ', SS.Round, (Select Max(Round) as MaxRound From TrickScore SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) as FinalRound'
 			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.Score as EventScore'
+			+ ', CASE WHEN SS.ScorePass1 > SS.ScorePass2 THEN SS.ScorePass1 ELSE SS.ScorePass2 END as EventScoreBackup'
 			+ ', TRIM(CAST(SS.Score AS CHAR)) + '' POINTS (P1:'' + TRIM(CAST(SS.ScorePass1 AS CHAR)) + '' P2:'' + TRIM(CAST(SS.ScorePass2 AS CHAR)) + '')'' AS EventScoreDesc'
 			+ ', (Select RO.Score From TrickScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff'
 			+ ', TV.Pass1VideoUrl, TV.Pass2VideoUrl '
@@ -134,7 +136,7 @@ BEGIN
 			+ ', ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, ''N'') as ReadyForPlcmt'
 			+ ', ER.RankingRating, ER.RankingScore, ''' + @curScoreFormat + ''' AS PlcmtFormat, ' + @curNumPreLim + ' AS NumPreLim'
 			+ ', SS.Round, (Select Max(Round) as MaxRound From SlalomScore SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) as FinalRound'
-			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.Score as EventScore, CAST(SS.Score AS CHAR) AS Buoys'
+			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.Score as EventScore, 0 as EventScoreBackup, CAST(SS.Score AS CHAR) AS Buoys'
 			+ ', (Select RO.Score From SlalomScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff'
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedMph AS CHAR)) + ''mph '' + TRIM(SS.FinalLenOff) + '' ('' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + ''kph '' + TRIM(SS.FinalLen) + ''m)'' AS EventScoreDesc'
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + ''kph '' + TRIM(SS.FinalLen) + ''m'' AS EventScoreDescMeteric'
