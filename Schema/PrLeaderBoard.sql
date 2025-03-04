@@ -29,7 +29,7 @@ CREATE PROCEDURE dbo.PrLeaderBoard  @InSanctionId AS varchar(6), @InEvent AS var
 AS
 BEGIN
 	DECLARE @curSortCmd varchar(256);
-	DECLARE @curScoreSelect varchar(1024);
+	DECLARE @curScoreSelect varchar(2048);
 	DECLARE @curDivFilter varchar(256);
 	DECLARE @curSqlStmt NVARCHAR(MAX);
 	DECLARE @curScoreFormat varchar(24);
@@ -37,6 +37,8 @@ BEGIN
 	DECLARE @curScoreAttr varchar(12);
 	DECLARE @curTourProp varchar(24);
 	DECLARE @curTourPropPrelim varchar(24);
+	DECLARE @curScoreBackup varchar(32);
+	SET @curScoreBackup = '0 AS EventScoreBackup'
 	SET @curTourProp = @InEvent + 'SummaryDataType'
 	SET @curTourPropPrelim = @InEvent + 'SummaryNumPrelim'
 
@@ -57,7 +59,7 @@ BEGIN
 	ELSE IF @curScoreFormat = 'BEST'
 		SET @curSortCmd = 'AgeGroup ASC, ReadyForPlcmt DESC, EventScore DESC, EventScoreBackup DESC, ScoreRunoff DESC'
 	ELSE IF @curScoreFormat = 'FINAL' OR @curScoreFormat = 'H2H'
-		SET @curSortCmd = 'AgeGroup ASC, FinalRound DESC, ReadyForPlcmt DESC, EventScore DESC, ScoreRunoff DESC'
+		SET @curSortCmd = 'AgeGroup ASC, FinalRound DESC, ReadyForPlcmt DESC, EventScore DESC, ScoreRunoff DESC, EventScoreBackup DESC'
 	ELSE IF @curScoreFormat = 'FIRST'
 		SET @curSortCmd = 'AgeGroup ASC, Round ASC, ReadyForPlcmt DESC, EventScore DESC, ScoreRunoff DESC'
 	ELSE IF @curScoreFormat = 'ROUND'
@@ -78,14 +80,20 @@ BEGIN
 		SET @curScoreSelect = 'AND SS.PK = (Select Min(PK) From ' + @InEvent + 'Score PK '
 			+ 'Where PK.SanctionId = TR.SanctionId AND PK.MemberId = SS.MemberId AND PK.AgeGroup = SS.AgeGroup AND PK.Round < 25 '
 			+ 'AND PK.ScoreFeet = ( Select Max(ScoreFeet) From ' + @InEvent + 'Score BS Where BS.SanctionId = PK.SanctionId AND BS.MemberId = PK.MemberId AND BS.AgeGroup = PK.AgeGroup AND Round < 25) )'
-	ELSE IF @curScoreFormat = 'Final' OR @curScoreFormat = 'H2H'
+	ELSE IF @curScoreFormat = 'Final' OR @curScoreFormat = 'H2H' BEGIN
 		SET @curScoreSelect = 'AND ( ( (Select Max(Round) as MaxRound From ' + @InEvent + 'Score SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) > ' + @curNumPreLim
 			+ ' AND SS.Round = (Select Max(Round) as MaxRound From ' + @InEvent + 'Score SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) ) '
 			+ 'OR ( '
 			+ '(Select Max(Round) as MaxRound From ' + @InEvent + 'Score SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) <= ' + @curNumPreLim
 			+ ' AND SS.PK = (Select Min(PK) From ' + @InEvent + 'Score PK '
 			+ 'Where PK.SanctionId = TR.SanctionId AND PK.MemberId = SS.MemberId AND PK.AgeGroup = SS.AgeGroup AND PK.Round < 25 '
-			+ 'AND PK.' + @curScoreAttr + ' = ( Select Max(' + @curScoreAttr + ') From ' + @InEvent + 'Score BS Where BS.SanctionId = PK.SanctionId AND BS.MemberId = PK.MemberId AND BS.AgeGroup = PK.AgeGroup AND Round < 25) ) ) )';
+			+ 'AND PK.' + @curScoreAttr + ' = ( Select Max(' + @curScoreAttr + ') From ' + @InEvent + 'Score BS Where BS.SanctionId = PK.SanctionId AND BS.MemberId = PK.MemberId AND BS.AgeGroup = PK.AgeGroup AND Round < 25) ) ) )'
+			+ ' '
+			+ 'INNER JOIN (Select SanctionId, MemberId, AgeGroup, Max(Score) as EventScoreBackup From SlalomScore '
+			+ 'Where Round <= 2 Group By SanctionId, MemberId, AgeGroup ) AS SSB '
+			+ 'ON SSB.SanctionId = TR.SanctionId AND SSB.MemberId = TR.MemberId AND SSB.AgeGroup = TR.AgeGroup ';
+		SET @curScoreBackup = 'EventScoreBackup';
+	END
 	ELSE IF @curScoreFormat = 'FIRST'
 		SET @curScoreSelect = 'AND SS.Round = (Select Min(Round) as MaxRound '
 			+ 'From ' + @InEvent + 'Score SS2 '
@@ -136,7 +144,8 @@ BEGIN
 			+ ', ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, ''N'') as ReadyForPlcmt'
 			+ ', ER.RankingRating, ER.RankingScore, ''' + @curScoreFormat + ''' AS PlcmtFormat, ' + @curNumPreLim + ' AS NumPreLim'
 			+ ', SS.Round, (Select Max(Round) as MaxRound From SlalomScore SS2 Where SS2.SanctionId = SS.SanctionId AND SS2.MemberId = SS.MemberId AND SS2.AgeGroup = SS.AgeGroup AND SS2.Round < 25 ) as FinalRound'
-			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.Score as EventScore, 0 as EventScoreBackup, CAST(SS.Score AS CHAR) AS Buoys'
+			+ ', COALESCE (SS.Status, ''TBD'') AS Status, SS.NopsScore, SS.Score as EventScore, CAST(SS.Score AS CHAR) AS Buoys'
+			+ ', ' + @curScoreBackup
 			+ ', (Select RO.Score From SlalomScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff'
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedMph AS CHAR)) + ''mph '' + TRIM(SS.FinalLenOff) + '' ('' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + ''kph '' + TRIM(SS.FinalLen) + ''m)'' AS EventScoreDesc'
 			+ ', TRIM(CAST(SS.FinalPassScore AS CHAR)) + '' @ '' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + ''kph '' + TRIM(SS.FinalLen) + ''m'' AS EventScoreDescMeteric'
