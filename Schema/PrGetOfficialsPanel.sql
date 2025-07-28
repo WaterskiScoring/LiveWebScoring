@@ -51,7 +51,7 @@ BEGIN
 
 	UNION
 
-	Select TR.SkierName, TR.SanctionId, TR.MemberID, 'Chief Tech Controller' as Assignment, 15 as SortOrder, TechOfficialRating, TechOfficialRating, TechOfficialRating
+	Select TR.SkierName, TR.SanctionId, TR.MemberID, 'Chief Tech Controller' as Assignment, 15 as SortOrder, TechControllerSlalomRating, TechControllerTrickRating, TechControllerJumpRating
 	FROM TourReg TR 
 	INNER JOIN OfficialWork OW on OW.SanctionId = TR.SanctionId AND OW.MemberID = TR.MemberId
 	Where TR.SanctionId = @InSanctionId AND TechChief = 'Y'
@@ -79,7 +79,7 @@ BEGIN
 
 	UNION
 
-	Select TR.SkierName, TR.SanctionId, TR.MemberID, 'Assist Chief Tech Controller' as Assignment, 24 as SortOrder, TechOfficialRating, TechOfficialRating, TechOfficialRating
+	Select TR.SkierName, TR.SanctionId, TR.MemberID, 'Assist Chief Tech Controller' as Assignment, 24 as SortOrder, TechControllerSlalomRating, TechControllerTrickRating, TechControllerJumpRating
 	FROM TourReg TR 
 	INNER JOIN OfficialWork OW on OW.SanctionId = TR.SanctionId AND OW.MemberID = TR.MemberId
 	Where TR.SanctionId = @InSanctionId AND TechAsstChief = 'Y'

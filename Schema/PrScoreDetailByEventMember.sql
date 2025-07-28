@@ -26,12 +26,12 @@ AS
 BEGIN
 	IF @InEvent = 'Slalom' 
 	BEGIN
-		SELECT TR.SkierName, TR.SanctionId, TR.MemberId, TR.SkiYearAge, TR.AgeGroup, TR.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
+		SELECT TR.SkierName, ER.SanctionId, ER.MemberId, TR.SkiYearAge, ER.AgeGroup, ER.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
 			, ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, 'N') as ReadyForPlcmt
 			, ER.RankingRating, ER.RankingScore, ER.Rotation, ER.RunOrder
 			
 			, SS.Round, COALESCE (SS.Status, 'TBD') AS Status, SS.NopsScore, SS.Score AS EventScore, SS.StartSpeed, SS.StartLen
-			, (Select RO.Score From SlalomScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff
+			, (Select RO.Score From SlalomScore RO Where RO.SanctionId = ER.SanctionId AND RO.MemberId = ER.MemberId AND RO.AgeGroup = ER.AgeGroup AND RO.Round = 25) as ScoreRunoff
 			, TRIM(CAST(SS.FinalPassScore AS CHAR)) + ' @ ' + TRIM(CAST(SS.FinalSpeedMph AS CHAR)) + 'mph ' + TRIM(SS.FinalLenOff) + ' (' + TRIM(CAST(SS.FinalSpeedKph AS CHAR)) + 'kph ' + TRIM(SS.FinalLen) + 'm)' AS EventScoreDesc
 
 			, SkierRunNum, BoatTime, TimeInTol, ScoreProt, Reride, ProtectedScore, BoatPathGood, PassLineLength, PassSpeedKph
@@ -40,20 +40,20 @@ BEGIN
 			, SR.InsertDate, SR.LastUpdateDate, SR.RerideReason
 		FROM TourReg AS TR 
 		INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = @InEvent 
-		INNER JOIN SlalomScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
-		INNER JOIN SlalomRecap AS SR ON SR.MemberId = TR.MemberId AND SR.SanctionId = TR.SanctionId AND SR.AgeGroup = TR.AgeGroup AND SR.Round = SS.Round
+		INNER JOIN SlalomScore AS SS ON SS.MemberId = ER.MemberId AND SS.SanctionId = ER.SanctionId AND SS.AgeGroup = ER.AgeGroup
+		INNER JOIN SlalomRecap AS SR ON SR.MemberId = ER.MemberId AND SR.SanctionId = ER.SanctionId AND SR.AgeGroup = ER.AgeGroup AND SR.Round = SS.Round
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, SS.Round, SkierRunNum;
+		Order by ER.SanctionId, ER.MemberId, ER.AgeGroup, SS.Round, SkierRunNum;
 	END
 
 	ELSE IF @InEvent = 'Jump' 
 	BEGIN
-		SELECT TR.SkierName, TR.SanctionId, TR.MemberId, TR.SkiYearAge, TR.AgeGroup, TR.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
+		SELECT TR.SkierName, ER.SanctionId, ER.MemberId, TR.SkiYearAge, ER.AgeGroup, ER.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
 			, ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, 'N') as ReadyForPlcmt
 			, ER.RankingRating, ER.RankingScore, ER.Rotation, ER.RunOrder
 			
 			, SS.Round, COALESCE (SS.Status, 'TBD') AS Status, SS.NopsScore, SS.ScoreFeet AS EventScore, SS.ScoreFeet, SS.ScoreMeters
-			, (Select RO.ScoreFeet From JumpScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff
+			, (Select RO.ScoreFeet From JumpScore RO Where RO.SanctionId = ER.SanctionId AND RO.MemberId = ER.MemberId AND RO.AgeGroup = ER.AgeGroup AND RO.Round = 25) as ScoreRunoff
 			, TRIM(CAST(ROUND(SS.ScoreFeet, 0) AS CHAR)) + 'FT (' + TRIM(CAST(ROUND(SS.ScoreMeters, 1) AS CHAR)) + 'M)' AS EventScoreDesc
 
 			, PassNum, ReturnToBase, SR.RampHeight, SR.BoatSpeed, SR.SkierBoatPath, SR.BoatSplitTime as BoatSplitTime52, SR.BoatSplitTime2 as BoatSplitTime82, SR.BoatEndTime
@@ -63,20 +63,20 @@ BEGIN
 			, SR.InsertDate, SR.LastUpdateDate
 		FROM TourReg AS TR 
 		INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = @InEvent 
-		INNER JOIN JumpScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
-		INNER JOIN JumpRecap AS SR ON SR.MemberId = TR.MemberId AND SR.SanctionId = TR.SanctionId AND SR.AgeGroup = TR.AgeGroup AND SR.Round = SS.Round
+		INNER JOIN JumpScore AS SS ON SS.MemberId = ER.MemberId AND SS.SanctionId = ER.SanctionId AND SS.AgeGroup = ER.AgeGroup
+		INNER JOIN JumpRecap AS SR ON SR.MemberId = ER.MemberId AND SR.SanctionId = ER.SanctionId AND SR.AgeGroup = ER.AgeGroup AND SR.Round = SS.Round
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, SS.Round, PassNum;
+		Order by ER.SanctionId, ER.MemberId, ER.AgeGroup, SS.Round, PassNum;
 	END
 
 	ELSE IF @InEvent = 'Trick' 
 	BEGIN
-		SELECT TR.SkierName, TR.SanctionId, TR.MemberId, TR.SkiYearAge, TR.AgeGroup, TR.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
+		SELECT TR.SkierName, ER.SanctionId, ER.MemberId, TR.SkiYearAge, ER.AgeGroup, ER.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
 			, ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, 'N') as ReadyForPlcmt
 			, ER.RankingRating, ER.RankingScore, ER.Rotation, ER.RunOrder
 			
 			, SS.Round, COALESCE (SS.Status, 'TBD') AS Status, SS.NopsScore, SS.Score AS EventScore
-			, (Select RO.Score From TrickScore RO Where RO.SanctionId = TR.SanctionId AND RO.MemberId = TR.MemberId AND RO.AgeGroup = TR.AgeGroup AND RO.Round = 25) as ScoreRunoff
+			, (Select RO.Score From TrickScore RO Where RO.SanctionId = ER.SanctionId AND RO.MemberId = ER.MemberId AND RO.AgeGroup = ER.AgeGroup AND RO.Round = 25) as ScoreRunoff
 			, TRIM(CAST(SS.Score AS CHAR)) + ' POINTS (P1:' + TRIM(CAST(SS.ScorePass1 AS CHAR)) + ' P2:' + TRIM(CAST(SS.ScorePass2 AS CHAR)) + ')' AS EventScoreDesc 
 
 			, PassNum, Seq, Skis, SR.Score as TrickScore, Code as TrickCode, Results as TrickResults
@@ -85,11 +85,11 @@ BEGIN
 			, SS.InsertDate, SR.LastUpdateDate
 		FROM TourReg AS TR 
 		INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = @InEvent 
-		INNER JOIN TrickScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
-		INNER JOIN TrickPass AS SR ON SR.MemberId = TR.MemberId AND SR.SanctionId = TR.SanctionId AND SR.AgeGroup = TR.AgeGroup AND SR.Round = SS.Round
-		LEFT OUTER JOIN TrickVideo AS TV ON TV.SanctionId = TR.SanctionId AND TV.MemberId = TR.MemberId AND TV.AgeGroup = TR.AgeGroup AND TV.Round = SS.Round
+		INNER JOIN TrickScore AS SS ON SS.MemberId = ER.MemberId AND SS.SanctionId = ER.SanctionId AND SS.AgeGroup = ER.AgeGroup
+		INNER JOIN TrickPass AS SR ON SR.MemberId = ER.MemberId AND SR.SanctionId = ER.SanctionId AND SR.AgeGroup = ER.AgeGroup AND SR.Round = SS.Round
+		LEFT OUTER JOIN TrickVideo AS TV ON TV.SanctionId = ER.SanctionId AND TV.MemberId = ER.MemberId AND TV.AgeGroup = ER.AgeGroup AND TV.Round = SS.Round
 		Where TR.SanctionId = @InSanctionId AND TR.MemberId = @InMemberId AND (SS.Round = @InRound OR 0 = @InRound)
-		Order by TR.SanctionId, TR.MemberId, TR.AgeGroup, SS.Round, PassNum, Seq;
+		Order by ER.SanctionId, ER.MemberId, ER.AgeGroup, SS.Round, PassNum, Seq;
 	END
 
 	ELSE IF @InEvent = 'Overall' 
