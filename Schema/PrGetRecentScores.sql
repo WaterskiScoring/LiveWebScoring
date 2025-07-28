@@ -23,12 +23,6 @@ Description:	Retrieve tournament slalom scores sequenced by time skied regardles
 CREATE PROCEDURE dbo.PrGetRecentScores @InSanctionId AS varchar(6), @InUseLastActive as bit = 0
 AS
 BEGIN
-	DECLARE @curDateFilter varchar(20);
-	IF @InUseLastActive = 1
-		SET @curDateFilter = (Select TRIM(CAST( Convert(Date, Max(InsertDate)) AS CHAR)) + ' 00:00:00' as LastScoredDate From SlalomScore Where SanctionId =  @InSanctionId);
-	ELSE
-		SET @curDateFilter = (Select TRIM(CAST( CONVERT (date, GETDATE()) AS CHAR)) + ' 00:00:00');
-
 	SELECT TR.SkierName, TR.SanctionId, TR.MemberId, TR.SkiYearAge, TR.AgeGroup, TR.AgeGroup as Div, TR.Gender, TR.City, TR.State, TR.Federation
 		, ER.Event, COALESCE(SS.EventClass, ER.EventClass) as EventClass, ER.EventGroup, ER.TeamCode, COALESCE(ER.ReadyForPlcmt, 'N') as ReadyForPlcmt
 		, ER.RankingRating, ER.RankingScore
@@ -41,7 +35,7 @@ BEGIN
 	INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = 'Slalom' 
 	INNER JOIN SlalomScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
 	Where TR.SanctionId =  @InSanctionId
-	  AND SS.InsertDate > @curDateFilter
+	  AND SS.InsertDate >= (Select Max(InsertDate) as LastScoredDate From SlalomScore Where SanctionId =  @InSanctionId)
 	
 	UNION
 
@@ -55,7 +49,7 @@ BEGIN
 	INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = 'Trick' 
 	INNER JOIN TrickScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
 	Where TR.SanctionId =  @InSanctionId
-	  AND SS.InsertDate > @curDateFilter
+	  AND SS.InsertDate >= (Select Max(InsertDate) as LastScoredDate From TrickScore Where SanctionId =  @InSanctionId)
 
 	UNION
 
@@ -69,7 +63,7 @@ BEGIN
 	INNER JOIN EventReg AS ER ON ER.MemberId = TR.MemberId AND ER.SanctionId = TR.SanctionId AND ER.AgeGroup = TR.AgeGroup AND ER.Event = 'Jump' 
 	INNER JOIN JumpScore AS SS ON SS.MemberId = TR.MemberId AND SS.SanctionId = TR.SanctionId AND SS.AgeGroup = TR.AgeGroup
 	Where TR.SanctionId =  @InSanctionId
-	  AND SS.InsertDate > @curDateFilter
+	  AND SS.InsertDate >= (Select Max(InsertDate) as LastScoredDate From JumpScore Where SanctionId =  @InSanctionId)
 
 	Order by TR.SanctionId, SS.InsertDate DESC;
 
